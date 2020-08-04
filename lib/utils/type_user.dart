@@ -1,0 +1,4 @@
+enum TypeOfUser {
+  Student,
+  Teacher,
+}
