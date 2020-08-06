@@ -63,5 +63,15 @@ ThemeData _buildTheme() {
       backgroundColor: mainBackgroundColor,
       elevation: 1,
     ),
+    textTheme: base.textTheme.copyWith(
+      headline3: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: mainDarkColor,
+      ),
+      headline5: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: mainBackgroundColor,
+      ),
+    ),
   );
 }

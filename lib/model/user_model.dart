@@ -14,8 +14,8 @@ class UserModel {
   UserModel({
     this.name,
     this.surName,
-    @required this.email,
-    @required this.password,
+    this.email,
+    this.password,
     this.typeUser,
     this.lastAccess,
     this.createdAt,

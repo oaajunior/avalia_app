@@ -1,9 +1,9 @@
-import '../services/avalia_app_service.dart';
+import '../services/user_service.dart';
 import '../utils/loading_status.dart';
 import '../model/user_model.dart';
 
 class UserAccessViewModel {
-  AvaliaAppService service = AvaliaAppServiceImpl();
+  UserService service = UserServiceImpl();
   var loadingStatus = LoadingStatus.loading;
   Exception userException;
 
@@ -23,7 +23,21 @@ class UserAccessViewModel {
     return service.verifyAuthUser();
   }
 
-  Future<void> signOut() {
+  Future<dynamic> signOut() {
     return service.signOut();
+  }
+
+  Future<dynamic> getCurrentUser() async {
+    final result = await service.getCurrentUser();
+    return result;
+  }
+
+  Future<UserModel> getUserData() async {
+    try {
+      final result = await service.getUserData();
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }

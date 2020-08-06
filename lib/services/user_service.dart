@@ -8,13 +8,15 @@ import '../utils/verify_internet_connection.dart';
 import '../model/internet_exception.dart';
 import '../model/user_exception.dart';
 
-abstract class AvaliaAppService {
+abstract class UserService {
   Future<void> createOrAuthenticateUser(UserModel user, {bool login = true});
   Stream<FirebaseUser> verifyAuthUser();
-  Future<void> signOut();
+  Future<dynamic> signOut();
+  Future<dynamic> getCurrentUser();
+  Future<UserModel> getUserData();
 }
 
-class AvaliaAppServiceImpl implements AvaliaAppService {
+class UserServiceImpl implements UserService {
   final _authInstance = FirebaseAuth.instance;
   final _storeInstance = Firestore.instance;
 
@@ -113,7 +115,34 @@ class AvaliaAppServiceImpl implements AvaliaAppService {
   }
 
   @override
+  Future<dynamic> getCurrentUser() {
+    return _authInstance.currentUser();
+  }
+
+  @override
   Future<void> signOut() {
     return _authInstance.signOut();
+  }
+
+  @override
+  Future<UserModel> getUserData() async {
+    try {
+      final userId = await getCurrentUser();
+      final userReference =
+          await _storeInstance.collection('users').document(userId.uid).get();
+      final userData = UserModel(
+          name: userReference['username'],
+          surName: userReference['surname'],
+          email: userReference['email'],
+          typeUser: userReference['type_user'] == 'T'
+              ? TypeOfUser.Teacher
+              : TypeOfUser.Student);
+
+      return userData;
+    } on PlatformException catch (error) {
+      print(error.message);
+      throw UserException(
+          'Houve um erro ao tentar recuperar informações do usuário');
+    }
   }
 }
