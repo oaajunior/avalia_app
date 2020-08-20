@@ -1,6 +1,6 @@
 import '../services/user_service.dart';
 import '../utils/loading_status.dart';
-import '../model/user_model.dart';
+import '../model/user/user_model.dart';
 
 class UserAccessViewModel {
   UserService service = UserServiceImpl();

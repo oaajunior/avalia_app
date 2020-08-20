@@ -1,6 +1,9 @@
+import 'package:avalia_app/view/layout/layout_buttons.dart';
+import 'package:avalia_app/view/layout/layout_text_fields.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/type_user.dart';
+import '../../../res/colors.dart';
 
 class FormUserAccess extends StatefulWidget {
   final Function isLoading;
@@ -29,7 +32,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
   FocusNode _passwordFocus;
   FocusNode _repeatedPasswordFocus;
   FocusNode _userTypeFocus;
-  TextEditingController informedPassword = TextEditingController();
+  TextEditingController _informedPassword = TextEditingController();
   bool _showUserPassword = false;
 
   @override
@@ -99,7 +102,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       return 'Por favor, informe sua senha.';
     } else {
       if (!regex.hasMatch(value)) {
-        return 'A senha informada não é válida!\nEla deve conter no mínimo 8 caracteres\ncom letra maiúscula, minúscula e símbolos(\$@!&%).';
+        return 'A senha deve conter no mínimo 8 caracteres com letra maiúscula, minúscula e símbolos (\$@!&%).';
       }
     }
     return null;
@@ -133,235 +136,222 @@ class _FormUserAccessState extends State<FormUserAccess> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Center(
-        child: AnimatedContainer(
-          duration: Duration(
-            microseconds: 300,
+    final _texFieldName = LayoutTextFields.customTextFields(
+      key: ValueKey('name'),
+      focusNode: _usernameFocus,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) {
+        FocusScope.of(context).requestFocus(_surnameFocus);
+      },
+      textCapitalization: TextCapitalization.words,
+      validator: (name) => _validateName(name),
+      onSaved: (name) {
+        _userName = name.trim();
+      },
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(
+        hintText: 'Nome:',
+      ),
+    );
+
+    final _textFieldSurname = LayoutTextFields.customTextFields(
+      key: ValueKey('surname'),
+      focusNode: _surnameFocus,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) {
+        FocusScope.of(context).requestFocus(_emailFocus);
+      },
+      textCapitalization: TextCapitalization.words,
+      enableSuggestions: false,
+      validator: (surname) => _validateSurname(surname),
+      onSaved: (surname) {
+        _userSurname = surname.trim();
+      },
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(
+        hintText: 'Sobrenome:',
+      ),
+    );
+
+    final _textFieldEmail = LayoutTextFields.customTextFields(
+      key: ValueKey('email'),
+      focusNode: _emailFocus,
+      onFieldSubmitted: (_) {
+        FocusScope.of(context).requestFocus(_passwordFocus);
+      },
+      validator: (email) => _validateEmail(email.trim()),
+      onSaved: (email) {
+        _userEmail = email.trim();
+      },
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        hintText: 'E-mail',
+      ),
+    );
+    final _textFieldPassword = LayoutTextFields.customTextFields(
+      key: ValueKey('password'),
+      controller: _informedPassword,
+      focusNode: _passwordFocus,
+      textInputAction: widget.isLogin() ? null : TextInputAction.next,
+      onFieldSubmitted: widget.isLogin()
+          ? (_) => _trySubmit()
+          : (_) {
+              FocusScope.of(context).requestFocus(_repeatedPasswordFocus);
+            },
+      validator: (password) => _validatePassword(password),
+      onSaved: (password) {
+        _userPassword = password.trim();
+      },
+      decoration: InputDecoration(
+        hintText: 'Senha',
+        prefix: Padding(
+          padding: const EdgeInsets.only(left: 42.0),
+        ),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(
+                _showUserPassword ? Icons.visibility : Icons.visibility_off),
+            onPressed: () {
+              setState(() {
+                _showUserPassword = !_showUserPassword;
+              });
+            },
+            color: Theme.of(context).iconTheme.color,
           ),
-          height: widget.isLogin()
-              ? deviceSize.height * 0.5
-              : deviceSize.height * 0.9,
-          width: deviceSize.width * 0.9,
-          curve: Curves.easeIn,
-          constraints: BoxConstraints(
-            maxHeight: widget.isLogin()
-                ? deviceSize.height * 0.5
-                : deviceSize.height * 0.9,
-            maxWidth: deviceSize.width * 0.9,
-          ),
-          child: SingleChildScrollView(
-            child: Card(
-              elevation: 1,
-              margin: const EdgeInsets.all(20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (!widget.isLogin())
-                        TextFormField(
-                          key: ValueKey('name'),
-                          focusNode: _usernameFocus,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_surnameFocus);
-                          },
-                          autocorrect: false,
-                          textCapitalization: TextCapitalization.words,
-                          enableSuggestions: false,
-                          validator: (name) => _validateName(name),
-                          onSaved: (name) {
-                            _userName = name.trim();
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            labelText: 'Nome:',
-                          ),
-                        ),
-                      if (!widget.isLogin())
-                        TextFormField(
-                          key: ValueKey('surname'),
-                          focusNode: _surnameFocus,
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_emailFocus);
-                          },
-                          autocorrect: false,
-                          textCapitalization: TextCapitalization.words,
-                          enableSuggestions: false,
-                          validator: (surname) => _validateSurname(surname),
-                          onSaved: (surname) {
-                            _userSurname = surname.trim();
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            labelText: 'Sobrenome:',
-                          ),
-                        ),
-                      TextFormField(
-                        key: ValueKey('email'),
-                        focusNode: _emailFocus,
-                        onFieldSubmitted: (_) {
-                          FocusScope.of(context).requestFocus(_passwordFocus);
-                        },
-                        textInputAction: TextInputAction.next,
-                        autocorrect: false,
-                        textCapitalization: TextCapitalization.none,
-                        enableSuggestions: false,
-                        validator: (email) => _validateEmail(email.trim()),
-                        onSaved: (email) {
-                          _userEmail = email.trim();
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'E-mail:',
-                        ),
-                      ),
-                      TextFormField(
-                        controller: informedPassword,
-                        key: ValueKey('password'),
-                        focusNode: _passwordFocus,
-                        textInputAction:
-                            widget.isLogin() ? null : TextInputAction.next,
-                        onFieldSubmitted: widget.isLogin()
-                            ? (_) => _trySubmit()
-                            : (_) {
-                                FocusScope.of(context)
-                                    .requestFocus(_repeatedPasswordFocus);
-                              },
-                        validator: (password) => _validatePassword(password),
-                        onSaved: (password) {
-                          _userPassword = password.trim();
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Senha:',
-                          suffixIcon: IconButton(
-                            icon: Icon(_showUserPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _showUserPassword = !_showUserPassword;
-                              });
-                            },
-                          ),
-                        ),
-                        obscureText: _showUserPassword ? false : true,
-                      ),
-                      if (!widget.isLogin())
-                        TextFormField(
-                          key: ValueKey('repeatedPassword'),
-                          focusNode: _repeatedPasswordFocus,
-                          validator: (repeatedPassword) =>
-                              _validateRepeatedPassword(
-                                  informedPassword.text, repeatedPassword),
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_userTypeFocus);
-                          },
-                          decoration:
-                              InputDecoration(labelText: 'Confirmação Senha:'),
-                          obscureText: _showUserPassword ? false : true,
-                        ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      if (!widget.isLogin())
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Radio(
-                                      activeColor:
-                                          Theme.of(context).primaryColor,
-                                      focusNode: _userTypeFocus,
-                                      value: TypeOfUser.Student,
-                                      groupValue: _userType,
-                                      onChanged: (TypeOfUser value) {
-                                        setState(() {
-                                          _userType = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Text('Aluno'),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Radio(
-                                      activeColor:
-                                          Theme.of(context).primaryColor,
-                                      value: TypeOfUser.Teacher,
-                                      groupValue: _userType,
-                                      onChanged: (TypeOfUser value) {
-                                        setState(() {
-                                          _userType = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Text('Professor'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      if (widget.isLoading()) CircularProgressIndicator(),
-                      if (!widget.isLoading())
-                        RaisedButton(
-                          shape: ButtonTheme.of(context).shape,
-                          color: Theme.of(context).accentColor,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            _trySubmit();
-                          },
-                          child: widget.isLogin()
-                              ? Text('Entrar')
-                              : Text('Cadastrar'),
-                        ),
-                      if (!widget.isLoading())
-                        FlatButton(
-                          onPressed: () {
-                            _resetForm();
-                            widget.setLogin(!widget.isLogin());
-                            widget.isLogin()
-                                ? _emailFocus.requestFocus()
-                                : _usernameFocus.requestFocus();
-                          },
-                          textColor: Theme.of(context).primaryColor,
-                          child: widget.isLogin()
-                              ? Text(
-                                  'É novo por aqui? Cadastre-se!',
-                                )
-                              : Text(
-                                  'Eu já tenho uma conta!',
-                                ),
-                        ),
-                    ],
+        ),
+      ),
+      obscureText: _showUserPassword ? false : true,
+    );
+
+    final _textFieldRepeatedPassword = LayoutTextFields.customTextFields(
+      key: ValueKey('repeatedPassword'),
+      focusNode: _repeatedPasswordFocus,
+      validator: (repeatedPassword) =>
+          _validateRepeatedPassword(_informedPassword.text, repeatedPassword),
+      onFieldSubmitted: (_) {
+        FocusScope.of(context).requestFocus(_userTypeFocus);
+      },
+      decoration: InputDecoration(hintText: 'Confirmação Senha:'),
+      obscureText: _showUserPassword ? false : true,
+    );
+
+    final radioTypeUser = Container(
+      margin: EdgeInsets.only(left: 40.0),
+      width: deviceSize.width * 0.9,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Radio(
+                    focusNode: _userTypeFocus,
+                    value: TypeOfUser.Student,
+                    groupValue: _userType,
+                    onChanged: (TypeOfUser value) {
+                      setState(() {
+                        _userType = value;
+                      });
+                    },
                   ),
                 ),
-              ),
+                Text('Aluno'),
+              ],
             ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Radio(
+                    value: TypeOfUser.Teacher,
+                    toggleable: true,
+                    groupValue: _userType,
+                    onChanged: (TypeOfUser value) {
+                      setState(() {
+                        _userType = value;
+                      });
+                    },
+                  ),
+                ),
+                Text('Professor'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final _buttons = Expanded(
+      flex: widget.isLogin() ? 1 : 0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          LayoutButtons.customRaisedButtons(
+            textRaisedButtonOne: widget.isLogin() ? 'Acessar' : 'Cadastrar',
+            color: blueDeepColor,
+            context: context,
+            onPressedButtonOne: _trySubmit,
+          ),
+          LayoutButtons.customFlatButtons(
+            context: context,
+            text:
+                widget.isLogin() ? 'É novo por aqui? Cadastre-se!' : 'Cancelar',
+            onPressed: () {
+              _resetForm();
+              widget.setLogin(!widget.isLogin());
+              widget.isLogin()
+                  ? _emailFocus.requestFocus()
+                  : _usernameFocus.requestFocus();
+            },
+          ),
+        ],
+      ),
+    );
+
+    final _content = AnimatedContainer(
+      duration: Duration(
+        microseconds: 300,
+      ),
+      curve: Curves.easeIn,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: widget.isLogin()
+              ? deviceSize.height * 0.65
+              : deviceSize.height * 0.8,
+          maxHeight: widget.isLogin()
+              ? deviceSize.height * 0.65
+              : deviceSize.height * 1.25,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!widget.isLogin()) _texFieldName,
+              if (!widget.isLogin()) _textFieldSurname,
+              _textFieldEmail,
+              _textFieldPassword,
+              if (!widget.isLogin()) _textFieldRepeatedPassword,
+              SizedBox(
+                height: 12,
+              ),
+              if (!widget.isLogin()) radioTypeUser,
+              SizedBox(
+                height: 12,
+              ),
+              if (widget.isLoading()) CircularProgressIndicator(),
+              _buttons,
+            ],
           ),
         ),
       ),
     );
+
+    return _content;
   }
 }

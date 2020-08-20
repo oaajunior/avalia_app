@@ -3,10 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
-import '../model/user_model.dart';
+import '../model/user/user_model.dart';
 import '../utils/verify_internet_connection.dart';
-import '../model/internet_exception.dart';
-import '../model/user_exception.dart';
+import '../model/exceptions/internet_exception.dart';
+import '../model/exceptions/user_exception.dart';
 
 abstract class UserService {
   Future<void> createOrAuthenticateUser(UserModel user, {bool login = true});
@@ -52,7 +52,6 @@ class UserServiceImpl implements UserService {
           'email': user.email,
           'type_user': user.typeUser == TypeOfUser.Teacher ? 'T' : 'S',
           'create_at': timeStamp,
-          'last_access': timeStamp,
         });
       }
     } on AuthException catch (error) {
@@ -82,6 +81,14 @@ class UserServiceImpl implements UserService {
       }
     } on PlatformException catch (error) {
       switch (error.code) {
+        case 'ERROR_USER_NOT_FOUND':
+          throw UserException(
+              'O e-mail informado não foi encontrado. Por favor, verifique!');
+
+        case 'ERROR_WRONG_PASSWORD':
+          throw UserException(
+              'A senha informada não está correta. Por favor, verifique!');
+
         case 'ERROR_WEAK_PASSWORD':
           throw UserException(
               'A senha informada não é adequada. Por favor, informe uma senha contendo letras (minúscula e maiúscula), números e símbolos (#%*!\$)');
@@ -93,6 +100,10 @@ class UserServiceImpl implements UserService {
         case 'ERROR_EMAIL_ALREADY_IN_USE':
           throw UserException(
               'Já existe um usuário com o e-mail informado. Por favor, verifique!');
+
+        case 'ERROR_USER_DISABLED':
+          throw UserException(
+              'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
 
         case 'ERROR_NETWORK_REQUEST_FAILED':
           throw InternetException(

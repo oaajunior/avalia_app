@@ -1,6 +1,5 @@
 import 'package:avalia_app/utils/type_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class UserModel {
   String name;
@@ -8,7 +7,6 @@ class UserModel {
   String email;
   String password;
   TypeOfUser typeUser;
-  Timestamp lastAccess;
   Timestamp createdAt;
 
   UserModel({
@@ -17,7 +15,6 @@ class UserModel {
     this.email,
     this.password,
     this.typeUser,
-    this.lastAccess,
     this.createdAt,
   });
 }
