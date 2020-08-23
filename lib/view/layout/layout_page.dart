@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../res/custom_icons_button.dart';
 
 class LayoutPage {
-  static void _backToPage(BuildContext context) {
+  static void _backPage(BuildContext context) {
     Navigator.of(context).pop();
   }
 
@@ -57,7 +57,7 @@ class LayoutPage {
                 icon: Icon(
                   CustomIconsButton.button_back,
                 ),
-                onPressed: () => _backToPage(context),
+                onPressed: () => _backPage(context),
               ),
             ),
           Padding(

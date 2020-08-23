@@ -1,3 +1,4 @@
+import 'package:avalia_app/model/exceptions/evaluation_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,13 +47,16 @@ class EvaluationServiceImpl implements EvaluationService {
             await getDisciplineDescription(document.data['discipline']);
 
         questions = await getQuestions(document.data['question']);
-        final totalTime = TimeOfDay.fromDateTime(
-            DateTime.fromMillisecondsSinceEpoch(
-                (totalTimeQuestions / 1000).floor()));
+
+        final totalTime = Duration(seconds: totalTimeQuestions);
+        final arrayTime = totalTime.toString().split(':');
+        final formattedTime =
+            '${arrayTime[0]}h${arrayTime[1]}min${double.parse(arrayTime[2]).truncate()}s';
+
         evaluation = EvaluationModel(
           status: document.data['status'],
           code: document.data['code'],
-          grade: document.data['grade'],
+          team: document.data['team'],
           createdAt: document.data['create_at'],
           title: document.data['title'],
           discipline: discipline ?? '',
@@ -60,15 +64,19 @@ class EvaluationServiceImpl implements EvaluationService {
           finalDate: document.data['final_date'],
           question: questions,
           totalQuestions: totalQuestions,
-          totalTime: totalTime,
+          totalTime: formattedTime,
           stageEducation: document.data['stage_education'],
+          schoolYear: document.data['school_year'],
           user: document.data['user'],
         );
-
         return evaluation;
       }
     } on PlatformException catch (error) {
-      throw error;
+      final errorMessage = error.message.toString();
+      if (errorMessage.contains('PERMISSION_DENIED')) {
+        throw EvaluationException(
+            'Você não tem privilégios para consultar o banco de dados');
+      }
     } on InternetException catch (error) {
       throw error;
     } on Exception catch (error) {
@@ -77,8 +85,9 @@ class EvaluationServiceImpl implements EvaluationService {
     }
   }
 
-  Future<String> getDisciplineDescription(String disciplineRef) async {
-    final disciplineData = await _storeInstance.document(disciplineRef).get();
+  Future<String> getDisciplineDescription(
+      DocumentReference disciplineRef) async {
+    final disciplineData = await disciplineRef.get();
 
     if (disciplineData != null && disciplineData.data['active'] == true) {
       return disciplineData.data['name'];
@@ -87,12 +96,16 @@ class EvaluationServiceImpl implements EvaluationService {
     }
   }
 
-  Future<List<QuestionModel>> getQuestions(String questionsRef) async {
-    List<QuestionModel> questions;
+  Future<List<QuestionModel>> getQuestions(
+      List<dynamic> questionsReference) async {
+    List<QuestionModel> questions = List<QuestionModel>();
+    totalQuestions = 0;
+    totalTimeQuestions = 0;
 
-    final questionsData = await _storeInstance.document(questionsRef).get();
-    if (questionsData != null) {
-      questionsData.data.forEach((index, question) {
+    await Future.forEach(questionsReference, (questionRef) async {
+      final questionData = await questionRef.get();
+      if (questionData != null && questionData.data != null) {
+        final question = questionData.data;
         if (question['active'] == true) {
           totalQuestions++;
           totalTimeQuestions += question['response_time'];
@@ -102,14 +115,13 @@ class EvaluationServiceImpl implements EvaluationService {
             bncc: question['bncc'],
             createdAt: question['created_at'],
             description: question['description'],
-            difficulty: question['difficulty'],
-            questionType: question['question_type'],
+            difficulty: question['question_type'],
             responseTime: question['response_time'],
             tip: question['tip'],
           ));
         }
-      });
-    }
+      }
+    });
 
     return questions;
   }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionModel {
-  String active;
+  bool active;
   int answer;
   String bncc;
   String description;

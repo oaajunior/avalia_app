@@ -15,6 +15,7 @@ ThemeData basicTheme() {
     cursorColor: whiteColor,
     unselectedWidgetColor: whiteColor,
     toggleableActiveColor: whiteColor,
+    buttonBarTheme: _basicButtonBarTheme(base.buttonBarTheme),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: _basicTextTheme(base.textTheme),
     buttonTheme: _basicButtonTheme(base.buttonTheme),
@@ -40,6 +41,17 @@ ThemeData basicTheme() {
 //     highlightColor: whiteColor,
 //   );
 // }
+
+ButtonBarThemeData _basicButtonBarTheme(ButtonBarThemeData basicButtonBar) {
+  return basicButtonBar.copyWith(
+    alignment: MainAxisAlignment.spaceAround,
+    buttonHeight: 40.0,
+    buttonMinWidth: 100.0,
+    buttonPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+    mainAxisSize: MainAxisSize.max,
+    layoutBehavior: ButtonBarLayoutBehavior.padded,
+  );
+}
 
 InputDecorationTheme _basicInputDecorationTheme(
     InputDecorationTheme baseInputDecoration) {
@@ -95,6 +107,12 @@ DialogTheme _basicDialogTheme(DialogTheme baseDialog) {
     ),
     backgroundColor: whiteColor,
     elevation: 1,
+    titleTextStyle: TextStyle(
+      fontSize: 24.0,
+    ),
+    contentTextStyle: TextStyle(
+      fontSize: 18.0,
+    ),
   );
 }
 
@@ -120,6 +138,7 @@ TextTheme _basicTextTheme(TextTheme baseText) {
       .copyWith(
         bodyText1: TextStyle(
           color: whiteColor,
+          fontSize: 16,
         ),
         bodyText2: TextStyle(
           fontSize: 20,

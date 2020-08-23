@@ -1,9 +1,10 @@
-import 'package:avalia_app/view/home_view.dart';
 import 'package:flutter/material.dart';
 
 import './view/user_access/user_access.dart';
-import './view/avaliacao/avaliacoes_realizadas_view.dart';
-import './view/avaliacao/realizar_avaliacao_view.dart';
+import './view/evaluation/done_evaluations/done_evaluations_view.dart';
+import './view/evaluation/perform_evaluation/perform_evaluation_view.dart';
+import './view/evaluation/perform_evaluation/realizar_avaliacao_busca_view.dart';
+import './view/home_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   var arguments = settings.arguments;
@@ -15,11 +16,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case HomeView.routeName:
       builder = (context) => HomeView();
       break;
-    case RealizarAvaliacaoScreen.routeName:
-      builder = (context) => RealizarAvaliacaoScreen(arguments);
+    case PerformEvaluationView.routeName:
+      builder = (context) => PerformEvaluationView(arguments);
       break;
-    case AvaliacoesRealizadasView.routeName:
-      builder = (context) => AvaliacoesRealizadasView();
+    case RealizarAvaliacaoBuscaView.routeName:
+      builder = (context) => RealizarAvaliacaoBuscaView(arguments);
+      break;
+    case DoneEvaluationsView.routeName:
+      builder = (context) => DoneEvaluationsView();
       break;
     default:
       builder = (context) => UserAccessView();

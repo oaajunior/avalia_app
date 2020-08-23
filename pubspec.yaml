@@ -73,6 +73,7 @@ flutter:
   assets:
     - lib/res/icons/icon_edit_profile.png
     - lib/res/icons/icon_logo.png
+    - lib/res/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

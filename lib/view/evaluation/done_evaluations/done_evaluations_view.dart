@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AvaliacoesRealizadasView extends StatelessWidget {
+class DoneEvaluationsView extends StatelessWidget {
   static const routeName = 'avaliacoes_realizadas';
 
   @override

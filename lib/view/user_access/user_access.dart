@@ -1,13 +1,14 @@
-import 'package:avalia_app/res/colors.dart';
-import 'package:avalia_app/view/home_view.dart';
-import 'package:avalia_app/view/layout/layout_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../view/home_view.dart';
 import './widgets/form_user_access.dart';
 import '../../view_model/user_acess_view_model.dart';
 import '../../model/user/user_model.dart';
 import '../../utils/loading_status.dart';
 import '../../utils/type_user.dart';
+import '.././layout/layout_page.dart';
+import '../../res/colors.dart';
+import '../../view/layout/layout_alert.dart';
 
 class UserAccessView extends StatefulWidget {
   static const routeName = '/login-view';
@@ -40,35 +41,34 @@ class _UserAccessViewState extends State<UserAccessView> {
     return _isLogin;
   }
 
-  Future<void> showMessageToUser(String title, String message) {
-    return showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: DialogTheme.of(context).shape,
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
-          title,
+  Future<void> showMessageToUser(
+    String title,
+    String message,
+  ) {
+    final customMessage = Text(message);
+
+    final button = RaisedButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold,
+            ),
+        child: Text(
+          'Ok',
           textAlign: TextAlign.center,
         ),
-        content: Container(
-          margin: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 8.0),
-          child: Text(
-            message,
-          ),
-        ),
-        actions: [
-          FlatButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(false);
-            },
-            child: Text(
-              'Ok',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ),
-        ],
       ),
+    );
+
+    return LayoutAlert.customAlert(
+      title: title,
+      message: customMessage,
+      color: Theme.of(context).primaryColor,
+      context: context,
+      actionButtons: button,
     );
   }
 

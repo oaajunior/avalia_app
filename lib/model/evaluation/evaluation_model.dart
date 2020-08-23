@@ -10,12 +10,13 @@ class EvaluationModel {
   String discipline;
   Timestamp initialDate;
   Timestamp finalDate;
-  String grade;
+  String team;
   List<QuestionModel> question;
   String stageEducation;
   int totalQuestions;
-  TimeOfDay totalTime;
+  String totalTime;
   Timestamp createdAt;
+  int schoolYear;
   DocumentReference user;
 
   EvaluationModel({
@@ -25,12 +26,13 @@ class EvaluationModel {
     this.discipline,
     this.initialDate,
     this.finalDate,
-    this.grade,
+    this.team,
     this.question,
     this.stageEducation,
     this.totalQuestions,
     this.totalTime,
     this.createdAt,
+    this.schoolYear,
     this.user,
   });
 }

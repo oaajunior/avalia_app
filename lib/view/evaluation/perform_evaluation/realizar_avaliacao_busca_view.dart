@@ -1,16 +1,17 @@
-import 'package:avalia_app/view/layout/layout_text_fields.dart';
 import 'package:flutter/material.dart';
 
-import '../layout/layout_page.dart';
-import '../../res/colors.dart';
-import '../../res/custom_icons.dart';
-import '../../view/layout/layout_buttons.dart';
+import '../../layout/layout_page.dart';
+import '../../../res/colors.dart';
+import '../../../res/custom_icons.dart';
+import '../../layout/layout_buttons.dart';
+import '../../../view/layout/layout_text_fields.dart';
+import '../../layout/layout_text_fields.dart';
 
-class RealizarAvaliacaoScreen extends StatelessWidget {
-  static const routeName = '/realizar_avaliacao';
+class RealizarAvaliacaoBuscaView extends StatelessWidget {
+  static const routeName = '/realizar_avaliacao_busca';
   final String title;
 
-  RealizarAvaliacaoScreen(this.title);
+  RealizarAvaliacaoBuscaView(this.title);
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +31,15 @@ class RealizarAvaliacaoScreen extends StatelessWidget {
               iconRaisedButtonOne: CustomIcons.icon_search_evaluation,
               color: yellowDeepColor,
               context: context,
-              onPressedButtonOne: () {}),
+              onPressedButtonOne: null),
         ],
       ),
     );
 
     final _content = ConstrainedBox(
         constraints: BoxConstraints(
-          minHeight: deviceSize.height * 0.45,
-          maxHeight: deviceSize.height * 0.45,
+          minHeight: deviceSize.height * 0.47,
+          maxHeight: deviceSize.height * 0.47,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -53,7 +54,6 @@ class RealizarAvaliacaoScreen extends StatelessWidget {
       headerTitle: 'avalia',
       context: context,
       mainText: title,
-      message: 'Por favor,\n informe o código',
       color: yellowDeepColor,
       content: _content,
     );

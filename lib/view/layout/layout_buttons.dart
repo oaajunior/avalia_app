@@ -4,10 +4,10 @@ class LayoutButtons {
   static Widget customRaisedButtons({
     String textRaisedButtonOne,
     IconData iconRaisedButtonOne,
-    Function() onPressedButtonOne,
+    Function onPressedButtonOne,
     String textRaisedButtonTwo,
     IconData iconRaisedButtonTwo,
-    Function onPressedButtonTwo,
+    void Function([BuildContext ctx]) onPressedButtonTwo,
     Color color,
     BuildContext context,
   }) {
@@ -81,7 +81,7 @@ class LayoutButtons {
     BuildContext context,
   }) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+      margin: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
       child: FlatButton(
         onPressed: onPressed,
         child: Text(

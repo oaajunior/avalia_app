@@ -28,8 +28,7 @@ class UserAccessViewModel {
   }
 
   Future<dynamic> getCurrentUser() async {
-    final result = await service.getCurrentUser();
-    return result;
+    return await service.getCurrentUser();
   }
 
   Future<UserModel> getUserData() async {
