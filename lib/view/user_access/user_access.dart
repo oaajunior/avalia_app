@@ -87,7 +87,7 @@ class _UserAccessViewState extends State<UserAccessView> {
         'Houve erro ao cadastrar o usuário! Verifique as informações fornecidas.';
     final messageCreateUserWithUndefinedError =
         'Houve erro ao cadastrar o usuário, verifique as informações e tente novamente!';
-    final titleAuthenticateUser = 'Autenticação do Usuário';
+    final titleAuthenticateUser = 'Autenticação de Usuário';
     final messageLoginUserWithError =
         'Houve erro ao processar a autenticação. Verifique as informações fornecidas!';
     final messageLogiWithUndefinedError =

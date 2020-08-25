@@ -79,7 +79,13 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
         mainAxisSize: MainAxisSize.min,
         children: [
           _form,
-          if (widget.isLoading()) Center(child: CircularProgressIndicator()),
+          if (widget.isLoading())
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
           _button,
         ],
       ),

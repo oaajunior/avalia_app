@@ -40,6 +40,12 @@ dependencies:
   path_provider: ^1.6.11
   #To verify if there is connection with the internet
   connectivity: ">=0.4.9 <2.0.0"
+  #To resizes FontSize automatically
+  auto_size_text: ^2.1.0
+  #To use the class NumberFormat, package of internalionization
+  intl: ^0.16.1
+  #To show the progress bar
+  percent_indicator: ^2.1.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

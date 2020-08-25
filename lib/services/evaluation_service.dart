@@ -111,10 +111,11 @@ class EvaluationServiceImpl implements EvaluationService {
           totalTimeQuestions += question['response_time'];
           questions.add(QuestionModel(
             active: question['active'],
-            answer: question['answer'],
+            rightAnswer: question['answer'],
             bncc: question['bncc'],
             createdAt: question['created_at'],
             description: question['description'],
+            answers: (question['answers'] as List).cast<String>().toList(),
             difficulty: question['question_type'],
             responseTime: question['response_time'],
             tip: question['tip'],

@@ -1,4 +1,5 @@
 import 'package:avalia_app/model/evaluation/evaluation_model.dart';
+import 'package:avalia_app/view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../view/layout/layout_alert.dart';
@@ -20,6 +21,7 @@ class PerformEvaluationView extends StatefulWidget {
 
 class _PerformEvaluationViewState extends State<PerformEvaluationView> {
   final _viewModel = PerformEvaluationViewModel();
+  EvaluationModel evaluation;
   bool _isLoading = false;
 
   void setLoading(bool value) {
@@ -30,6 +32,14 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
 
   bool getIsLoading() {
     return _isLoading;
+  }
+
+  void _goToPage() {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushNamed(
+      PerformEvaluationQuestionsView.routeName,
+      arguments: evaluation,
+    );
   }
 
   Widget _buildText(String textHeader, String textField) {
@@ -55,6 +65,37 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> showMessageToUser(
+    String title,
+    String message,
+  ) {
+    final customMessage = Text(message);
+
+    final button = RaisedButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold,
+            ),
+        child: Text(
+          'Ok',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+
+    return LayoutAlert.customAlert(
+      title: title,
+      message: customMessage,
+      color: yellowDeepColor,
+      context: context,
+      actionButtons: button,
     );
   }
 
@@ -113,7 +154,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
           width: 24.0,
         ),
         RaisedButton(
-          onPressed: () {},
+          onPressed: _goToPage,
           color: yellowDeepColor,
           child: DefaultTextStyle(
             style: Theme.of(context).textTheme.bodyText2.copyWith(
@@ -126,7 +167,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       ],
     );
     final alert = LayoutAlert.customAlert(
-      title: 'Realizar Avaliação',
+      title: widget.title.replaceAll('\n', ' '),
       color: yellowDeepColor,
       context: context,
       message: message,
@@ -137,9 +178,9 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
 
   void _searchForEvaluationCode(String codigo) async {
     setLoading(true);
-    final result = await _viewModel.getEvaluation(codigo);
-    if (result != null) {
-      await _buildEvaluation(result);
+    evaluation = await _viewModel.getEvaluation(codigo);
+    if (evaluation != null) {
+      await _buildEvaluation(evaluation);
     }
     switch (_viewModel.loadingStatus) {
       case LoadingStatus.completed:
@@ -149,6 +190,10 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       case LoadingStatus.error:
         if (_viewModel.exception != null) {
           setLoading(false);
+          showMessageToUser(
+            widget.title.replaceAll('\n', ' '),
+            _viewModel.exception.toString(),
+          );
         }
         break;
       default:
