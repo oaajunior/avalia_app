@@ -34,6 +34,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
   FocusNode _userTypeFocus;
   TextEditingController _informedPassword = TextEditingController();
   bool _showUserPassword = false;
+  bool _showUserRepeteadPassword = false;
 
   @override
   void initState() {
@@ -150,7 +151,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        hintText: 'Nome:',
+        hintText: 'Nome',
       ),
     );
 
@@ -169,7 +170,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        hintText: 'Sobrenome:',
+        hintText: 'Sobrenome',
       ),
     );
 
@@ -184,6 +185,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
         _userEmail = email.trim();
       },
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         hintText: 'E-mail',
       ),
@@ -232,13 +234,32 @@ class _FormUserAccessState extends State<FormUserAccess> {
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_userTypeFocus);
       },
-      decoration: InputDecoration(hintText: 'Confirmação Senha:'),
-      obscureText: _showUserPassword ? false : true,
+      decoration: InputDecoration(
+        hintText: 'Confirmação Senha',
+        prefix: Padding(
+          padding: const EdgeInsets.only(left: 42.0),
+        ),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(_showUserRepeteadPassword
+                ? Icons.visibility
+                : Icons.visibility_off),
+            onPressed: () {
+              setState(() {
+                _showUserRepeteadPassword = !_showUserRepeteadPassword;
+              });
+            },
+            color: Theme.of(context).iconTheme.color,
+          ),
+        ),
+      ),
+      obscureText: _showUserRepeteadPassword ? false : true,
     );
 
     final radioTypeUser = Container(
-      margin: EdgeInsets.only(left: 40.0),
-      width: deviceSize.width * 0.9,
+      //margin: EdgeInsets.only(left: 8.0),
+      width: deviceSize.width * 0.8,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -299,8 +320,27 @@ class _FormUserAccessState extends State<FormUserAccess> {
           ),
           LayoutButtons.customFlatButtons(
             context: context,
-            text:
-                widget.isLogin() ? 'É novo por aqui? Cadastre-se!' : 'Cancelar',
+            text: widget.isLogin()
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'É novo por aqui? ',
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Cadastre-se!',
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  )
+                : 'Cancelar',
             onPressed: () {
               _resetForm();
               widget.setLogin(!widget.isLogin());
@@ -321,10 +361,10 @@ class _FormUserAccessState extends State<FormUserAccess> {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: widget.isLogin()
-              ? deviceSize.height * 0.65
+              ? deviceSize.height * 0.7
               : deviceSize.height * 0.8,
           maxHeight: widget.isLogin()
-              ? deviceSize.height * 0.65
+              ? deviceSize.height * 0.7
               : deviceSize.height * 1.25,
         ),
         child: Form(

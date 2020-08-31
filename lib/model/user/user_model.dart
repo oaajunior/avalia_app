@@ -17,4 +17,20 @@ class UserModel {
     this.typeUser,
     this.createdAt,
   });
+
+  UserModel.fromMap(
+    Map<String, dynamic> user,
+  )   : name = user['username'],
+        surName = user['surname'],
+        email = user['email'],
+        typeUser =
+            user['type_user'] == 'T' ? TypeOfUser.Teacher : TypeOfUser.Student;
+
+  Map<String, dynamic> toMap() => {
+        'username': this.name,
+        'surname': this.surName,
+        'email': this.email,
+        'type_user': this.typeUser == TypeOfUser.Teacher ? 'T' : 'S',
+        'create_at': Timestamp.now(),
+      };
 }

@@ -1,31 +1,18 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:avalia_app/res/custom_icon.dart';
 import 'package:flutter/material.dart';
 
-import '../../res/custom_icons_button.dart';
+import '../../res/custom_icon_button.dart';
 
 class LayoutPage {
   static void _backPage(BuildContext context) {
     Navigator.of(context).pop();
   }
 
-  static void _backToBegin(BuildContext context, int pageToBack) {
-    switch (pageToBack) {
-      case 0:
-        break;
-      case 1:
-        Navigator.of(context).pop();
-        break;
-      case 2:
-        Navigator.of(context)..pop()..pop();
-        break;
-      case 3:
-        Navigator.of(context)..pop()..pop()..pop();
-        break;
-      default:
-        Navigator.of(context).pop();
-        break;
-    }
-    //Navigator.of(context).popUntil(ModalRoute.withName(HomeView.routeName));
-  }
+  // static void _backToBegin(BuildContext context) {
+  //   Navigator.of(context)
+  //       .popUntil(ModalRoute.withName(PerformEvaluationView.routeName));
+  // }
 
   static Widget render({
     bool hasHeader = false,
@@ -39,51 +26,55 @@ class LayoutPage {
     Widget content,
   }) {
     final deviceSize = MediaQuery.of(context).size;
+
     final _header = Container(
       margin: const EdgeInsets.symmetric(
         horizontal: 8.0,
       ),
+      padding: const EdgeInsets.only(top: 8),
       width: deviceSize.width,
-      child: Row(
-        mainAxisAlignment: hasHeaderButtons
-            ? MainAxisAlignment.spaceBetween
-            : MainAxisAlignment.center,
+      child: Stack(
+        alignment: hasHeaderButtons ? Alignment.topLeft : Alignment.topCenter,
         children: [
           if (hasHeaderButtons)
-            Padding(
-              padding: const EdgeInsets.only(right: 48),
-              child: IconButton(
-                iconSize: Theme.of(context).iconTheme.size,
-                icon: Icon(
-                  CustomIconsButton.button_back,
-                ),
-                onPressed: () => _backPage(context),
+            IconButton(
+              iconSize: Theme.of(context).iconTheme.size,
+              icon: Icon(
+                CustomIconButton.button_back,
               ),
+              onPressed: () => _backPage(context),
             ),
           Padding(
-            padding: const EdgeInsets.only(top: 32.0),
-            child: Text(
-              headerTitle != null ? headerTitle : '',
-              style: Theme.of(context).textTheme.headline3,
-            ),
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Center(
+                child: Icon(
+              CustomIcon.icon_logo_avalia,
+              size: 70,
+            )
+                // Text(
+                //   headerTitle != null ? headerTitle : '',
+                //   style: Theme.of(context).textTheme.headline3,
+                // ),
+                ),
           ),
-          if (hasHeaderButtons)
-            Padding(
-              padding: const EdgeInsets.only(right: 48.0),
-              child: IconButton(
-                iconSize: Theme.of(context).iconTheme.size,
-                icon: Icon(CustomIconsButton.button_home),
-                onPressed: () => _backToBegin(context, numberPagesToHome),
-              ),
-            ),
         ],
       ),
+      // if (hasHeaderButtons)
+      //   Padding(
+      //     padding: const EdgeInsets.only(right: 48.0),
+      //     child: IconButton(
+      //       iconSize: Theme.of(context).iconTheme.size,
+      //       icon: Icon(CustomIconButton.button_home),
+      //       onPressed: () => _backToBegin(context),
+      //     ),
+      //   ),
     );
 
     final _mainText = Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: Text(
+      child: AutoSizeText(
         mainText != null ? mainText : '',
+        wrapWords: false,
         style: Theme.of(context).textTheme.headline2,
         textAlign: TextAlign.center,
       ),
@@ -116,7 +107,7 @@ class LayoutPage {
                   children: [
                     if (hasHeader) _header,
                     if (mainText != null) _mainText,
-                    _buildSizedBox(24),
+                    _buildSizedBox(8),
                     if (message != null) _message,
                     _buildSizedBox(8),
                   ],

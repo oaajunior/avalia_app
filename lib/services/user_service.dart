@@ -1,4 +1,3 @@
-import 'package:avalia_app/utils/type_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -12,18 +11,20 @@ abstract class UserService {
   Future<void> createOrAuthenticateUser(UserModel user, {bool login = true});
   Stream<FirebaseUser> verifyAuthUser();
   Future<dynamic> signOut();
-  Future<dynamic> getCurrentUser();
+  Future<FirebaseUser> getCurrentFirebaseUser();
   Future<UserModel> getUserData();
+  Future<String> getCurrentUser();
 }
 
 class UserServiceImpl implements UserService {
   final _authInstance = FirebaseAuth.instance;
   final _storeInstance = Firestore.instance;
+  static String _userId;
 
   @override
   Future<void> createOrAuthenticateUser(UserModel user,
       {bool login = true}) async {
-    final timeStamp = Timestamp.now();
+    //final timeStamp = Timestamp.now();
     AuthResult _authResult;
 
     try {
@@ -46,33 +47,27 @@ class UserServiceImpl implements UserService {
         await _storeInstance
             .collection('users')
             .document(_authResult.user.uid)
-            .setData({
-          'username': user.name,
-          'surname': user.surName,
-          'email': user.email,
-          'type_user': user.typeUser == TypeOfUser.Teacher ? 'T' : 'S',
-          'create_at': timeStamp,
-        });
+            .setData(user.toMap());
       }
     } on AuthException catch (error) {
       switch (error.code) {
-        case 'INVALID_EMAIL':
+        case 'ERROR_INVALID_EMAIL':
           throw UserException(
               'O e-mail informado é inválido! Por favor, verifique.');
 
-        case 'INVALID_PASSWORD':
+        case 'ERROR_INVALID_PASSWORD':
           throw UserException(
               'A senha informada não está correta! Por favor, verifique.');
 
-        case 'EMAIL_NOT_FOUND':
+        case 'ERROR_EMAIL_NOT_FOUND':
           throw UserException(
               'O e-mail informado não foi encontrado! Por favor, verifique.');
 
-        case 'USER_NOT_FOUND':
+        case 'ERROR_USER_NOT_FOUND':
           throw UserException(
               'O e-mail informado não foi encontrado! Por favor, verifique.');
 
-        case 'USER_DISABLED':
+        case 'ERROR_USER_DISABLED':
           throw UserException(
               'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
 
@@ -126,7 +121,7 @@ class UserServiceImpl implements UserService {
   }
 
   @override
-  Future<dynamic> getCurrentUser() {
+  Future<FirebaseUser> getCurrentFirebaseUser() {
     return _authInstance.currentUser();
   }
 
@@ -140,20 +135,27 @@ class UserServiceImpl implements UserService {
     try {
       final userId = await getCurrentUser();
       final userReference =
-          await _storeInstance.collection('users').document(userId.uid).get();
-      final userData = UserModel(
-          name: userReference['username'],
-          surName: userReference['surname'],
-          email: userReference['email'],
-          typeUser: userReference['type_user'] == 'T'
-              ? TypeOfUser.Teacher
-              : TypeOfUser.Student);
+          await _storeInstance.collection('users').document(userId).get();
+      final userData = UserModel.fromMap(userReference.data);
 
       return userData;
     } on PlatformException catch (error) {
       print(error.message);
       throw UserException(
           'Houve um erro ao tentar recuperar informações do usuário');
+    }
+  }
+
+  @override
+  Future<String> getCurrentUser() async {
+    if (_userId != null) {
+      return _userId;
+    } else {
+      final result = await getCurrentFirebaseUser();
+      if (result != null) {
+        _userId = result.uid;
+      }
+      return _userId;
     }
   }
 }

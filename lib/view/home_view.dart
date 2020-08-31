@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../view_model/user_acess_view_model.dart';
 import '../res/colors.dart';
-import '../res/custom_icons.dart';
+import '../res/custom_icon.dart';
 import '../view/layout/layout_page.dart';
 import '../view/user_access/user_access.dart';
 import 'evaluation/perform_evaluation/perform_evaluation_view.dart';
@@ -41,22 +41,22 @@ class _HomeViewState extends State<HomeView> {
   final _listOptionsBottomPage = [
     {
       'name': 'Ajuda',
-      'icon': CustomIcons.icon_help_main_menu,
+      'icon': CustomIcon.icon_help_main_menu,
       'function': null,
     },
     {
       'name': 'Perfil',
-      'icon': CustomIcons.icon_edit_profile_main_menu,
+      'icon': CustomIcon.icon_edit_profile_main_menu,
       'function': null,
     },
     {
       'name': 'Sobre',
-      'icon': CustomIcons.icon_about_main_menu,
+      'icon': CustomIcon.icon_about_main_menu,
       'function': null,
     },
     {
       'name': 'Sair',
-      'icon': CustomIcons.icon_exit_main_menu,
+      'icon': CustomIcon.icon_exit_main_menu,
       'function': null,
     },
   ];
@@ -208,7 +208,7 @@ class _HomeViewState extends State<HomeView> {
     );
 
     Widget _bullets = Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _listOptionsPage
@@ -230,8 +230,9 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
 
-    Widget _userBottomOptions = Padding(
-      padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0, 0.0),
+    Widget _userBottomOptions = Container(
+      padding: const EdgeInsets.only(left: 16.0),
+      alignment: Alignment.bottomCenter,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _listOptionsBottomPage.map((item) {
@@ -242,8 +243,8 @@ class _HomeViewState extends State<HomeView> {
               margin: const EdgeInsets.only(
                 right: 8,
               ),
-              height: 80,
-              width: 80,
+              height: deviceSize.height * 0.12,
+              width: deviceSize.width * 0.2,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: blueBrightColor,
@@ -271,12 +272,17 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
 
-    Widget _content = Column(
-      children: [
-        _userOptionsPage,
-        _bullets,
-        _userBottomOptions,
-      ],
+    Widget _content = Container(
+      height: deviceSize.height * 0.78,
+      child: Column(
+        children: [
+          _userOptionsPage,
+          _bullets,
+          Expanded(
+            child: _userBottomOptions,
+          )
+        ],
+      ),
     );
 
     return LayoutPage.render(

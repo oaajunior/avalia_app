@@ -51,6 +51,7 @@ class LayoutButtons {
                   data: Theme.of(context).copyWith(
                     iconTheme: Theme.of(context).iconTheme.copyWith(
                           color: color != null ? color : Colors.white,
+                          opacity: 0.3,
                         ),
                   ),
                   child: Icon(
@@ -76,22 +77,20 @@ class LayoutButtons {
   }
 
   static Widget customFlatButtons({
-    String text,
+    dynamic text,
     Function onPressed,
     BuildContext context,
   }) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
       child: FlatButton(
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-          ),
-        ),
-      ),
+          onPressed: onPressed,
+          child: (text is String)
+              ? Text(
+                  text,
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              : text),
     );
   }
 }

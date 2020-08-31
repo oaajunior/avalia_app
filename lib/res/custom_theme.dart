@@ -15,8 +15,8 @@ ThemeData basicTheme() {
     cursorColor: whiteColor,
     unselectedWidgetColor: whiteColor,
     toggleableActiveColor: whiteColor,
-    buttonBarTheme: _basicButtonBarTheme(base.buttonBarTheme),
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    buttonBarTheme: _basicButtonBarTheme(base.buttonBarTheme),
     textTheme: _basicTextTheme(base.textTheme),
     buttonTheme: _basicButtonTheme(base.buttonTheme),
     iconTheme: _basicIconTheme(base.iconTheme),
@@ -44,7 +44,7 @@ ThemeData basicTheme() {
 
 ButtonBarThemeData _basicButtonBarTheme(ButtonBarThemeData basicButtonBar) {
   return basicButtonBar.copyWith(
-    alignment: MainAxisAlignment.spaceAround,
+    alignment: MainAxisAlignment.spaceEvenly,
     buttonHeight: 40.0,
     buttonMinWidth: 100.0,
     buttonPadding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -152,9 +152,11 @@ TextTheme _basicTextTheme(TextTheme baseText) {
         ),
         headline4: TextStyle(
           color: whiteColor,
+          fontSize: 24,
         ),
         headline5: TextStyle(
           color: whiteColor,
+          fontSize: 22,
         ),
         headline6: TextStyle(
           color: whiteColor,

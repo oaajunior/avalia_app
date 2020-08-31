@@ -15,14 +15,18 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class CustomIcons {
-  CustomIcons._();
+class CustomIcon {
+  CustomIcon._();
 
-  static const _kFontFam = 'CustomIcons';
+  static const _kFontFam = 'CustomIcon';
   static const _kFontPkg = null;
 
+  static const IconData icon_about_main_menu =
+      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icon_edit_questions =
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icon_search_evaluation =
+      IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icon_evaluation_active =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icon_evaluation_finished =
@@ -35,9 +39,9 @@ class CustomIcons {
       IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icon_exit_main_menu =
       IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData icon_about_main_menu =
+  static const IconData icon_avalia =
       IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData icon_search_evaluation =
+  static const IconData icon_logo_avalia =
       IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icon_ranking =
       IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);

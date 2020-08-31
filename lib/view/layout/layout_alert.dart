@@ -5,11 +5,14 @@ class LayoutAlert {
     String title,
     Widget message,
     BuildContext context,
+    Color colorTitle,
     Color color,
     Widget actionButtons,
+    bool barrierDismissible = true,
   }) {
     return showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
       builder: (ctx) => LayoutBuilder(
         builder: (context, constraints) => ConstrainedBox(
           constraints: BoxConstraints(
@@ -23,10 +26,9 @@ class LayoutAlert {
               shape: DialogTheme.of(context).shape,
               backgroundColor: Theme.of(context).accentColor,
               title: DefaultTextStyle(
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(color: color, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline4.copyWith(
+                    color: colorTitle != null ? colorTitle : color,
+                    fontWeight: FontWeight.bold),
                 child: Text(
                   title,
                   textAlign: TextAlign.center,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../res/custom_icons.dart';
+import '../../../../res/custom_icon.dart';
 import '../../../layout/layout_buttons.dart';
 import '../../../layout/layout_text_fields.dart';
 
@@ -59,7 +59,7 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
         children: [
           LayoutButtons.customRaisedButtons(
             textRaisedButtonOne: 'Buscar',
-            iconRaisedButtonOne: CustomIcons.icon_search_evaluation,
+            iconRaisedButtonOne: CustomIcon.icon_search_evaluation,
             color: yellowDeepColor,
             context: context,
             onPressedButtonOne: _trySubmit,
@@ -68,24 +68,28 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
       ),
     );
 
-    final _form = Form(key: _formKey, child: _textField);
+    final _form = Form(
+      key: _formKey,
+      child: _textField,
+    );
+
+    final _progressIndicator = Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
 
     final _content = ConstrainedBox(
       constraints: BoxConstraints(
-        minHeight: deviceSize.height * 0.47,
-        maxHeight: deviceSize.height * 0.47,
+        minHeight: deviceSize.height * 0.48,
+        maxHeight: deviceSize.height * 0.48,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _form,
-          if (widget.isLoading())
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
+          if (widget.isLoading()) _progressIndicator,
           _button,
         ],
       ),

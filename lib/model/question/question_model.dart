@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionModel {
+  String id;
   bool active;
-  int rightAnswer;
+  String rightAnswer;
   String bncc;
   String description;
-  List<String> answers;
+  Map<String, String> answerOptions;
   int difficulty;
   int questionType;
   int responseTime;
@@ -13,15 +14,31 @@ class QuestionModel {
   Timestamp createdAt;
 
   QuestionModel({
+    this.id,
     this.active,
     this.rightAnswer,
     this.bncc,
     this.description,
-    this.answers,
+    this.answerOptions,
     this.difficulty,
     this.questionType,
     this.responseTime,
     this.tip,
     this.createdAt,
   });
+
+  QuestionModel.fromMap(
+    String id,
+    Map<String, dynamic> question,
+  )   : id = id,
+        active = question['active'],
+        rightAnswer = question['right_answer'],
+        bncc = question['bncc'],
+        createdAt = question['created_at'],
+        description = question['description'],
+        answerOptions = (question['answers'] as Map).cast<String, String>(),
+        questionType = question['question_type'],
+        difficulty = question['difficulty'],
+        responseTime = question['response_time'],
+        tip = question['tip'];
 }

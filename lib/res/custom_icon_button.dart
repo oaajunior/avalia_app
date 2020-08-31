@@ -15,10 +15,10 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class CustomIconsButton {
-  CustomIconsButton._();
+class CustomIconButton {
+  CustomIconButton._();
 
-  static const _kFontFam = 'CustomIconsButton';
+  static const _kFontFam = 'CustomIconButton';
   static const _kFontPkg = null;
 
   static const IconData button_back =

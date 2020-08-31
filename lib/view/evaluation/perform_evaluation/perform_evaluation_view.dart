@@ -1,6 +1,5 @@
-import 'package:avalia_app/model/evaluation/evaluation_model.dart';
-import 'package:avalia_app/view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../view/layout/layout_alert.dart';
 import '../../layout/layout_page.dart';
@@ -8,6 +7,8 @@ import '../../../view_model/perform_evaluation_view_model.dart';
 import 'widgets/perform_evaluation_detail.dart';
 import '../../../utils/loading_status.dart';
 import '../../../res/colors.dart';
+import '../../../model/evaluation/evaluation_model.dart';
+import '../../../view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
 
 class PerformEvaluationView extends StatefulWidget {
   static const routeName = '/realizar_avaliacao';
@@ -21,7 +22,7 @@ class PerformEvaluationView extends StatefulWidget {
 
 class _PerformEvaluationViewState extends State<PerformEvaluationView> {
   final _viewModel = PerformEvaluationViewModel();
-  EvaluationModel evaluation;
+  EvaluationModel _evaluation;
   bool _isLoading = false;
 
   void setLoading(bool value) {
@@ -34,12 +35,27 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     return _isLoading;
   }
 
-  void _goToPage() {
-    Navigator.of(context).pop();
-    Navigator.of(context).pushNamed(
-      PerformEvaluationQuestionsView.routeName,
-      arguments: evaluation,
-    );
+  void _goToPage() async {
+    if (await _isDateEvaluationRight()) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed(
+        PerformEvaluationQuestionsView.routeName,
+        arguments: _evaluation,
+      );
+    }
+  }
+
+  Future<bool> _isDateEvaluationRight() async {
+    if (_evaluation.finalDate.toDate().isBefore(DateTime.now())) {
+      await showMessageToUser('Período da Avaliação',
+          'O período da avaliação já foi encerrado. Verifique com o seu professor!');
+      return false;
+    } else if (_evaluation.initialDate.toDate().isAfter(DateTime.now())) {
+      await showMessageToUser('Período da Avaliação',
+          'O período da avaliação ainda não foi iniciado. Verifique com o seu professor!');
+      return false;
+    }
+    return true;
   }
 
   Widget _buildText(String textHeader, String textField) {
@@ -47,7 +63,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       children: [
         DefaultTextStyle(
           style: Theme.of(context).textTheme.bodyText2.copyWith(
-                color: yellowDeepColor,
+                color: Colors.black54,
                 fontWeight: FontWeight.bold,
               ),
           child: Text(
@@ -55,9 +71,12 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
             textAlign: TextAlign.left,
           ),
         ),
+        SizedBox(
+          height: 28,
+        ),
         DefaultTextStyle(
           style: Theme.of(context).textTheme.bodyText2.copyWith(
-                color: yellowDeepColor,
+                color: Colors.black54,
               ),
           child: Text(
             textField,
@@ -72,12 +91,16 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     String title,
     String message,
   ) {
-    final customMessage = Text(message);
+    final customMessage = Text(
+      message,
+      textAlign: TextAlign.center,
+    );
 
     final button = RaisedButton(
       onPressed: () {
         Navigator.of(context).pop();
       },
+      color: yellowDeepColor,
       child: DefaultTextStyle(
         style: Theme.of(context).textTheme.bodyText2.copyWith(
               color: Theme.of(context).accentColor,
@@ -93,13 +116,14 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     return LayoutAlert.customAlert(
       title: title,
       message: customMessage,
-      color: yellowDeepColor,
+      colorTitle: yellowDeepColor,
+      color: blackSoftColor,
       context: context,
       actionButtons: button,
     );
   }
 
-  Future<void> _buildEvaluation(EvaluationModel evaluation) {
+  Future<void> _buildEvaluation(EvaluationModel _evaluation) {
     final message = FittedBox(
       alignment: Alignment.topLeft,
       fit: BoxFit.contain,
@@ -107,28 +131,40 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildText(
-            'Etapa Ensino: ',
-            evaluation.stageEducation,
-          ),
-          _buildText(
             'Disciplina: ',
-            evaluation.discipline,
+            _evaluation.discipline,
           ),
           _buildText(
             'Ano Escolar: ',
-            '${evaluation.schoolYear.toString()}º',
+            '${_evaluation.schoolYear.toString()}º',
           ),
           _buildText(
             'Turma: ',
-            evaluation.team,
+            _evaluation.team,
           ),
           _buildText(
             'Quantidade de Questões: ',
-            evaluation.totalQuestions.toString(),
+            _evaluation.totalQuestions.toString(),
           ),
           _buildText(
             'Tempo Mínimo: ',
-            evaluation.totalTime,
+            _evaluation.totalTime,
+          ),
+          _buildText(
+            'Data Inicio: ',
+            DateFormat('d/MM/yy').format(_evaluation.initialDate.toDate()),
+          ),
+          _buildText(
+            'Hora Inicio: ',
+            DateFormat('Hm').format(_evaluation.initialDate.toDate()),
+          ),
+          _buildText(
+            'Data Final ',
+            DateFormat('d/MM/yy').format(_evaluation.finalDate.toDate()),
+          ),
+          _buildText(
+            'Hora Final: ',
+            DateFormat('Hm').format(_evaluation.finalDate.toDate()),
           ),
         ],
       ),
@@ -136,6 +172,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
 
     final buttons = Row(
       mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         RaisedButton(
           onPressed: () {
@@ -148,10 +185,11 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
                 ),
             child: Text('Cancelar'),
           ),
-          color: yellowDeepColor,
+          color: yellowBrightColor,
+          elevation: 0,
         ),
         SizedBox(
-          width: 24.0,
+          width: 32,
         ),
         RaisedButton(
           onPressed: _goToPage,
@@ -166,27 +204,34 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
         )
       ],
     );
+
     final alert = LayoutAlert.customAlert(
       title: widget.title.replaceAll('\n', ' '),
       color: yellowDeepColor,
       context: context,
       message: message,
       actionButtons: buttons,
+      barrierDismissible: false,
     );
     return alert;
   }
 
   void _searchForEvaluationCode(String codigo) async {
     setLoading(true);
-    evaluation = await _viewModel.getEvaluation(codigo);
-    if (evaluation != null) {
-      await _buildEvaluation(evaluation);
-    }
+    _evaluation = await _viewModel.getEvaluation(codigo);
+
     switch (_viewModel.loadingStatus) {
       case LoadingStatus.completed:
         setLoading(false);
-
+        await _buildEvaluation(_evaluation);
         break;
+
+      case LoadingStatus.empty:
+        setLoading(false);
+        await showMessageToUser('Avaliação não encontrada',
+            'Não foi localizada uma avaliação para o código informado. Por favor, verifique o código digitado!');
+        break;
+
       case LoadingStatus.error:
         if (_viewModel.exception != null) {
           setLoading(false);
@@ -210,7 +255,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       headerTitle: 'avalia',
       context: context,
       mainText: widget.title,
-      message: 'Por favor,\n informe o código',
+      message: 'Por favor,\n informe um código',
       color: yellowDeepColor,
       content: PerformEvaluationDetail(getIsLoading, _searchForEvaluationCode),
     );

@@ -96,12 +96,12 @@ flutter:
     - family: Quenda
       fonts:
         - asset: lib/res/fonts/Quenda-Medium.otf
-    - family: CustomIcons
+    - family: CustomIcon
       fonts:
-        - asset: lib/res/icons/Custom-Icons.ttf
-    - family: CustomIconsButton
+        - asset: lib/res/icons/Custom-Icon.ttf
+    - family: CustomIconButton
       fonts:
-        - asset: lib/res/icons/Custom-Icons-Button.ttf
+        - asset: lib/res/icons/Custom-Icon-Button.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

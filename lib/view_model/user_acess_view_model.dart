@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../services/user_service.dart';
 import '../utils/loading_status.dart';
 import '../model/user/user_model.dart';
@@ -19,7 +21,7 @@ class UserAccessViewModel {
     }
   }
 
-  Stream<dynamic> verifyAuthUser() {
+  Stream<FirebaseUser> verifyAuthUser() {
     return service.verifyAuthUser();
   }
 
@@ -27,8 +29,8 @@ class UserAccessViewModel {
     return service.signOut();
   }
 
-  Future<dynamic> getCurrentUser() async {
-    return await service.getCurrentUser();
+  Future<String> getCurrentUser() {
+    return service.getCurrentUser();
   }
 
   Future<UserModel> getUserData() async {
