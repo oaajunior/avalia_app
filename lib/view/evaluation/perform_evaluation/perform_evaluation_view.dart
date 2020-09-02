@@ -1,3 +1,4 @@
+import 'package:avalia_app/view/evaluation/perform_evaluation/widgets/perform_evaluation_prepare_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -8,7 +9,6 @@ import 'widgets/perform_evaluation_detail.dart';
 import '../../../utils/loading_status.dart';
 import '../../../res/colors.dart';
 import '../../../model/evaluation/evaluation_model.dart';
-import '../../../view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
 
 class PerformEvaluationView extends StatefulWidget {
   static const routeName = '/realizar_avaliacao';
@@ -39,7 +39,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     if (await _isDateEvaluationRight()) {
       Navigator.of(context).pop();
       Navigator.of(context).pushNamed(
-        PerformEvaluationQuestionsView.routeName,
+        PerformEvaluationPrepareView.routeName,
         arguments: _evaluation,
       );
     }
@@ -152,7 +152,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
           ),
           _buildText(
             'Data Inicio: ',
-            DateFormat('d/MM/yy').format(_evaluation.initialDate.toDate()),
+            DateFormat('dd/MM/yy').format(_evaluation.initialDate.toDate()),
           ),
           _buildText(
             'Hora Inicio: ',
@@ -160,7 +160,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
           ),
           _buildText(
             'Data Final ',
-            DateFormat('d/MM/yy').format(_evaluation.finalDate.toDate()),
+            DateFormat('dd/MM/yy').format(_evaluation.finalDate.toDate()),
           ),
           _buildText(
             'Hora Final: ',
@@ -252,10 +252,8 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     return LayoutPage.render(
       hasHeader: true,
       hasHeaderButtons: true,
-      headerTitle: 'avalia',
+      headerTitle: 'Realizar Avaliação',
       context: context,
-      mainText: widget.title,
-      message: 'Por favor,\n informe um código',
       color: yellowDeepColor,
       content: PerformEvaluationDetail(getIsLoading, _searchForEvaluationCode),
     );

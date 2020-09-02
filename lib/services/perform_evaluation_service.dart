@@ -17,7 +17,7 @@ abstract class PerformEvaluationService {
 }
 
 class EvaluationServiceImpl implements PerformEvaluationService {
-  final _storeInstance = Firestore.instance;
+  final _storeInstance = FirebaseFirestore.instance;
   int _totalQuestions = 0;
   int _totalTimeQuestions = 0;
   final userService = UserServiceImpl();
@@ -45,22 +45,22 @@ class EvaluationServiceImpl implements PerformEvaluationService {
           return evaluation;
         }
 
-        QuerySnapshot docsData = await docReference.getDocuments();
-        if (docsData == null || docsData.documents.length == 0) {
+        QuerySnapshot docsData = await docReference.get();
+        if (docsData == null || docsData.docs.length == 0) {
           return evaluation;
         }
-        docsData.documents.forEach((doc) {
+        docsData.docs.forEach((doc) {
           docEvaluation = doc;
-          if (docEvaluation.data['status'] == 'I') {
+          if (docEvaluation.get('status') == 'I') {
             throw EvaluationException(
                 'A avaliação informada está Inativa. Por favor, entre em contato com o seu professor!');
-          } else if (docEvaluation.data['status'] == 'F') {
+          } else if (docEvaluation.get('status') == 'F') {
             throw EvaluationException(
                 'A avaliação informada está Finalizada. Por favor, entre em contato com o seu professor!');
           }
         });
 
-        questions = await getQuestions(docEvaluation.data['question']);
+        questions = await getQuestions(docEvaluation.get('question'));
 
         final totalTime = Duration(seconds: _totalTimeQuestions);
         final arrayTime = totalTime.toString().split(':');
@@ -68,11 +68,11 @@ class EvaluationServiceImpl implements PerformEvaluationService {
             '${arrayTime[0]}h${arrayTime[1]}min${double.parse(arrayTime[2]).truncate()}s';
 
         evaluation = EvaluationModel.fromMap(
-          docEvaluation.documentID,
+          docEvaluation.id,
           _totalQuestions,
           formattedTime,
           questions,
-          docEvaluation.data,
+          docEvaluation.data(),
         );
       } else {
         throw EvaluationException(
@@ -102,16 +102,15 @@ class EvaluationServiceImpl implements PerformEvaluationService {
     _totalTimeQuestions = 0;
 
     await Future.forEach(questionsReference, (questionRef) async {
-      final questionData = await questionRef.get();
-      if (questionData != null && questionData.data != null) {
-        final question = questionData.data;
-        if (question['active'] == true) {
+      final question = await questionRef.get();
+      if (question != null && question.data() != null) {
+        if (question.get('active') == true) {
           _totalQuestions++;
-          _totalTimeQuestions += question['response_time'];
+          _totalTimeQuestions += question.get('response_time');
           questions.add(
             QuestionModel.fromMap(
-              questionData.documentID,
-              question,
+              question.id,
+              question.data(),
             ),
           );
         }
@@ -145,8 +144,8 @@ class EvaluationServiceImpl implements PerformEvaluationService {
         .where('evaluation_code', isEqualTo: code)
         .where('user', isEqualTo: user);
 
-    final documents = await query.getDocuments();
-    if (documents != null && documents.documents.length == 0) {
+    final documents = await query.get();
+    if (documents != null && documents.docs.length == 0) {
       return false;
     } else {
       return true;

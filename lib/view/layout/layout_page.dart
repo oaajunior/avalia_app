@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:avalia_app/res/custom_icon.dart';
+import 'package:avalia_app/res/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/custom_icon_button.dart';
@@ -17,6 +17,7 @@ class LayoutPage {
   static Widget render({
     bool hasHeader = false,
     bool hasHeaderButtons = false,
+    bool hasHeaderLogo = false,
     String headerTitle,
     String mainText,
     String message,
@@ -28,11 +29,8 @@ class LayoutPage {
     final deviceSize = MediaQuery.of(context).size;
 
     final _header = Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      padding: const EdgeInsets.only(top: 8),
       width: deviceSize.width,
+      margin: const EdgeInsets.all(8.0),
       child: Stack(
         alignment: hasHeaderButtons ? Alignment.topLeft : Alignment.topCenter,
         children: [
@@ -40,23 +38,35 @@ class LayoutPage {
             IconButton(
               iconSize: Theme.of(context).iconTheme.size,
               icon: Icon(
-                CustomIconButton.button_back,
+                CustomIconButton.button_back_without_desc,
+                color: whiteColor,
               ),
               onPressed: () => _backPage(context),
             ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Center(
-                child: Icon(
-              CustomIcon.icon_logo_avalia,
-              size: 70,
-            )
-                // Text(
-                //   headerTitle != null ? headerTitle : '',
-                //   style: Theme.of(context).textTheme.headline3,
-                // ),
-                ),
-          ),
+          if (headerTitle != null)
+            Container(
+              padding: const EdgeInsets.only(top: 14.0),
+              alignment: Alignment.center,
+              height: deviceSize.height * 0.06,
+              child: Text(
+                headerTitle,
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ),
+          if (hasHeaderLogo)
+            Container(
+              height: deviceSize.height * 0.25,
+              padding: const EdgeInsets.only(top: 32.0, bottom: 32.0),
+              child: Center(
+                  child: Image.asset(
+                'lib/res/images/avalia_logo.png',
+              )
+                  // Text(
+                  //   headerTitle != null ? headerTitle : '',
+                  //   style: Theme.of(context).textTheme.headline3,
+                  // ),
+                  ),
+            ),
         ],
       ),
       // if (hasHeaderButtons)
@@ -101,15 +111,16 @@ class LayoutPage {
               minHeight: deviceSize.height * 0.95,
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (hasHeader) _header,
                     if (mainText != null) _mainText,
-                    _buildSizedBox(8),
+                    if (mainText != null) _buildSizedBox(8),
                     if (message != null) _message,
-                    _buildSizedBox(8),
+                    if (message != null) _buildSizedBox(8),
                   ],
                 ),
                 if (content != null)

@@ -22,7 +22,8 @@ class LayoutAlert {
             width: constraints.maxWidth,
             child: AlertDialog(
               insetPadding: const EdgeInsets.symmetric(horizontal: 32.0),
-              actionsPadding: const EdgeInsets.symmetric(horizontal: 24.0),
+              actionsPadding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               shape: DialogTheme.of(context).shape,
               backgroundColor: Theme.of(context).accentColor,
               title: DefaultTextStyle(

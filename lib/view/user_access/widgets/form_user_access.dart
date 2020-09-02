@@ -152,6 +152,9 @@ class _FormUserAccessState extends State<FormUserAccess> {
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
         hintText: 'Nome',
+        hintStyle: TextStyle(
+          color: whitSoftColor,
+        ),
       ),
     );
 
@@ -171,6 +174,9 @@ class _FormUserAccessState extends State<FormUserAccess> {
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
         hintText: 'Sobrenome',
+        hintStyle: TextStyle(
+          color: whitSoftColor,
+        ),
       ),
     );
 
@@ -188,6 +194,9 @@ class _FormUserAccessState extends State<FormUserAccess> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         hintText: 'E-mail',
+        hintStyle: TextStyle(
+          color: whitSoftColor,
+        ),
       ),
     );
     final _textFieldPassword = LayoutTextFields.customTextFields(
@@ -206,8 +215,11 @@ class _FormUserAccessState extends State<FormUserAccess> {
       },
       decoration: InputDecoration(
         hintText: 'Senha',
+        hintStyle: TextStyle(
+          color: whitSoftColor,
+        ),
         prefix: Padding(
-          padding: const EdgeInsets.only(left: 42.0),
+          padding: const EdgeInsets.only(left: 55.0),
         ),
         suffixIcon: Padding(
           padding: const EdgeInsets.only(right: 8.0),
@@ -219,7 +231,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
                 _showUserPassword = !_showUserPassword;
               });
             },
-            color: Theme.of(context).iconTheme.color,
+            color: whitSoftColor,
           ),
         ),
       ),
@@ -236,6 +248,9 @@ class _FormUserAccessState extends State<FormUserAccess> {
       },
       decoration: InputDecoration(
         hintText: 'Confirmação Senha',
+        hintStyle: TextStyle(
+          color: whitSoftColor,
+        ),
         prefix: Padding(
           padding: const EdgeInsets.only(left: 42.0),
         ),
@@ -250,7 +265,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
                 _showUserRepeteadPassword = !_showUserRepeteadPassword;
               });
             },
-            color: Theme.of(context).iconTheme.color,
+            color: whitSoftColor,
           ),
         ),
       ),
@@ -258,7 +273,6 @@ class _FormUserAccessState extends State<FormUserAccess> {
     );
 
     final radioTypeUser = Container(
-      //margin: EdgeInsets.only(left: 8.0),
       width: deviceSize.width * 0.8,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -361,10 +375,10 @@ class _FormUserAccessState extends State<FormUserAccess> {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: widget.isLogin()
-              ? deviceSize.height * 0.7
+              ? deviceSize.height * 0.69
               : deviceSize.height * 0.8,
           maxHeight: widget.isLogin()
-              ? deviceSize.height * 0.7
+              ? deviceSize.height * 0.69
               : deviceSize.height * 1.25,
         ),
         child: Form(

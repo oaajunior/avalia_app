@@ -152,10 +152,8 @@ class _HomeViewState extends State<HomeView> {
         child: Stack(
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 22.0),
+              margin: const EdgeInsets.symmetric(horizontal: 24.0),
               padding: const EdgeInsets.only(top: 24.0),
-              height: deviceSize.height * 0.55,
-              width: deviceSize.width * 0.85,
               decoration: BoxDecoration(
                 color: whiteColor,
                 borderRadius: BorderRadius.circular(20.0),
@@ -175,7 +173,7 @@ class _HomeViewState extends State<HomeView> {
               top: 10,
               left: 48,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline4.copyWith(
+                style: Theme.of(context).textTheme.headline2.copyWith(
                       color: color,
                     ),
                 child: Text(
@@ -190,7 +188,9 @@ class _HomeViewState extends State<HomeView> {
 
     final _userOptionsPage = Center(
       child: Container(
-        height: deviceSize.height * 0.55,
+        padding: EdgeInsets.only(top: deviceSize.height * 0.1),
+        height: deviceSize.height * 0.7,
+        width: deviceSize.width,
         child: PageView.builder(
           scrollDirection: Axis.horizontal,
           controller: _pageController,
@@ -231,7 +231,9 @@ class _HomeViewState extends State<HomeView> {
     );
 
     Widget _userBottomOptions = Container(
-      padding: const EdgeInsets.only(left: 16.0),
+      padding: const EdgeInsets.only(
+        left: 16.0,
+      ),
       alignment: Alignment.bottomCenter,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -273,7 +275,7 @@ class _HomeViewState extends State<HomeView> {
     );
 
     Widget _content = Container(
-      height: deviceSize.height * 0.78,
+      height: deviceSize.height * 0.93,
       child: Column(
         children: [
           _userOptionsPage,
@@ -286,9 +288,9 @@ class _HomeViewState extends State<HomeView> {
     );
 
     return LayoutPage.render(
-      hasHeader: true,
+      hasHeader: false,
       hasHeaderButtons: false,
-      headerTitle: 'avalia',
+      hasHeaderLogo: false,
       context: context,
       color: Theme.of(context).primaryColor,
       content: _content,

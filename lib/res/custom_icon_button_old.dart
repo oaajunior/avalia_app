@@ -15,10 +15,10 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class CustomIconButton {
-  CustomIconButton._();
+class CustomIconButtonOld {
+  CustomIconButtonOld._();
 
-  static const _kFontFam = 'CustomIconButton';
+  static const _kFontFam = 'CustomIconButtonOld';
   static const _kFontPkg = null;
 
   static const IconData button_back =
@@ -29,8 +29,4 @@ class CustomIconButton {
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData button_edit =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData button_home_without_desc =
-      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData button_back_without_desc =
-      IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

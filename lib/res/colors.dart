@@ -13,3 +13,4 @@ const pinkColor = const Color(0xFFD066A1);
 const redColor = const Color(0xFFC02F2E);
 const cadetBlueColor = const Color(0xFF5A9EAA);
 const whiteColor = Colors.white;
+const whitSoftColor = Colors.white54;

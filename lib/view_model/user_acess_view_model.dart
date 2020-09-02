@@ -21,7 +21,7 @@ class UserAccessViewModel {
     }
   }
 
-  Stream<FirebaseUser> verifyAuthUser() {
+  Stream<User> verifyAuthUser() {
     return service.verifyAuthUser();
   }
 

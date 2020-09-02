@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../../res/custom_icon.dart';
 import '../../../utils/loading_status.dart';
@@ -45,6 +44,7 @@ class _PerformEvaluationQuestionsViewState
   int _indexQuestion = 0;
   bool _lastQuestion = false;
   bool _isLoading = false;
+  int _timeToAnswer = 0;
 
   void setLoading(bool value) {
     setState(() {
@@ -118,9 +118,9 @@ class _PerformEvaluationQuestionsViewState
 
   void _timeToQuestion() {
     _cancelTimer();
+
     int _counterSeconds =
         widget.evaluation.question[_indexQuestion].responseTime;
-
     _timerToCancel = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_counterSeconds >= 0) {
         setState(() {
@@ -128,6 +128,7 @@ class _PerformEvaluationQuestionsViewState
                   widget.evaluation.question[_indexQuestion].responseTime)
               .toPrecision(2);
         });
+        _timeToAnswer = _counterSeconds;
         _counterSeconds--;
       } else {
         _cancelTimer();
@@ -138,30 +139,35 @@ class _PerformEvaluationQuestionsViewState
 
   Future<void> _saveStudentEvaluation(
       EvaluationStudentModel evaluationStudent) async {
-    Widget userNota = CircularPercentIndicator(
-      radius: 180,
-      lineWidth: 2.0,
-      percent: 1.0,
-      animation: false,
-      backgroundColor: greenBrightColor,
-      progressColor: greenBrightColor,
-      center: DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline3.copyWith(
-              color: greenBrightColor,
+    Widget userNota = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 80.0),
+      child: CircularPercentIndicator(
+        radius: 188,
+        lineWidth: 4.0,
+        percent: 1.0,
+        animation: false,
+        backgroundColor: greenBrightColor,
+        progressColor: greenBrightColor,
+        center: DefaultTextStyle(
+          style: Theme.of(context).textTheme.headline3.copyWith(
+                color: greenBrightColor,
+                fontWeight: FontWeight.bold,
+              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              _evaluationStudent.grade.toString(),
             ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Text(
-            _evaluationStudent.grade.toString(),
           ),
         ),
       ),
     );
+
     Widget circularProgress = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: CircularPercentIndicator(
         radius: 150.0,
-        lineWidth: 3.0,
+        lineWidth: 4.0,
         percent: 1.0,
         restartAnimation: true,
         animation: true,
@@ -267,13 +273,13 @@ class _PerformEvaluationQuestionsViewState
     //         .toDouble();
     final numberOfQuestions = widget.evaluation.question.length;
     final deviceSize = MediaQuery.of(context).size;
-    final timeToAnswer =
-        widget.evaluation.question[_indexQuestion].responseTime;
-    final totalTime = Duration(seconds: timeToAnswer);
-    final arrayTime = totalTime.toString().split(':');
-    final formattedTime = int.parse(arrayTime[1]) == 0
-        ? '${double.parse(arrayTime[2]).truncate()}s'
-        : '${arrayTime[1]}min${double.parse(arrayTime[2]).truncate()}s';
+    // final timeToAnswer =
+    //     widget.evaluation.question[_indexQuestion].responseTime;
+    //final totalTime = Duration(seconds: timeToAnswer);
+    // final arrayTime = totalTime.toString().split(':');
+    // final formattedTime = int.parse(arrayTime[1]) == 0
+    //     ? '${double.parse(arrayTime[2]).truncate()}'
+    //     : '${arrayTime[1]}min${double.parse(arrayTime[2]).truncate()}s';
 
     final numberFormat = NumberFormat('00');
 
@@ -281,135 +287,115 @@ class _PerformEvaluationQuestionsViewState
       alignment: Alignment.center,
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            'Questão',
-            style: Theme.of(context).textTheme.headline3,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
-            width: 8,
-          ),
           Text(
             '${numberFormat.format(_indexQuestion + 1)}/${numberFormat.format(numberOfQuestions)}',
             style: Theme.of(context).textTheme.headline3,
             textAlign: TextAlign.center,
-          )
+          ),
+          Container(
+            width: deviceSize.width * 0.4,
+            padding: const EdgeInsets.only(left: 52.0),
+            child: CircularPercentIndicator(
+              radius: 55,
+              percent: _timeToResponse,
+              center: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text((_timeToAnswer).toString()),
+              ),
+              backgroundColor: whiteColor,
+              progressColor: greenDeepColor,
+              animation: false,
+            ),
+          ),
         ],
       ),
     );
 
-    final _progressIndicator = Container(
-      width: deviceSize.width * 0.4,
-      child: Center(
-        child: LinearPercentIndicator(
-          lineHeight: 8.0,
-          leading: Text('0'),
-          trailing: Text('$formattedTime'),
-          percent: _timeToResponse,
-          backgroundColor: whiteColor,
-          progressColor: greenDeepColor,
-          linearStrokeCap: LinearStrokeCap.roundAll,
-          animation: false,
-        ),
-      ),
-    );
-
-    List<Widget> _buildOptions(
+    Widget _buildOptions(
         AnswerLetter answerLetter, String letter, String optionAnswer) {
-      List<Widget> list = List<Widget>();
-      list.add(
-        Theme(
-          data: Theme.of(context).copyWith(
-            unselectedWidgetColor: yellowDeepColor,
-            toggleableActiveColor: yellowDeepColor,
-          ),
-          child: Radio(
-            value: answerLetter,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            toggleable: true,
-            groupValue: _answerLetter,
-            onChanged: (AnswerLetter value) {
-              setState(() {
-                _answerLetter = value;
-              });
-            },
-          ),
-        ),
-      );
-      list.add(
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline6.copyWith(
-                      color: yellowDeepColor,
-                    ),
-                child: Text(letter),
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 24.0),
+        child: Row(
+          children: [
+            Theme(
+              data: Theme.of(context).copyWith(
+                unselectedWidgetColor: yellowDeepColor,
+                toggleableActiveColor: yellowDeepColor,
               ),
-              Container(
-                width: deviceSize.width * 0.25,
-                child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.headline6.copyWith(
-                        color: yellowDeepColor,
-                      ),
-                  child: AutoSizeText(
-                    optionAnswer,
-                    wrapWords: false,
-                    textAlign: TextAlign.left,
-                    group: _groupOfTextsRadios,
-                    maxLines: 6,
+              child: Radio(
+                value: answerLetter,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                toggleable: true,
+                groupValue: _answerLetter,
+                onChanged: (AnswerLetter value) {
+                  setState(() {
+                    _answerLetter = value;
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  DefaultTextStyle(
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                          color: yellowDeepColor,
+                        ),
+                    child: Text(letter),
                   ),
-                ),
+                  Container(
+                    width: deviceSize.width * 0.67,
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.headline6.copyWith(
+                            color: yellowDeepColor,
+                          ),
+                      child: AutoSizeText(
+                        optionAnswer,
+                        wrapWords: false,
+                        textAlign: TextAlign.left,
+                        group: _groupOfTextsRadios,
+                        maxLines: 3,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
-      return list;
     }
 
-    final _answersAC = Container(
+    final _answersOptions = Container(
       margin: EdgeInsets.only(
         left: 16.0,
         right: 8.0,
-        top: 16.0,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      height: deviceSize.height * 0.45,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          ..._buildOptions(
+          _buildOptions(
             AnswerLetter.A,
             'A - ',
             question.answerOptions['A'],
           ),
-          ..._buildOptions(
-            AnswerLetter.C,
-            'C - ',
-            question.answerOptions['C'],
-          ),
-        ],
-      ),
-    );
-
-    final _answersBD = Container(
-      margin: const EdgeInsets.only(
-        left: 16.0,
-        right: 8.0,
-        top: 65,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ..._buildOptions(
+          _buildOptions(
             AnswerLetter.B,
             'B - ',
             question.answerOptions['B'],
           ),
-          ..._buildOptions(
+          _buildOptions(
+            AnswerLetter.C,
+            'C - ',
+            question.answerOptions['C'],
+          ),
+          _buildOptions(
             AnswerLetter.D,
             'D - ',
             question.answerOptions['D'],
@@ -436,7 +422,7 @@ class _PerformEvaluationQuestionsViewState
     );
 
     final _question = Padding(
-      padding: const EdgeInsets.only(top: 16.0, left: 24.0, right: 24.0),
+      padding: const EdgeInsets.only(top: 8.0, left: 24.0, right: 24.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -476,13 +462,12 @@ class _PerformEvaluationQuestionsViewState
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).accentColor),
       width: deviceSize.width * 0.9,
-      height: deviceSize.height * 0.55,
+      height: deviceSize.height * 0.66,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _question,
-          _answersAC,
-          _answersBD,
+          _answersOptions,
         ],
       ),
     );
@@ -490,13 +475,12 @@ class _PerformEvaluationQuestionsViewState
     final _content = ConstrainedBox(
       constraints: BoxConstraints(
         minHeight: deviceSize.height * 0.75,
-        maxHeight: deviceSize.height * 0.80,
+        maxHeight: deviceSize.height * 0.87,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           _title,
-          _progressIndicator,
           _questionnaire,
           _button,
         ],
@@ -506,7 +490,7 @@ class _PerformEvaluationQuestionsViewState
     return LayoutPage.render(
       hasHeader: true,
       hasHeaderButtons: true,
-      headerTitle: 'avalia',
+      headerTitle: 'Questões',
       context: context,
       color: yellowDeepColor,
       content: _content,

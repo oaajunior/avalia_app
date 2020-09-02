@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../res/custom_icon.dart';
+//import '../../../../res/custom_icon.dart';
 import '../../../layout/layout_buttons.dart';
 import '../../../layout/layout_text_fields.dart';
 
@@ -43,14 +43,32 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
       }
     }
 
-    final _textField = LayoutTextFields.customTextFields(
-      decoration: InputDecoration(hintText: 'Código'),
-      key: ValueKey('codigo'),
-      onSaved: (codigo) {
-        _codigoAvaliacao = codigo.trim();
-      },
-      onFieldSubmitted: (_) => _trySubmit(),
-      validator: (codigo) => _validateCodigo(codigo),
+    final _textField = Container(
+      height: deviceSize.height * 0.4,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            'Por favor,\n informe um código',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          LayoutTextFields.customTextFields(
+            decoration: InputDecoration(
+              hintText: 'Código',
+              hintStyle: TextStyle(
+                color: whitSoftColor,
+              ),
+            ),
+            key: ValueKey('codigo'),
+            onSaved: (codigo) {
+              _codigoAvaliacao = codigo.trim();
+            },
+            onFieldSubmitted: (_) => _trySubmit(),
+            validator: (codigo) => _validateCodigo(codigo),
+          ),
+        ],
+      ),
     );
 
     final _button = Expanded(
@@ -59,7 +77,7 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
         children: [
           LayoutButtons.customRaisedButtons(
             textRaisedButtonOne: 'Buscar',
-            iconRaisedButtonOne: CustomIcon.icon_search_evaluation,
+            //iconRaisedButtonOne: CustomIcon.icon_search_evaluation,
             color: yellowDeepColor,
             context: context,
             onPressedButtonOne: _trySubmit,
@@ -82,11 +100,11 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
 
     final _content = ConstrainedBox(
       constraints: BoxConstraints(
-        minHeight: deviceSize.height * 0.48,
-        maxHeight: deviceSize.height * 0.48,
+        minHeight: deviceSize.height * 0.83,
+        maxHeight: deviceSize.height * 0.86,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
           _form,
           if (widget.isLoading()) _progressIndicator,

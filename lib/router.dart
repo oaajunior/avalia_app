@@ -4,6 +4,7 @@ import './view/user_access/user_access.dart';
 import './view/evaluation/done_evaluations/done_evaluations_view.dart';
 import './view/evaluation/perform_evaluation/perform_evaluation_view.dart';
 import 'view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
+import './view/evaluation/perform_evaluation/widgets/perform_evaluation_prepare_view.dart';
 import './view/home_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -21,6 +22,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case PerformEvaluationQuestionsView.routeName:
       builder = (context) => PerformEvaluationQuestionsView(arguments);
+      break;
+    case PerformEvaluationPrepareView.routeName:
+      builder = (context) => PerformEvaluationPrepareView(arguments);
       break;
     case DoneEvaluationsView.routeName:
       builder = (context) => DoneEvaluationsView();

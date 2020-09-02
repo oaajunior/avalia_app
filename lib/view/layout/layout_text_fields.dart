@@ -14,7 +14,7 @@ class LayoutTextFields {
     TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
     Function validator,
-    TextStyle textStyle,
+    TextStyle textStyle = const TextStyle(fontSize: 20),
     bool obscureText = false,
     InputDecoration decoration,
   }) {

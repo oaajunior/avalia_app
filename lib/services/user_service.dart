@@ -9,23 +9,22 @@ import '../model/exceptions/user_exception.dart';
 
 abstract class UserService {
   Future<void> createOrAuthenticateUser(UserModel user, {bool login = true});
-  Stream<FirebaseUser> verifyAuthUser();
+  Stream<User> verifyAuthUser();
   Future<dynamic> signOut();
-  Future<FirebaseUser> getCurrentFirebaseUser();
+  User getCurrentFirebaseUser();
   Future<UserModel> getUserData();
   Future<String> getCurrentUser();
 }
 
 class UserServiceImpl implements UserService {
   final _authInstance = FirebaseAuth.instance;
-  final _storeInstance = Firestore.instance;
+  final _storeInstance = FirebaseFirestore.instance;
   static String _userId;
 
   @override
   Future<void> createOrAuthenticateUser(UserModel user,
       {bool login = true}) async {
-    //final timeStamp = Timestamp.now();
-    AuthResult _authResult;
+    UserCredential _authResult;
 
     try {
       final isInternetOn = await VerifyInternetConnection.getStatus();
@@ -46,33 +45,8 @@ class UserServiceImpl implements UserService {
 
         await _storeInstance
             .collection('users')
-            .document(_authResult.user.uid)
-            .setData(user.toMap());
-      }
-    } on AuthException catch (error) {
-      switch (error.code) {
-        case 'ERROR_INVALID_EMAIL':
-          throw UserException(
-              'O e-mail informado é inválido! Por favor, verifique.');
-
-        case 'ERROR_INVALID_PASSWORD':
-          throw UserException(
-              'A senha informada não está correta! Por favor, verifique.');
-
-        case 'ERROR_EMAIL_NOT_FOUND':
-          throw UserException(
-              'O e-mail informado não foi encontrado! Por favor, verifique.');
-
-        case 'ERROR_USER_NOT_FOUND':
-          throw UserException(
-              'O e-mail informado não foi encontrado! Por favor, verifique.');
-
-        case 'ERROR_USER_DISABLED':
-          throw UserException(
-              'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
-
-        default:
-          throw UserException('Houve um erro na autenticação do usuário!');
+            .doc(_authResult.user.uid)
+            .set(user.toMap());
       }
     } on PlatformException catch (error) {
       switch (error.code) {
@@ -116,13 +90,13 @@ class UserServiceImpl implements UserService {
   }
 
   @override
-  Stream<FirebaseUser> verifyAuthUser() {
-    return _authInstance.onAuthStateChanged;
+  Stream<User> verifyAuthUser() {
+    return _authInstance.authStateChanges();
   }
 
   @override
-  Future<FirebaseUser> getCurrentFirebaseUser() {
-    return _authInstance.currentUser();
+  User getCurrentFirebaseUser() {
+    return _authInstance.currentUser;
   }
 
   @override
@@ -135,8 +109,8 @@ class UserServiceImpl implements UserService {
     try {
       final userId = await getCurrentUser();
       final userReference =
-          await _storeInstance.collection('users').document(userId).get();
-      final userData = UserModel.fromMap(userReference.data);
+          await _storeInstance.collection('users').doc(userId).get();
+      final userData = UserModel.fromMap(userReference.data());
 
       return userData;
     } on PlatformException catch (error) {
@@ -151,7 +125,7 @@ class UserServiceImpl implements UserService {
     if (_userId != null) {
       return _userId;
     } else {
-      final result = await getCurrentFirebaseUser();
+      final result = getCurrentFirebaseUser();
       if (result != null) {
         _userId = result.uid;
       }
