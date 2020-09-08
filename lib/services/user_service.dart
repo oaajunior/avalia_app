@@ -68,11 +68,15 @@ class UserServiceImpl implements UserService {
 
         case 'ERROR_EMAIL_ALREADY_IN_USE':
           throw UserException(
-              'Já existe um usuário com o e-mail informado. Por favor, verifique!');
+              'Já existe um usuário em uso com o e-mail informado. Por favor, verifique!');
 
         case 'ERROR_USER_DISABLED':
           throw UserException(
               'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
+
+        case 'ERROR_TOO_MANY_REQUESTS':
+          throw UserException(
+              'No momento há muitas requisições. Por favor, tente novamente mais tarde!');
 
         case 'ERROR_NETWORK_REQUEST_FAILED':
           throw InternetException(
@@ -101,6 +105,7 @@ class UserServiceImpl implements UserService {
 
   @override
   Future<void> signOut() {
+    _userId = null;
     return _authInstance.signOut();
   }
 

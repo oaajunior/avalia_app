@@ -6,7 +6,7 @@ import '../res/custom_icon.dart';
 import '../view/layout/layout_page.dart';
 import '../view/user_access/user_access.dart';
 import 'evaluation/perform_evaluation/perform_evaluation_view.dart';
-import 'evaluation/done_evaluations/done_evaluations_view.dart';
+import 'evaluation/done_evaluation/done_evaluation_search_view.dart';
 
 class HomeView extends StatefulWidget {
   static const routeName = '/home';
@@ -34,7 +34,7 @@ class _HomeViewState extends State<HomeView> {
       'title': 'Avaliações\nrealizadas',
       'image': 'lib/res/images/avalia_avaliacoes_realizadas.png',
       'color': greenDeepColor,
-      'page': DoneEvaluationsView.routeName,
+      'page': DoneEvaluationsSearchView.routeName,
     },
   ];
 
@@ -85,7 +85,7 @@ class _HomeViewState extends State<HomeView> {
   void _selectNewPage(BuildContext ctx, String page, String title) {
     Navigator.of(ctx).pushNamed(
       page,
-      arguments: title,
+      arguments: title.replaceAll('\n', ' '),
     );
   }
 

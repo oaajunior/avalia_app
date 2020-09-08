@@ -1,5 +1,6 @@
-import 'package:avalia_app/model/question_answers/question_answers_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../model/question_answers/question_answers_model.dart';
 
 class EvaluationStudentModel {
   String evaluationId;
@@ -9,7 +10,7 @@ class EvaluationStudentModel {
   Timestamp initialDateTime;
   Timestamp finalDateTime;
   String user;
-  List<QuestionAnswersModel> listQuestionAnswer;
+  List<QuestionAnswersModel> listQuestionAnswers;
   double grade;
 
   EvaluationStudentModel({
@@ -20,29 +21,34 @@ class EvaluationStudentModel {
     this.initialDateTime,
     this.finalDateTime,
     this.user,
-    this.listQuestionAnswer,
+    this.listQuestionAnswers,
     this.grade,
   });
 
   Map<String, dynamic> toMap() => {
         'user': this.user,
-        'discipline': this.evaluationDiscipline,
+        'evaluation_discipline': this.evaluationDiscipline,
         'evaluation_id': this.evaluationId,
         'evaluation_title': this.evaluationTitle,
         'evaluation_code': this.evaluationCode,
         'initial_date': this.initialDateTime,
         'final_date': this.finalDateTime,
         'grade': this.grade,
-        'question_answers': getStudentQuestionAnswers(this.listQuestionAnswer),
+        'question_answers': QuestionAnswersModel.getStudentQuestionAnswersToMap(
+            this.listQuestionAnswers),
       };
 
-  List<Map<String, dynamic>> getStudentQuestionAnswers(
-      List<QuestionAnswersModel> listQuestionAnswer) {
-    List<Map<String, dynamic>> firestoreMap = [];
-
-    listQuestionAnswer.forEach((questionAnswer) {
-      firestoreMap.add(questionAnswer.toMap());
-    });
-    return firestoreMap;
-  }
+  EvaluationStudentModel.fromMap(
+    Map<String, dynamic> studentEvaluation,
+  )   : evaluationId = studentEvaluation['evaluation_id'],
+        evaluationTitle = studentEvaluation['evaluation_title'],
+        evaluationDiscipline = studentEvaluation['evaluation_discipline'],
+        evaluationCode = studentEvaluation['evaluation_code'],
+        initialDateTime = studentEvaluation['initial_date'],
+        finalDateTime = studentEvaluation['final_date'],
+        grade = studentEvaluation['grade'],
+        user = studentEvaluation['user'],
+        listQuestionAnswers =
+            QuestionAnswersModel.getStudentQuestionAnswersFromMap(
+                studentEvaluation['question_answers']);
 }

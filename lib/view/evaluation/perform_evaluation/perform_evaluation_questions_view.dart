@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../res/custom_icon.dart';
@@ -19,6 +18,7 @@ import '../../layout/layout_buttons.dart';
 import '../../../utils/answer_letter.dart';
 import '../../../view_model/perform_evaluation_view_model.dart';
 import '../../../view/layout/layout_alert.dart';
+import '../../../view/evaluation/perform_evaluation/widgets/evaluation_quesitonnaire_view.dart';
 
 class PerformEvaluationQuestionsView extends StatefulWidget {
   static const routeName = '/perform_evaluation_questions';
@@ -32,7 +32,6 @@ class PerformEvaluationQuestionsView extends StatefulWidget {
 
 class _PerformEvaluationQuestionsViewState
     extends State<PerformEvaluationQuestionsView> {
-  final _groupOfTextsRadios = AutoSizeGroup();
   final _viewModelUser = UserAccessViewModel();
   final _viewModelEvaluation = PerformEvaluationViewModel();
   AnswerLetter _answerLetter = AnswerLetter.none;
@@ -56,6 +55,16 @@ class _PerformEvaluationQuestionsViewState
     return _isLoading;
   }
 
+  AnswerLetter getAnswerLetter() {
+    return _answerLetter;
+  }
+
+  void setAnswerLetter(AnswerLetter letter) {
+    setState(() {
+      _answerLetter = letter;
+    });
+  }
+
   void _nextQuestion() {
     if (_indexQuestion < widget.evaluation.question.length - 1) {
       _performStudentEvaluation();
@@ -68,7 +77,7 @@ class _PerformEvaluationQuestionsViewState
         !_lastQuestion) {
       _cancelTimer();
       _performStudentEvaluation();
-      _evaluationStudent.listQuestionAnswer = _listQuestionAnswer;
+      _evaluationStudent.listQuestionAnswers = _listQuestionAnswer;
       _evaluationStudent.finalDateTime = Timestamp.now();
       _lastQuestion = true;
       _saveStudentEvaluation(_evaluationStudent);
@@ -88,9 +97,7 @@ class _PerformEvaluationQuestionsViewState
       _evaluationStudent.grade = 0.0;
     } else {
       final questionData = widget.evaluation.question[_indexQuestion];
-      final userAnswer = _answerLetter.toString().split('.').last;
-      final userFinalAnswer = userAnswer == 'none' ? 'E' : userAnswer;
-      _evaluationStudent.grade += userFinalAnswer == questionData.rightAnswer
+      _evaluationStudent.grade += _answerLetter == questionData.rightAnswer
           ? (1 * questionData.difficulty)
           : 0;
 
@@ -103,7 +110,7 @@ class _PerformEvaluationQuestionsViewState
         questionType: questionData.questionType,
         rightAnswer: questionData.rightAnswer,
         tip: questionData.tip,
-        studentAnswer: userFinalAnswer,
+        studentAnswer: _answerLetter,
       );
       _listQuestionAnswer.add(_questionAnswers);
     }
@@ -139,7 +146,7 @@ class _PerformEvaluationQuestionsViewState
 
   Future<void> _saveStudentEvaluation(
       EvaluationStudentModel evaluationStudent) async {
-    Widget userNota = Padding(
+    Widget userGrade = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 80.0),
       child: CircularPercentIndicator(
         radius: 188,
@@ -217,7 +224,7 @@ class _PerformEvaluationQuestionsViewState
       case LoadingStatus.completed:
         await showUserGrade(
           'Parabéns,\nsua nota foi: ',
-          userNota,
+          userGrade,
           button,
         );
         setLoading(false);
@@ -267,7 +274,7 @@ class _PerformEvaluationQuestionsViewState
 
   @override
   Widget build(BuildContext context) {
-    final question = widget.evaluation.question[_indexQuestion];
+    final _question = widget.evaluation.question[_indexQuestion];
     // final questionsNumberOfCharacters =
     //     (widget.evaluation.question[_indexQuestion].description.length)
     //         .toDouble();
@@ -313,97 +320,6 @@ class _PerformEvaluationQuestionsViewState
       ),
     );
 
-    Widget _buildOptions(
-        AnswerLetter answerLetter, String letter, String optionAnswer) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 24.0),
-        child: Row(
-          children: [
-            Theme(
-              data: Theme.of(context).copyWith(
-                unselectedWidgetColor: yellowDeepColor,
-                toggleableActiveColor: yellowDeepColor,
-              ),
-              child: Radio(
-                value: answerLetter,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                toggleable: true,
-                groupValue: _answerLetter,
-                onChanged: (AnswerLetter value) {
-                  setState(() {
-                    _answerLetter = value;
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  DefaultTextStyle(
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: yellowDeepColor,
-                        ),
-                    child: Text(letter),
-                  ),
-                  Container(
-                    width: deviceSize.width * 0.67,
-                    child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                            color: yellowDeepColor,
-                          ),
-                      child: AutoSizeText(
-                        optionAnswer,
-                        wrapWords: false,
-                        textAlign: TextAlign.left,
-                        group: _groupOfTextsRadios,
-                        maxLines: 3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    final _answersOptions = Container(
-      margin: EdgeInsets.only(
-        left: 16.0,
-        right: 8.0,
-      ),
-      height: deviceSize.height * 0.45,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildOptions(
-            AnswerLetter.A,
-            'A - ',
-            question.answerOptions['A'],
-          ),
-          _buildOptions(
-            AnswerLetter.B,
-            'B - ',
-            question.answerOptions['B'],
-          ),
-          _buildOptions(
-            AnswerLetter.C,
-            'C - ',
-            question.answerOptions['C'],
-          ),
-          _buildOptions(
-            AnswerLetter.D,
-            'D - ',
-            question.answerOptions['D'],
-          ),
-        ],
-      ),
-    );
-
     final _button = Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -421,55 +337,13 @@ class _PerformEvaluationQuestionsViewState
       ),
     );
 
-    final _question = Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 24.0, right: 24.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline5.copyWith(
-                  color: yellowDeepColor,
-                ),
-            child: AutoSizeText(
-              '${_indexQuestion + 1}. ',
-              wrapWords: false,
-              maxLines: 2,
-            ),
-          ),
-          Container(
-            width: deviceSize.width * 0.7,
-            child: DefaultTextStyle(
-              style: Theme.of(context).textTheme.headline5.copyWith(
-                    color: yellowDeepColor,
-                  ),
-              child: AutoSizeText(
-                question.description,
-                textAlign: TextAlign.left,
-                wrapWords: false,
-                maxLines: 5,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    final _questionnaire = Container(
-      margin: const EdgeInsets.only(top: 8.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).accentColor),
-      width: deviceSize.width * 0.9,
-      height: deviceSize.height * 0.66,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _question,
-          _answersOptions,
-        ],
-      ),
+    final questionnaire = EvaluationQuestionnaireView.performEvaluation(
+      _indexQuestion,
+      _question,
+      getAnswerLetter,
+      setAnswerLetter,
+      true,
+      yellowDeepColor,
     );
 
     final _content = ConstrainedBox(
@@ -481,7 +355,7 @@ class _PerformEvaluationQuestionsViewState
         mainAxisSize: MainAxisSize.min,
         children: [
           _title,
-          _questionnaire,
+          questionnaire,
           _button,
         ],
       ),

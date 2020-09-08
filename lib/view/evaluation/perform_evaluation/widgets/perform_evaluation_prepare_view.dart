@@ -72,14 +72,24 @@ class _PerformEvaluationPrepareViewState
         ),
       ),
     );
-    Text message = Text('Prepare-se!');
+
+    Text message = Text(
+      'Prepare-se!',
+      style: TextStyle(
+        fontSize: 26,
+        color: yellowDeepColor,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+
     Widget showMessage = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 80.0),
       child: CircularPercentIndicator(
         radius: 188,
         lineWidth: 4.0,
         percent: percent,
-        animation: false,
+        // animation: true,
+        // animationDuration: 250,
         backgroundColor: whiteColor,
         progressColor: greenBrightColor,
         center: DefaultTextStyle(
@@ -97,25 +107,25 @@ class _PerformEvaluationPrepareViewState
       ),
     );
 
-    Widget animatedText = Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: AnimatedDefaultTextStyle(
-        child: message,
-        style: isSelected
-            ? TextStyle(
-                fontSize: 26,
-                color: yellowDeepColor,
-                fontWeight: FontWeight.bold,
-              )
-            : TextStyle(
-                fontSize: 29,
-                color: yellowDeepColor,
-                fontWeight: FontWeight.bold,
-              ),
-        duration: const Duration(microseconds: 2500),
-      ),
-    );
+    // Widget animatedText = Container(
+    //   alignment: Alignment.center,
+    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    //   child: AnimatedDefaultTextStyle(
+    //     child: message,
+    //     style: isSelected
+    // ? TextStyle(
+    //     fontSize: 26,
+    //     color: yellowDeepColor,
+    //     fontWeight: FontWeight.bold,
+    //   )
+    //         : TextStyle(
+    //             fontSize: 29,
+    //             color: yellowDeepColor,
+    //             fontWeight: FontWeight.bold,
+    //           ),
+    //     duration: const Duration(microseconds: 2500),
+    //   ),
+    // );
 
     return Center(
       child: Container(
@@ -134,7 +144,7 @@ class _PerformEvaluationPrepareViewState
               SizedBox(
                 height: 10,
               ),
-              animatedText,
+              message,
             ],
           ),
         ),

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../utils/answer_letter.dart';
+
 class QuestionModel {
   String id;
   bool active;
-  String rightAnswer;
+  AnswerLetter rightAnswer;
   String bncc;
   String description;
   Map<String, String> answerOptions;
@@ -32,7 +34,7 @@ class QuestionModel {
     Map<String, dynamic> question,
   )   : id = id,
         active = question['active'],
-        rightAnswer = question['right_answer'],
+        rightAnswer = getAnswerLetter(question['right_answer']),
         bncc = question['bncc'],
         createdAt = question['created_at'],
         description = question['description'],
@@ -41,4 +43,23 @@ class QuestionModel {
         difficulty = question['difficulty'],
         responseTime = question['response_time'],
         tip = question['tip'];
+
+  static AnswerLetter getAnswerLetter(String letterAnswer) {
+    switch (letterAnswer) {
+      case 'A':
+        return AnswerLetter.A;
+        break;
+      case 'B':
+        return AnswerLetter.B;
+        break;
+      case 'C':
+        return AnswerLetter.C;
+        break;
+      case 'D':
+        return AnswerLetter.D;
+        break;
+      default:
+        return AnswerLetter.E;
+    }
+  }
 }

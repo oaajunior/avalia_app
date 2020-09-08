@@ -21,6 +21,7 @@ ThemeData basicTheme() {
     buttonTheme: _basicButtonTheme(base.buttonTheme),
     iconTheme: _basicIconTheme(base.iconTheme),
     dialogTheme: _basicDialogTheme(base.dialogTheme),
+    cardTheme: _basicCardTheme(base.cardTheme),
     //toggleButtonsTheme: _basicToggleTheme(base.toggleButtonsTheme),
     inputDecorationTheme: _basicInputDecorationTheme(base.inputDecorationTheme),
   );
@@ -112,6 +113,16 @@ DialogTheme _basicDialogTheme(DialogTheme baseDialog) {
     contentTextStyle: TextStyle(
       fontSize: 18.0,
     ),
+  );
+}
+
+CardTheme _basicCardTheme(CardTheme baseCard) {
+  return baseCard.copyWith(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+    elevation: 1,
+    color: whiteColor,
   );
 }
 

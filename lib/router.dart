@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import './view/user_access/user_access.dart';
-import './view/evaluation/done_evaluations/done_evaluations_view.dart';
 import './view/evaluation/perform_evaluation/perform_evaluation_view.dart';
-import 'view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
+import './view/evaluation/done_evaluation/done_evaluation_list_view.dart';
+import './view/evaluation/done_evaluation/done_evaluation_search_view.dart';
+import './view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
 import './view/evaluation/perform_evaluation/widgets/perform_evaluation_prepare_view.dart';
+import './view/evaluation/done_evaluation/done_evaluation_question_answers_view.dart';
 import './view/home_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -26,9 +28,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case PerformEvaluationPrepareView.routeName:
       builder = (context) => PerformEvaluationPrepareView(arguments);
       break;
-    case DoneEvaluationsView.routeName:
-      builder = (context) => DoneEvaluationsView();
+    case DoneEvaluationsSearchView.routeName:
+      builder = (context) => DoneEvaluationsSearchView(arguments);
       break;
+    case DoneEvaluationListView.routeName:
+      builder = (context) => DoneEvaluationListView(arguments);
+      break;
+    case DoneEvaluationQuestionAnswersView.routeName:
+      builder = (context) => DoneEvaluationQuestionAnswersView(arguments);
+      break;
+
     default:
       builder = (context) => UserAccessView();
   }

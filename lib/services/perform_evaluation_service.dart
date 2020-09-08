@@ -1,12 +1,12 @@
-import 'package:avalia_app/model/evaluation_student/evaluation_student_model.dart';
-import 'package:avalia_app/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
 import '../utils/verify_internet_connection.dart';
+import '../services/user_service.dart';
+import '../model/evaluation_student/evaluation_student_model.dart';
 import '../model/evaluation/evaluation_model.dart';
 import '../model/question/question_model.dart';
-import '../model/exceptions/evaluation_exception.dart';
+import '../model/exceptions/perform_evaluation_exception.dart';
 import '../model/exceptions/internet_exception.dart';
 
 abstract class PerformEvaluationService {
@@ -52,10 +52,10 @@ class EvaluationServiceImpl implements PerformEvaluationService {
         docsData.docs.forEach((doc) {
           docEvaluation = doc;
           if (docEvaluation.get('status') == 'I') {
-            throw EvaluationException(
+            throw PerformEvaluationException(
                 'A avaliação informada está Inativa. Por favor, entre em contato com o seu professor!');
           } else if (docEvaluation.get('status') == 'F') {
-            throw EvaluationException(
+            throw PerformEvaluationException(
                 'A avaliação informada está Finalizada. Por favor, entre em contato com o seu professor!');
           }
         });
@@ -75,17 +75,17 @@ class EvaluationServiceImpl implements PerformEvaluationService {
           docEvaluation.data(),
         );
       } else {
-        throw EvaluationException(
+        throw PerformEvaluationException(
             'Já existe uma avaliação feita por você para o código informado. Procure o seu professor!');
       }
       return evaluation;
     } on PlatformException catch (error) {
       final errorMessage = error.message.toString();
       if (errorMessage.contains('PERMISSION_DENIED')) {
-        throw EvaluationException(
+        throw PerformEvaluationException(
             'Você não tem privilégios para consultar o banco de dados');
       }
-    } on EvaluationException catch (error) {
+    } on PerformEvaluationException catch (error) {
       throw error;
     } on InternetException catch (error) {
       throw error;

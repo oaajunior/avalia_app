@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../view/layout/layout_alert.dart';
 import '../../layout/layout_page.dart';
 import '../../../view_model/perform_evaluation_view_model.dart';
-import 'widgets/perform_evaluation_detail.dart';
+import 'widgets/perform_evaluation_detail_view.dart';
 import '../../../utils/loading_status.dart';
 import '../../../res/colors.dart';
 import '../../../model/evaluation/evaluation_model.dart';
@@ -252,10 +252,11 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     return LayoutPage.render(
       hasHeader: true,
       hasHeaderButtons: true,
-      headerTitle: 'Realizar Avaliação',
+      headerTitle: widget.title.replaceAll('\n', ' '),
       context: context,
       color: yellowDeepColor,
-      content: PerformEvaluationDetail(getIsLoading, _searchForEvaluationCode),
+      content:
+          PerformEvaluationDetailView(getIsLoading, _searchForEvaluationCode),
     );
   }
 }

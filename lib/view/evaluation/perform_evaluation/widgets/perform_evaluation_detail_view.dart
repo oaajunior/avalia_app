@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-//import '../../../../res/custom_icon.dart';
+
 import '../../../layout/layout_buttons.dart';
 import '../../../layout/layout_text_fields.dart';
-
 import '../../../../res/colors.dart';
 
-class PerformEvaluationDetail extends StatefulWidget {
+class PerformEvaluationDetailView extends StatefulWidget {
   final Function isLoading;
   final Function searchForEvaluationCode;
-  PerformEvaluationDetail(this.isLoading, this.searchForEvaluationCode);
+  PerformEvaluationDetailView(this.isLoading, this.searchForEvaluationCode);
   @override
-  _PerformEvaluationDetailState createState() =>
-      _PerformEvaluationDetailState();
+  _PerformEvaluationDetailViewState createState() =>
+      _PerformEvaluationDetailViewState();
 }
 
-class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
+class _PerformEvaluationDetailViewState
+    extends State<PerformEvaluationDetailView> {
   String _codigoAvaliacao;
   final _formKey = GlobalKey<FormState>();
 
@@ -44,7 +44,6 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
     }
 
     final _textField = Container(
-      height: deviceSize.height * 0.4,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -77,7 +76,6 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
         children: [
           LayoutButtons.customRaisedButtons(
             textRaisedButtonOne: 'Buscar',
-            //iconRaisedButtonOne: CustomIcon.icon_search_evaluation,
             color: yellowDeepColor,
             context: context,
             onPressedButtonOne: _trySubmit,
@@ -88,7 +86,12 @@ class _PerformEvaluationDetailState extends State<PerformEvaluationDetail> {
 
     final _form = Form(
       key: _formKey,
-      child: _textField,
+      child: Padding(
+        padding: EdgeInsets.only(top: deviceSize.height * 0.2),
+        child: Center(
+          child: _textField,
+        ),
+      ),
     );
 
     final _progressIndicator = Padding(
