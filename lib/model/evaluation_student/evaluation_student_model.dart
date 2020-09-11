@@ -9,6 +9,7 @@ class EvaluationStudentModel {
   String evaluationCode;
   Timestamp initialDateTime;
   Timestamp finalDateTime;
+  Timestamp createdAt;
   String user;
   List<QuestionAnswersModel> listQuestionAnswers;
   double grade;
@@ -20,6 +21,7 @@ class EvaluationStudentModel {
     this.evaluationCode,
     this.initialDateTime,
     this.finalDateTime,
+    this.createdAt,
     this.user,
     this.listQuestionAnswers,
     this.grade,
@@ -33,6 +35,7 @@ class EvaluationStudentModel {
         'evaluation_code': this.evaluationCode,
         'initial_date': this.initialDateTime,
         'final_date': this.finalDateTime,
+        'created_at': FieldValue.serverTimestamp(),
         'grade': this.grade,
         'question_answers': QuestionAnswersModel.getStudentQuestionAnswersToMap(
             this.listQuestionAnswers),
@@ -47,6 +50,7 @@ class EvaluationStudentModel {
         initialDateTime = studentEvaluation['initial_date'],
         finalDateTime = studentEvaluation['final_date'],
         grade = studentEvaluation['grade'],
+        createdAt = studentEvaluation['created_at'],
         user = studentEvaluation['user'],
         listQuestionAnswers =
             QuestionAnswersModel.getStudentQuestionAnswersFromMap(

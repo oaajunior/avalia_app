@@ -367,40 +367,42 @@ class _FormUserAccessState extends State<FormUserAccess> {
       ),
     );
 
-    final _content = AnimatedContainer(
-      duration: Duration(
-        microseconds: 300,
-      ),
-      curve: Curves.easeIn,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: widget.isLogin()
-              ? deviceSize.height * 0.69
-              : deviceSize.height * 0.8,
-          maxHeight: widget.isLogin()
-              ? deviceSize.height * 0.69
-              : deviceSize.height * 1.25,
+    final _content = SingleChildScrollView(
+      child: AnimatedContainer(
+        duration: Duration(
+          microseconds: 300,
         ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!widget.isLogin()) _texFieldName,
-              if (!widget.isLogin()) _textFieldSurname,
-              _textFieldEmail,
-              _textFieldPassword,
-              if (!widget.isLogin()) _textFieldRepeatedPassword,
-              SizedBox(
-                height: 12,
-              ),
-              if (!widget.isLogin()) radioTypeUser,
-              SizedBox(
-                height: 12,
-              ),
-              if (widget.isLoading()) CircularProgressIndicator(),
-              _buttons,
-            ],
+        curve: Curves.easeIn,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: widget.isLogin()
+                ? deviceSize.height * 0.69
+                : deviceSize.height * 0.8,
+            maxHeight: widget.isLogin()
+                ? deviceSize.height * 0.69
+                : deviceSize.height * 1.25,
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!widget.isLogin()) _texFieldName,
+                if (!widget.isLogin()) _textFieldSurname,
+                _textFieldEmail,
+                _textFieldPassword,
+                if (!widget.isLogin()) _textFieldRepeatedPassword,
+                SizedBox(
+                  height: 12,
+                ),
+                if (!widget.isLogin()) radioTypeUser,
+                SizedBox(
+                  height: 12,
+                ),
+                if (widget.isLoading()) CircularProgressIndicator(),
+                _buttons,
+              ],
+            ),
           ),
         ),
       ),

@@ -48,8 +48,8 @@ dependencies:
   intl: ^0.16.1
   #To show the progress bar
   percent_indicator: ^2.1.5
-  #To merge collections and more
-  darq: ^0.4.0+1
+  #To user circular checkbox
+  circular_check_box: ^1.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -101,12 +101,13 @@ flutter:
     - family: Quenda
       fonts:
         - asset: lib/res/fonts/Quenda-Medium.otf
+    - family: CustomButtonIcon
+      fonts:
+        - asset: lib/res/icons/Custom-Button-Icon.ttf
     - family: CustomIcon
       fonts:
         - asset: lib/res/icons/Custom-Icon.ttf
-    - family: CustomIconButton
-      fonts:
-        - asset: lib/res/icons/Custom-Icon-Button.ttf
-  #
+   
+  
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

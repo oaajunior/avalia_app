@@ -4,6 +4,7 @@ const blueDeepColor = const Color(0xFF4B81C2);
 const blueBrightColor = const Color(0xFF63ABE3);
 const greenDeepColor = const Color(0xFF5D8149);
 const greenBrightColor = const Color(0xFFA6A838);
+const greenSoftColor = const Color.fromRGBO(166, 168, 56, 0.5);
 const yellowDeepColor = const Color(0xFFE09A25);
 const yellowBrightColor = const Color.fromRGBO(224, 154, 37, 0.6);
 const blackSoftColor = Colors.black54;

@@ -31,6 +31,6 @@ class UserModel {
         'surname': this.surName,
         'email': this.email,
         'type_user': this.typeUser == TypeOfUser.Teacher ? 'T' : 'S',
-        'create_at': Timestamp.now(),
+        'create_at': FieldValue.serverTimestamp(),
       };
 }

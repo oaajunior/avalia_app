@@ -74,14 +74,10 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
             _initialDate.year + 2000, _initialDate.month, _initialDate.day)
         : _initialDate;
 
-    print(_initialDate);
-
     _finalDate = DateFormat('dd/MM/yyyy').parse(_finalDateController.text);
     _finalDate = _finalDate.year.toString().length == 2
         ? DateTime(_finalDate.year + 2000, _finalDate.month, _finalDate.day)
         : _finalDate;
-
-    print(_finalDate);
 
     if (_initialDate.isAfter(_finalDate)) {
       return false;

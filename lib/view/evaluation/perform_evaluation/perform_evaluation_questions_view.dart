@@ -34,7 +34,7 @@ class _PerformEvaluationQuestionsViewState
     extends State<PerformEvaluationQuestionsView> {
   final _viewModelUser = UserAccessViewModel();
   final _viewModelEvaluation = PerformEvaluationViewModel();
-  AnswerLetter _answerLetter = AnswerLetter.none;
+  Map<AnswerLetter, bool> _answerLetter = Map<AnswerLetter, bool>();
   EvaluationStudentModel _evaluationStudent;
   List<QuestionAnswersModel> _listQuestionAnswer = List<QuestionAnswersModel>();
   QuestionAnswersModel _questionAnswers;
@@ -55,21 +55,32 @@ class _PerformEvaluationQuestionsViewState
     return _isLoading;
   }
 
-  AnswerLetter getAnswerLetter() {
-    return _answerLetter;
+  bool getAnswerLetter(AnswerLetter letter) {
+    return _answerLetter[letter];
   }
 
-  void setAnswerLetter(AnswerLetter letter) {
+  void setAnswerLetter(AnswerLetter letter, bool value) {
     setState(() {
-      _answerLetter = letter;
+      _answerLetter[letter] = value;
     });
+  }
+
+  void _turnAllAnswerLetterToFalse() {
+    _answerLetter = {
+      AnswerLetter.A: false,
+      AnswerLetter.B: false,
+      AnswerLetter.C: false,
+      AnswerLetter.D: false,
+      AnswerLetter.E: false,
+      AnswerLetter.none: false,
+    };
   }
 
   void _nextQuestion() {
     if (_indexQuestion < widget.evaluation.question.length - 1) {
       _performStudentEvaluation();
       setState(() {
-        _answerLetter = AnswerLetter.none;
+        _turnAllAnswerLetterToFalse();
         _indexQuestion++;
       });
       _timeToQuestion();
@@ -97,7 +108,13 @@ class _PerformEvaluationQuestionsViewState
       _evaluationStudent.grade = 0.0;
     } else {
       final questionData = widget.evaluation.question[_indexQuestion];
-      _evaluationStudent.grade += _answerLetter == questionData.rightAnswer
+      AnswerLetter answerStudent;
+      _answerLetter.forEach((key, value) {
+        if (value == true) {
+          answerStudent = key;
+        }
+      });
+      _evaluationStudent.grade += answerStudent == questionData.rightAnswer
           ? (1 * questionData.difficulty)
           : 0;
 
@@ -110,7 +127,7 @@ class _PerformEvaluationQuestionsViewState
         questionType: questionData.questionType,
         rightAnswer: questionData.rightAnswer,
         tip: questionData.tip,
-        studentAnswer: _answerLetter,
+        studentAnswer: answerStudent,
       );
       _listQuestionAnswer.add(_questionAnswers);
     }
@@ -258,6 +275,7 @@ class _PerformEvaluationQuestionsViewState
 
   @override
   void initState() {
+    _turnAllAnswerLetterToFalse();
     _performStudentEvaluation();
     _timeToQuestion();
     super.initState();
@@ -344,20 +362,23 @@ class _PerformEvaluationQuestionsViewState
       setAnswerLetter,
       true,
       yellowDeepColor,
+      _turnAllAnswerLetterToFalse,
     );
 
-    final _content = ConstrainedBox(
-      constraints: BoxConstraints(
-        minHeight: deviceSize.height * 0.75,
-        maxHeight: deviceSize.height * 0.87,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _title,
-          questionnaire,
-          _button,
-        ],
+    final _content = SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: deviceSize.height * 0.75,
+          maxHeight: deviceSize.height * 0.87,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _title,
+            questionnaire,
+            _button,
+          ],
+        ),
       ),
     );
 

@@ -15,18 +15,22 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class CustomIconButtonOld {
-  CustomIconButtonOld._();
+class CustomButtonIcon {
+  CustomButtonIcon._();
 
-  static const _kFontFam = 'CustomIconButtonOld';
+  static const _kFontFam = 'CustomButtonIcon';
   static const _kFontPkg = null;
 
   static const IconData button_back =
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData button_ranking =
-      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData button_home =
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData button_edit =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData button_home_without_desc =
+      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData button_back_without_desc =
+      IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData button_ranking =
+      IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

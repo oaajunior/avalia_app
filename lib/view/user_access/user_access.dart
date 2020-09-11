@@ -45,7 +45,10 @@ class _UserAccessViewState extends State<UserAccessView> {
     String title,
     String message,
   ) {
-    final customMessage = Text(message);
+    final customMessage = Text(
+      message,
+      textAlign: TextAlign.center,
+    );
 
     final button = RaisedButton(
       onPressed: () {
@@ -66,9 +69,11 @@ class _UserAccessViewState extends State<UserAccessView> {
     return LayoutAlert.customAlert(
       title: title,
       message: customMessage,
-      color: Theme.of(context).primaryColor,
+      colorTitle: Theme.of(context).primaryColor,
+      color: blackSoftColor,
       context: context,
       actionButtons: button,
+      barrierDismissible: false,
     );
   }
 

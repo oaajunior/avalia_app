@@ -158,7 +158,10 @@ class _HomeViewState extends State<HomeView> {
                 color: whiteColor,
                 borderRadius: BorderRadius.circular(20.0),
                 image: DecorationImage(
-                  image: AssetImage(image),
+                  fit: BoxFit.fill,
+                  image: AssetImage(
+                    image,
+                  ),
                 ),
                 boxShadow: [
                   BoxShadow(

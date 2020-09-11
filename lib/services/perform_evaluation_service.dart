@@ -11,7 +11,6 @@ import '../model/exceptions/internet_exception.dart';
 
 abstract class PerformEvaluationService {
   Future<dynamic> getEvaluation(String code);
-
   Future<List<QuestionModel>> getQuestions(List<dynamic> questionsReference);
   Future<void> saveStudentEvaluation(EvaluationStudentModel evaluationStudent);
 }

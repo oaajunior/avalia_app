@@ -129,12 +129,12 @@ class _PerformEvaluationPrepareViewState
 
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: deviceSize.height * 0.2, bottom: 32.0),
         height: deviceSize.height * 0.5,
         width: deviceSize.width * 0.8,
         child: Card(
           shape: DialogTheme.of(context).shape,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               title,
               SizedBox(

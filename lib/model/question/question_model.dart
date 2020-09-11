@@ -8,7 +8,7 @@ class QuestionModel {
   AnswerLetter rightAnswer;
   String bncc;
   String description;
-  Map<String, String> answerOptions;
+  Map<AnswerLetter, String> answerOptions;
   int difficulty;
   int questionType;
   int responseTime;
@@ -38,7 +38,7 @@ class QuestionModel {
         bncc = question['bncc'],
         createdAt = question['created_at'],
         description = question['description'],
-        answerOptions = (question['answers'] as Map).cast<String, String>(),
+        answerOptions = getAnswersFromMap(question['answers']),
         questionType = question['question_type'],
         difficulty = question['difficulty'],
         responseTime = question['response_time'],
@@ -61,5 +61,15 @@ class QuestionModel {
       default:
         return AnswerLetter.E;
     }
+  }
+
+  static Map<AnswerLetter, String> getAnswersFromMap(
+      Map<String, dynamic> optionAnswers) {
+    Map<AnswerLetter, String> map = Map<AnswerLetter, String>();
+    optionAnswers.forEach((key, value) {
+      AnswerLetter letter = getAnswerLetter(key);
+      map.putIfAbsent(letter, () => value);
+    });
+    return map;
   }
 }

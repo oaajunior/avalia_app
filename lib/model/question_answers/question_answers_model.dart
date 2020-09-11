@@ -5,7 +5,7 @@ class QuestionAnswersModel {
   AnswerLetter rightAnswer;
   String bncc;
   String description;
-  Map<String, String> answerOptions;
+  Map<AnswerLetter, String> answerOptions;
   AnswerLetter studentAnswer;
   int difficulty;
   int questionType;
@@ -29,7 +29,7 @@ class QuestionAnswersModel {
         'question_type': this.questionType,
         'question_description': this.description,
         'question_difficulty': this.difficulty,
-        'answer_options': this.answerOptions,
+        'answer_options': convertAnswersToString(this.answerOptions),
         'question_right_answer': convertAnswerLetterToString(this.rightAnswer),
         'student_answer': convertAnswerLetterToString(this.studentAnswer),
         'tip': this.tip,
@@ -41,8 +41,7 @@ class QuestionAnswersModel {
         questionType = answerOptions['question_type'],
         description = answerOptions['question_description'],
         difficulty = answerOptions['question_difficulty'],
-        answerOptions =
-            (answerOptions['answer_options'] as Map).cast<String, String>(),
+        answerOptions = getAnswersFromMap(answerOptions['answer_options']),
         rightAnswer = getAnswerLetter(answerOptions['question_right_answer']),
         studentAnswer = getAnswerLetter(answerOptions['student_answer']),
         tip = answerOptions['tip'];
@@ -84,6 +83,26 @@ class QuestionAnswersModel {
       default:
         return AnswerLetter.E;
     }
+  }
+
+  static Map<AnswerLetter, String> getAnswersFromMap(
+      Map<String, dynamic> optionAnswers) {
+    Map<AnswerLetter, String> map = Map<AnswerLetter, String>();
+    optionAnswers.forEach((key, value) {
+      AnswerLetter letter = getAnswerLetter(key);
+      map.putIfAbsent(letter, () => value);
+    });
+    return map;
+  }
+
+  static Map<String, dynamic> convertAnswersToString(
+      Map<AnswerLetter, String> optionAnswers) {
+    Map<String, dynamic> map = Map<String, dynamic>();
+    optionAnswers.forEach((key, value) {
+      String letter = convertAnswerLetterToString(key);
+      map.putIfAbsent(letter, () => value);
+    });
+    return map;
   }
 
   static String convertAnswerLetterToString(AnswerLetter answerLetter) {

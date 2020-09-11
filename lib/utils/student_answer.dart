@@ -1,0 +1,6 @@
+enum StudentAnswer {
+  STUDENT_RIGHT,
+  STUDENT_WRONG,
+  STUDENT_BLANK,
+  NONE,
+}

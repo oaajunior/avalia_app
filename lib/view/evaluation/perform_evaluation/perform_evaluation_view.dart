@@ -11,7 +11,7 @@ import '../../../res/colors.dart';
 import '../../../model/evaluation/evaluation_model.dart';
 
 class PerformEvaluationView extends StatefulWidget {
-  static const routeName = '/realizar_avaliacao';
+  static const routeName = '/perform_evaluation';
   final String title;
 
   PerformEvaluationView(this.title);
@@ -59,31 +59,34 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
   }
 
   Widget _buildText(String textHeader, String textField) {
-    return Row(
-      children: [
-        DefaultTextStyle(
-          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
-              ),
-          child: Text(
-            textHeader,
-            textAlign: TextAlign.left,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Row(
+        children: [
+          DefaultTextStyle(
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
+            child: Text(
+              textHeader,
+              textAlign: TextAlign.left,
+            ),
           ),
-        ),
-        SizedBox(
-          height: 28,
-        ),
-        DefaultTextStyle(
-          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                color: Colors.black54,
-              ),
-          child: Text(
-            textField,
-            textAlign: TextAlign.left,
+          SizedBox(
+            height: 28,
           ),
-        ),
-      ],
+          DefaultTextStyle(
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: Colors.black54,
+                ),
+            child: Text(
+              textField,
+              textAlign: TextAlign.left,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -126,7 +129,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
   Future<void> _buildEvaluation(EvaluationModel _evaluation) {
     final message = FittedBox(
       alignment: Alignment.topLeft,
-      fit: BoxFit.contain,
+      fit: BoxFit.fitWidth,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -207,7 +210,8 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
 
     final alert = LayoutAlert.customAlert(
       title: widget.title.replaceAll('\n', ' '),
-      color: yellowDeepColor,
+      color: blackSoftColor,
+      colorTitle: yellowDeepColor,
       context: context,
       message: message,
       actionButtons: buttons,
@@ -255,8 +259,12 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       headerTitle: widget.title.replaceAll('\n', ' '),
       context: context,
       color: yellowDeepColor,
-      content:
-          PerformEvaluationDetailView(getIsLoading, _searchForEvaluationCode),
+      content: SingleChildScrollView(
+        child: PerformEvaluationDetailView(
+          getIsLoading,
+          _searchForEvaluationCode,
+        ),
+      ),
     );
   }
 }

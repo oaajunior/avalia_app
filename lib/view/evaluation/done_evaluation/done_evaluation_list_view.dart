@@ -47,14 +47,14 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
       child: Image.asset(
         'lib/res/images/avalia_evaluation_biology.png',
         height: _deviceSize.height * 0.2,
-        width: 80,
+        width: _deviceSize.height * 0.1,
         fit: BoxFit.cover,
       ),
     );
 
     Widget _buildInformation(int index) {
       return Padding(
-        padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 8.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,7 +73,6 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
             DefaultTextStyle(
               style: Theme.of(context).textTheme.headline6.copyWith(
                     color: greenDeepColor,
-                    //fontWeight: FontWeight.bold,
                   ),
               child: Text(
                 DateFormat('dd/MM/yyyy').format(
@@ -87,7 +86,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
     }
 
     Widget _buildGrade(int index) {
-      return Padding(
+      return Container(
         padding: const EdgeInsets.only(left: 12.0, top: 8.0, right: 4.0),
         child: CircularPercentIndicator(
           radius: 70,
@@ -113,16 +112,17 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
     }
 
     Widget _buildListItem(int index) {
-      return GestureDetector(
+      return InkWell(
         onTap: () => _goToPage(index),
         child: Card(
           shape: Theme.of(context).cardTheme.shape,
           child: Container(
             margin: const EdgeInsets.only(right: 8.0),
             width: _deviceSize.width * 0.9,
-            height: _deviceSize.height * 0.2,
+            height: _deviceSize.height * 0.18,
             child: Row(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _image,
                 _buildInformation(index),
@@ -134,17 +134,13 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
       );
     }
 
-    final _listView = ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: _deviceSize.width * 0.95,
-        maxHeight: _deviceSize.height * 0.25,
-      ),
-      child: Container(
-        margin: const EdgeInsets.only(top: 24.0),
-        child: ListView.builder(
-          itemCount: _studentEvaluation.length,
-          itemBuilder: (ctx, index) => _buildListItem(index),
-        ),
+    final _listView = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        itemCount: _studentEvaluation.length,
+        itemExtent: _deviceSize.height * 0.15,
+        itemBuilder: (ctx, index) => _buildListItem(index),
       ),
     );
 

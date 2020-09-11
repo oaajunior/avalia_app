@@ -48,6 +48,46 @@ class UserServiceImpl implements UserService {
             .doc(_authResult.user.uid)
             .set(user.toMap());
       }
+    } on FirebaseAuthException catch (error) {
+      switch (error.code) {
+        case 'user-not-found':
+          throw UserException(
+              'O e-mail informado não foi encontrado. Por favor, verifique!');
+        case 'email-already-exists':
+          throw UserException(
+              'O e-mail informado já existe. Por favor, verifique!');
+        case 'wrong-password':
+          throw UserException(
+              'A senha informada não está correta. Por favor, verifique!');
+        case 'invalid-password':
+          throw UserException(
+              'A senha informada não está correta. Por favor, verifique!');
+        case 'weak-passowrd':
+          throw UserException(
+              'A senha informada não é adequada. Por favor, informe uma senha contendo letras (minúscula e maiúscula), números e símbolos (#%*!\$)');
+        case 'invalid-email':
+          throw UserException(
+              'O endereço de e-mail informado não está no formato correto. Por favor, verifique!');
+
+        case 'email-already-in-use':
+          throw UserException(
+              'Já existe um usuário em uso com o e-mail informado. Por favor, verifique!');
+
+        case 'user-disabled':
+          throw UserException(
+              'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
+
+        case 'too-many-requests':
+          throw UserException(
+              'No momento há muitas requisições. Por favor, tente novamente mais tarde!');
+
+        case 'network-request-failed':
+          throw InternetException(
+              'Houve um erro ao tentar se conectar com o servidor. Verifique sua conexão com a internet.');
+
+        default:
+          throw UserException('Houve um erro no cadastro do usuário!');
+      }
     } on PlatformException catch (error) {
       switch (error.code) {
         case 'ERROR_USER_NOT_FOUND':

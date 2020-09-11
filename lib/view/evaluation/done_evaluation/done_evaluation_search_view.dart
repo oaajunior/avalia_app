@@ -124,7 +124,12 @@ class _DoneEvaluationsSearchViewState extends State<DoneEvaluationsSearchView> {
       context: context,
       headerTitle: widget.title.replaceAll('\n', ' '),
       color: greenDeepColor,
-      content: DoneEvaluationDetail(getIsLoading, _searchForStudentEvaluation),
+      content: SingleChildScrollView(
+        child: DoneEvaluationDetail(
+          getIsLoading,
+          _searchForStudentEvaluation,
+        ),
+      ),
     );
   }
 }

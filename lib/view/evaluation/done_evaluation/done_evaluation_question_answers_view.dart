@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils/answer_letter.dart';
+import '../../../utils/student_answer.dart';
 import '../../../view/layout/layout_page.dart';
 import '../../../view/evaluation/perform_evaluation/widgets/evaluation_quesitonnaire_view.dart';
 import '../../../model/evaluation_student/evaluation_student_model.dart';
@@ -18,6 +20,7 @@ class DoneEvaluationQuestionAnswersView extends StatefulWidget {
 
 class _DoneEvaluationQuestionAnswersViewState
     extends State<DoneEvaluationQuestionAnswersView> {
+  Map<AnswerLetter, StudentAnswer> _answerLetters;
   int _indexQuestion = 0;
 
   void _nextQuestion() {
@@ -26,6 +29,7 @@ class _DoneEvaluationQuestionAnswersViewState
       setState(() {
         _indexQuestion++;
       });
+      _mountOptionAnswers();
     }
   }
 
@@ -34,7 +38,42 @@ class _DoneEvaluationQuestionAnswersViewState
       setState(() {
         _indexQuestion--;
       });
+      _mountOptionAnswers();
     }
+  }
+
+  void _mountOptionAnswers() {
+    _answerLetters = Map<AnswerLetter, StudentAnswer>();
+
+    final listQuestionAnswers =
+        widget.studentEvaluation.listQuestionAnswers[_indexQuestion];
+
+    listQuestionAnswers.answerOptions.forEach((keyLetter, value) {
+      if (keyLetter == listQuestionAnswers.rightAnswer &&
+          keyLetter == listQuestionAnswers.studentAnswer) {
+        _answerLetters.putIfAbsent(
+            keyLetter, () => StudentAnswer.STUDENT_RIGHT);
+      } else if (keyLetter == listQuestionAnswers.studentAnswer &&
+          keyLetter != AnswerLetter.E) {
+        _answerLetters.putIfAbsent(
+            keyLetter, () => StudentAnswer.STUDENT_WRONG);
+      } else if (keyLetter == listQuestionAnswers.rightAnswer) {
+        _answerLetters.putIfAbsent(
+            keyLetter, () => StudentAnswer.STUDENT_BLANK);
+      } else {
+        _answerLetters.putIfAbsent(keyLetter, () => StudentAnswer.NONE);
+      }
+    });
+  }
+
+  StudentAnswer getAnswerLetter(AnswerLetter letter) {
+    return _answerLetters[letter];
+  }
+
+  @override
+  void initState() {
+    _mountOptionAnswers();
+    super.initState();
   }
 
   @override
@@ -43,6 +82,7 @@ class _DoneEvaluationQuestionAnswersViewState
     final _questionnaire = EvaluationQuestionnaireView.doneEvaluation(
       widget.studentEvaluation,
       _indexQuestion,
+      getAnswerLetter,
       greenDeepColor,
     );
 
@@ -101,31 +141,33 @@ class _DoneEvaluationQuestionAnswersViewState
       ),
     );
 
-    final _content = ConstrainedBox(
-      constraints: BoxConstraints(
-        minHeight: _deviceSize.height * 0.75,
-        maxHeight: _deviceSize.height * 0.87,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _questionnaire,
-          if (_indexQuestion == 0)
-            _buildOneButton(
-              'Próxima',
-              _nextQuestion,
-            ),
-          if (_indexQuestion > 0 &&
-              _indexQuestion <
-                  widget.studentEvaluation.listQuestionAnswers.length - 1)
-            _buttonNextAndBackPage,
-          if (_indexQuestion ==
-              widget.studentEvaluation.listQuestionAnswers.length - 1)
-            _buildOneButton(
-              'Anterior',
-              _beforeQuestion,
-            ),
-        ],
+    final _content = SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: _deviceSize.height * 0.75,
+          maxHeight: _deviceSize.height * 0.87,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _questionnaire,
+            if (_indexQuestion == 0)
+              _buildOneButton(
+                'Próxima',
+                _nextQuestion,
+              ),
+            if (_indexQuestion > 0 &&
+                _indexQuestion <
+                    widget.studentEvaluation.listQuestionAnswers.length - 1)
+              _buttonNextAndBackPage,
+            if (_indexQuestion ==
+                widget.studentEvaluation.listQuestionAnswers.length - 1)
+              _buildOneButton(
+                'Anterior',
+                _beforeQuestion,
+              ),
+          ],
+        ),
       ),
     );
 

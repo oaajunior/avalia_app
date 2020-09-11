@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:avalia_app/res/colors.dart';
+import 'package:avalia_app/res/custom_button_icon.dart';
 import 'package:flutter/material.dart';
 
-import '../../res/custom_icon_button.dart';
+import '../../res/colors.dart';
 
 class LayoutPage {
   static void _backPage(BuildContext context) {
@@ -38,7 +38,7 @@ class LayoutPage {
             IconButton(
               iconSize: Theme.of(context).iconTheme.size,
               icon: Icon(
-                CustomIconButton.button_back_without_desc,
+                CustomButtonIcon.button_back_without_desc,
                 color: whiteColor,
               ),
               onPressed: () => _backPage(context),
@@ -80,20 +80,24 @@ class LayoutPage {
       //   ),
     );
 
-    final _mainText = Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: AutoSizeText(
-        mainText != null ? mainText : '',
-        wrapWords: false,
-        style: Theme.of(context).textTheme.headline2,
-        textAlign: TextAlign.center,
+    final _mainText = Flexible(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: AutoSizeText(
+          mainText != null ? mainText : '',
+          wrapWords: false,
+          style: Theme.of(context).textTheme.headline2,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
 
-    final _message = Text(
-      message != null ? message : '',
-      style: Theme.of(context).textTheme.headline5,
-      textAlign: TextAlign.center,
+    final _message = Flexible(
+      child: Text(
+        message != null ? message : '',
+        style: Theme.of(context).textTheme.headline5,
+        textAlign: TextAlign.center,
+      ),
     );
 
     Widget _buildSizedBox(double value) {
@@ -105,39 +109,28 @@ class LayoutPage {
     return Scaffold(
       backgroundColor: color,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: deviceSize.height * 0.95,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: deviceSize.height * 0.45,
+            maxHeight: deviceSize.height * 1.25,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (hasHeader) _header,
+              Expanded(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (hasHeader) _header,
                     if (mainText != null) _mainText,
                     if (mainText != null) _buildSizedBox(8),
                     if (message != null) _message,
                     if (message != null) _buildSizedBox(8),
+                    if (content != null) Flexible(child: content),
                   ],
                 ),
-                if (content != null)
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: deviceSize.height * 0.45,
-                      maxHeight: deviceSize.height * 1.25,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        content,
-                      ],
-                    ),
-                  ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
