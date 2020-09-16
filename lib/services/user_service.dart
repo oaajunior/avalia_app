@@ -155,7 +155,7 @@ class UserServiceImpl implements UserService {
       final userId = await getCurrentUser();
       final userReference =
           await _storeInstance.collection('users').doc(userId).get();
-      final userData = UserModel.fromMap(userReference.data());
+      final userData = UserModel.fromMap(userId, userReference.data());
 
       return userData;
     } on PlatformException catch (error) {

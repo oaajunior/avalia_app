@@ -50,6 +50,8 @@ dependencies:
   percent_indicator: ^2.1.5
   #To user circular checkbox
   circular_check_box: ^1.0.4
+  #To show a custom scrollbar
+  draggable_scrollbar: ^0.0.4
 
 
   # The following adds the Cupertino Icons font to your application.

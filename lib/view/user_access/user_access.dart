@@ -166,8 +166,6 @@ class _UserAccessViewState extends State<UserAccessView> {
       hasHeaderButtons: false,
       context: context,
       hasHeaderLogo: true,
-      //headerTitle: 'avalia',
-      //mainText: _isLogin ? 'Acessar' : 'Cadastrar',
       color: blueDeepColor,
       content: FormUserAccess(
         getIsLoading,

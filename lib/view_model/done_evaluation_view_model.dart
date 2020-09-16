@@ -27,4 +27,23 @@ class DoneEvaluationViewModel {
     }
     return result;
   }
+
+  Future<List<EvaluationStudentModel>> getTopStudentEvaluation(
+      {String code, String userId}) async {
+    List<EvaluationStudentModel> result;
+    try {
+      loadingStatus = LoadingStatus.loading;
+      result =
+          await service.getTopStudentEvaluation(code: code, userId: userId);
+      loadingStatus = LoadingStatus.completed;
+      if (result == null || result.length <= 0) {
+        loadingStatus = LoadingStatus.empty;
+      }
+    } catch (error) {
+      print(error.toString());
+      loadingStatus = LoadingStatus.error;
+      exception = error;
+    }
+    return result;
+  }
 }

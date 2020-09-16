@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import '../../../../view/layout/layout_page.dart';
-import '../../../../res/colors.dart';
-import '../perform_evaluation_questions_view.dart';
-import '../../../../model/evaluation/evaluation_model.dart';
+import '../../layout/layout_page.dart';
+import '../../../res/colors.dart';
+import 'perform_evaluation_questions_view.dart';
+import '../../../model/evaluation/evaluation_model.dart';
 
 class PerformEvaluationPrepareView extends StatefulWidget {
   static const routeName = '/perform_evaluation_prepare';

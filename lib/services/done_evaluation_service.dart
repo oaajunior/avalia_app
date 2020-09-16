@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +14,9 @@ abstract class DoneEvaluationService {
     DateTime initialDate,
     DateTime finalDate,
   });
+
+  Future<List<EvaluationStudentModel>> getTopStudentEvaluation(
+      {String code, String userId});
 }
 
 class DoneEvaluationImpl implements DoneEvaluationService {
@@ -43,7 +48,7 @@ class DoneEvaluationImpl implements DoneEvaluationService {
                 Timestamp.fromDate(finalDate.add(Duration(days: 1))),
           )
           .where(
-            'user',
+            'user_id',
             isEqualTo: userId,
           )
           .orderBy(
@@ -69,5 +74,54 @@ class DoneEvaluationImpl implements DoneEvaluationService {
     }
 
     return _evaluationStudentModelList;
+  }
+
+  @override
+  Future<List<EvaluationStudentModel>> getTopStudentEvaluation(
+      {String code, String userId}) async {
+    List<EvaluationStudentModel> _evaluationStudentList =
+        List<EvaluationStudentModel>();
+    final _query = _storeInstance
+        .collection('student_evaluation')
+        .where('evaluation_code', isEqualTo: code)
+        .orderBy('grade', descending: true)
+        .orderBy('user_name');
+
+    final _queryResult = await _query.get();
+
+    if (_queryResult.size > 0) {
+      _queryResult.docs.forEach((doc) {
+        _evaluationStudentList.add(EvaluationStudentModel.fromMap(doc.data()));
+      });
+
+      double grade = _evaluationStudentList.first.grade;
+      int position = 1;
+      int percentStudentGrade = 1;
+      int totalOfStudents = _evaluationStudentList.length;
+      _evaluationStudentList.first.position = position;
+      _evaluationStudentList.first.percentStudentGrade = percentStudentGrade;
+      for (var i = 1; i < _evaluationStudentList.length; i++) {
+        if (grade == _evaluationStudentList[i].grade) {
+          _evaluationStudentList[i].position = position;
+          _evaluationStudentList[i].percentStudentGrade = percentStudentGrade;
+        } else {
+          position++;
+          grade = _evaluationStudentList[i].grade;
+          percentStudentGrade =
+              ((position / totalOfStudents) * 100).ceilToDouble().truncate();
+
+          _evaluationStudentList[i].position = position;
+          _evaluationStudentList[i].percentStudentGrade = percentStudentGrade;
+        }
+      }
+    }
+    return _evaluationStudentList;
+  }
+}
+
+extension Precision on double {
+  double toPrecision(int fractionDigits) {
+    double mod = pow(10, fractionDigits.toDouble());
+    return ((this * mod).round().toDouble() / mod);
   }
 }

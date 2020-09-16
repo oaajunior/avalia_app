@@ -44,5 +44,5 @@ class CustomIcon {
   static const IconData icon_logo_avalia =
       IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icon_ranking =
-      IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+      IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

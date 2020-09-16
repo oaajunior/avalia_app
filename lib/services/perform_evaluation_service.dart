@@ -75,7 +75,7 @@ class EvaluationServiceImpl implements PerformEvaluationService {
         );
       } else {
         throw PerformEvaluationException(
-            'Já existe uma avaliação feita por você para o código informado. Procure o seu professor!');
+            'Já existe uma avaliação feita por você para o código informado. Por favor, procure o seu professor!');
       }
       return evaluation;
     } on PlatformException catch (error) {
@@ -141,7 +141,7 @@ class EvaluationServiceImpl implements PerformEvaluationService {
     Query query = _storeInstance
         .collection('student_evaluation')
         .where('evaluation_code', isEqualTo: code)
-        .where('user', isEqualTo: user);
+        .where('user_id', isEqualTo: user);
 
     final documents = await query.get();
     if (documents != null && documents.docs.length == 0) {

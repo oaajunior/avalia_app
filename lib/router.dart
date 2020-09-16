@@ -1,3 +1,4 @@
+import 'package:avalia_app/view/ranking/ranking_view.dart';
 import 'package:flutter/material.dart';
 
 import './view/user_access/user_access.dart';
@@ -5,7 +6,7 @@ import './view/evaluation/perform_evaluation/perform_evaluation_view.dart';
 import './view/evaluation/done_evaluation/done_evaluation_list_view.dart';
 import './view/evaluation/done_evaluation/done_evaluation_search_view.dart';
 import './view/evaluation/perform_evaluation/perform_evaluation_questions_view.dart';
-import './view/evaluation/perform_evaluation/widgets/perform_evaluation_prepare_view.dart';
+import 'view/evaluation/perform_evaluation/perform_evaluation_prepare_view.dart';
 import './view/evaluation/done_evaluation/done_evaluation_question_answers_view.dart';
 import './view/home_view.dart';
 
@@ -37,7 +38,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case DoneEvaluationQuestionAnswersView.routeName:
       builder = (context) => DoneEvaluationQuestionAnswersView(arguments);
       break;
-
+    case RankingView.routeName:
+      builder = (context) => RankingView(arguments);
+      break;
     default:
       builder = (context) => UserAccessView();
   }

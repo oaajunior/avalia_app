@@ -98,13 +98,17 @@ class _PerformEvaluationQuestionsViewState
   void _performStudentEvaluation() async {
     if (_evaluationStudent == null) {
       final evaluationData = widget.evaluation;
+      final user = await _viewModelUser.getUserData();
+      final tempName = user.surName.split(' ');
+      final userName = user.name + ' ' + tempName.first;
       _evaluationStudent = EvaluationStudentModel();
       _evaluationStudent.initialDateTime = Timestamp.now();
       _evaluationStudent.evaluationId = evaluationData.id;
       _evaluationStudent.evaluationTitle = evaluationData.title;
       _evaluationStudent.evaluationDiscipline = evaluationData.discipline;
       _evaluationStudent.evaluationCode = evaluationData.code;
-      _evaluationStudent.user = await _viewModelUser.getCurrentUser();
+      _evaluationStudent.userId = user.id;
+      _evaluationStudent.userName = userName;
       _evaluationStudent.grade = 0.0;
     } else {
       final questionData = widget.evaluation.question[_indexQuestion];

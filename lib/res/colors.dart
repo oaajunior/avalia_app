@@ -10,6 +10,7 @@ const yellowBrightColor = const Color.fromRGBO(224, 154, 37, 0.6);
 const blackSoftColor = Colors.black54;
 const purpleDeepColor = const Color(0xFF66327E);
 const purpleBrightColor = const Color(0xFF8D2682);
+const purpleSoftColor = const Color.fromRGBO(141, 38, 131, 0.3);
 const pinkColor = const Color(0xFFD066A1);
 const redColor = const Color(0xFFC02F2E);
 const cadetBlueColor = const Color(0xFF5A9EAA);

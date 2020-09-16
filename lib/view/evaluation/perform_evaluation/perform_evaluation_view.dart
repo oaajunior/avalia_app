@@ -1,4 +1,4 @@
-import 'package:avalia_app/view/evaluation/perform_evaluation/widgets/perform_evaluation_prepare_view.dart';
+import 'package:avalia_app/view/evaluation/perform_evaluation/perform_evaluation_prepare_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -173,7 +173,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       ),
     );
 
-    final buttons = Row(
+    final _buttons = Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -214,7 +214,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       colorTitle: yellowDeepColor,
       context: context,
       message: message,
-      actionButtons: buttons,
+      actionButtons: _buttons,
       barrierDismissible: false,
     );
     return alert;

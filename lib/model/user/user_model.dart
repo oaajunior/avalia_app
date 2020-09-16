@@ -2,6 +2,7 @@ import 'package:avalia_app/utils/type_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
+  String id;
   String name;
   String surName;
   String email;
@@ -10,6 +11,7 @@ class UserModel {
   Timestamp createdAt;
 
   UserModel({
+    this.id,
     this.name,
     this.surName,
     this.email,
@@ -19,8 +21,10 @@ class UserModel {
   });
 
   UserModel.fromMap(
+    String userId,
     Map<String, dynamic> user,
-  )   : name = user['username'],
+  )   : id = userId,
+        name = user['username'],
         surName = user['surname'],
         email = user['email'],
         typeUser =

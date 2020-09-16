@@ -2,8 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../res/custom_icon.dart';
+import '../../../../view/ranking/ranking_view.dart';
 import '../../../../res/colors.dart';
-import '../../../../res/custom_button_icon.dart';
 import '../../../../utils/student_answer.dart';
 import '../../../../model/evaluation_student/evaluation_student_model.dart';
 import '../../../../model/question/question_model.dart';
@@ -46,12 +47,19 @@ class _EvaluationQuestionnaireViewState
     extends State<EvaluationQuestionnaireView> {
   final _groupOfTextsRadios = AutoSizeGroup();
 
+  void _goToPage() {
+    Navigator.of(context).pushNamed(
+      RankingView.routeName,
+      arguments: widget.studentEvaluation,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
     final _question = Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 24.0, right: 24.0),
+      padding: const EdgeInsets.only(top: 8.0, left: 24.0, right: 16.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -68,7 +76,7 @@ class _EvaluationQuestionnaireViewState
             ),
           ),
           Container(
-            width: deviceSize.width * 0.7,
+            width: deviceSize.width * 0.73,
             child: DefaultTextStyle(
               style: Theme.of(context).textTheme.headline5.copyWith(
                     color: widget.color,
@@ -221,19 +229,34 @@ class _EvaluationQuestionnaireViewState
     );
 
     final _ranking = Container(
-      child: IconButton(
-        onPressed: () {},
-        color: purpleDeepColor,
-        iconSize: 45,
+      margin: const EdgeInsets.only(top: 8.0),
+      child: RaisedButton.icon(
+        label: DefaultTextStyle(
+          style: Theme.of(context).textTheme.subtitle2.copyWith(
+                color: purpleDeepColor,
+                fontWeight: FontWeight.w600,
+              ),
+          child: Text('Ranking'),
+        ),
+        onPressed: () => _goToPage(),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         icon: Icon(
-          CustomButtonIcon.button_ranking,
+          CustomIcon.icon_ranking,
+          size: 40,
+          color: purpleDeepColor,
+        ),
+        color: whiteColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          side: BorderSide(color: purpleDeepColor, width: 1.3),
         ),
       ),
     );
 
     final _header = Container(
-      width: deviceSize.width * 0.6,
-      height: deviceSize.height * 0.09,
+      width: deviceSize.width * 0.8,
+      height: deviceSize.height * 0.1,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

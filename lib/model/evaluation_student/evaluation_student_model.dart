@@ -10,9 +10,12 @@ class EvaluationStudentModel {
   Timestamp initialDateTime;
   Timestamp finalDateTime;
   Timestamp createdAt;
-  String user;
+  String userId;
+  String userName;
   List<QuestionAnswersModel> listQuestionAnswers;
   double grade;
+  int position = 0;
+  int percentStudentGrade = 0;
 
   EvaluationStudentModel({
     this.evaluationId,
@@ -22,13 +25,15 @@ class EvaluationStudentModel {
     this.initialDateTime,
     this.finalDateTime,
     this.createdAt,
-    this.user,
+    this.userId,
+    this.userName,
     this.listQuestionAnswers,
     this.grade,
   });
 
   Map<String, dynamic> toMap() => {
-        'user': this.user,
+        'user_id': this.userId,
+        'user_name': this.userName,
         'evaluation_discipline': this.evaluationDiscipline,
         'evaluation_id': this.evaluationId,
         'evaluation_title': this.evaluationTitle,
@@ -51,7 +56,8 @@ class EvaluationStudentModel {
         finalDateTime = studentEvaluation['final_date'],
         grade = studentEvaluation['grade'],
         createdAt = studentEvaluation['created_at'],
-        user = studentEvaluation['user'],
+        userId = studentEvaluation['user_id'],
+        userName = studentEvaluation['user_name'],
         listQuestionAnswers =
             QuestionAnswersModel.getStudentQuestionAnswersFromMap(
                 studentEvaluation['question_answers']);
