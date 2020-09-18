@@ -41,7 +41,7 @@ dependencies:
   #Access directories of the resource
   path_provider: ^1.6.11
   #To verify if there is connection with the internet
-  connectivity: ">=0.4.9+2 <2.0.0"
+  data_connection_checker: ^0.3.4
   #To resizes FontSize automatically
   auto_size_text: ^2.1.0
   #To use the class NumberFormat, package of internalionization

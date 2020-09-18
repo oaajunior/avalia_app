@@ -64,7 +64,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       child: Row(
         children: [
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
                   color: Colors.black54,
                   fontWeight: FontWeight.bold,
                 ),
@@ -77,7 +77,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
             height: 28,
           ),
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
                   color: Colors.black54,
                 ),
             child: Text(
@@ -182,7 +182,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
             Navigator.of(context).pop();
           },
           child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.subtitle1.copyWith(
                   color: Theme.of(context).accentColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -198,7 +198,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
           onPressed: _goToPage,
           color: yellowDeepColor,
           child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.subtitle1.copyWith(
                   color: Theme.of(context).accentColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -233,7 +233,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
       case LoadingStatus.empty:
         setLoading(false);
         await showMessageToUser('Avaliação não encontrada',
-            'Não foi localizada uma avaliação para o código informado. Por favor, verifique o código digitado!');
+            'Não foi localizada a avaliação para o código informado.');
         break;
 
       case LoadingStatus.error:

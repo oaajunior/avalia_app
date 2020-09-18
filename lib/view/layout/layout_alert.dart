@@ -21,14 +21,14 @@ class LayoutAlert {
           child: Container(
             width: constraints.maxWidth * 0.8,
             child: AlertDialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 32.0),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 40.0),
               actionsPadding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
               shape: DialogTheme.of(context).shape,
               backgroundColor: Theme.of(context).accentColor,
               title: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline4.copyWith(
+                style: Theme.of(context).textTheme.headline5.copyWith(
                     color: colorTitle != null ? colorTitle : color,
                     fontWeight: FontWeight.bold),
                 child: Text(
@@ -39,7 +39,7 @@ class LayoutAlert {
               content: Container(
                 margin: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 8.0),
                 child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  style: Theme.of(context).textTheme.headline6.copyWith(
                         color: color,
                       ),
                   child: message,

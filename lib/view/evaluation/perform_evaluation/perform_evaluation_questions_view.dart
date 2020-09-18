@@ -168,16 +168,16 @@ class _PerformEvaluationQuestionsViewState
   Future<void> _saveStudentEvaluation(
       EvaluationStudentModel evaluationStudent) async {
     Widget userGrade = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 80.0),
+      padding: const EdgeInsets.symmetric(horizontal: 60.0),
       child: CircularPercentIndicator(
-        radius: 188,
+        radius: 170,
         lineWidth: 4.0,
         percent: 1.0,
         animation: false,
         backgroundColor: greenBrightColor,
         progressColor: greenBrightColor,
         center: DefaultTextStyle(
-          style: Theme.of(context).textTheme.headline3.copyWith(
+          style: Theme.of(context).textTheme.headline4.copyWith(
                 color: greenBrightColor,
                 fontWeight: FontWeight.bold,
               ),
@@ -218,14 +218,15 @@ class _PerformEvaluationQuestionsViewState
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
         side: BorderSide(
-          width: 1.0,
+          width: 1.5,
           style: BorderStyle.solid,
           color: yellowDeepColor,
         ),
       ),
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.bodyText2.copyWith(
+        style: Theme.of(context).textTheme.subtitle1.copyWith(
               color: yellowDeepColor,
+              fontWeight: FontWeight.w700,
             ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -244,7 +245,7 @@ class _PerformEvaluationQuestionsViewState
     switch (_viewModelEvaluation.loadingStatus) {
       case LoadingStatus.completed:
         await showUserGrade(
-          'Parabéns,\nsua nota foi: ',
+          'Sua nota foi: ',
           userGrade,
           button,
         );
@@ -320,18 +321,21 @@ class _PerformEvaluationQuestionsViewState
         children: [
           Text(
             '${numberFormat.format(_indexQuestion + 1)}/${numberFormat.format(numberOfQuestions)}',
-            style: Theme.of(context).textTheme.headline3,
+            style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.center,
           ),
           Container(
             width: deviceSize.width * 0.4,
             padding: const EdgeInsets.only(left: 52.0),
             child: CircularPercentIndicator(
-              radius: 55,
+              radius: 50,
               percent: _timeToResponse,
               center: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text((_timeToAnswer).toString()),
+                child: DefaultTextStyle(
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                  child: Text((_timeToAnswer).toString()),
+                ),
               ),
               backgroundColor: whiteColor,
               progressColor: greenDeepColor,
@@ -373,7 +377,7 @@ class _PerformEvaluationQuestionsViewState
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: deviceSize.height * 0.75,
-          maxHeight: deviceSize.height * 0.87,
+          maxHeight: deviceSize.height * 0.86,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

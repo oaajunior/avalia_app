@@ -103,8 +103,15 @@ class _FormUserAccessState extends State<FormUserAccess> {
       return 'Por favor, informe sua senha.';
     } else {
       if (!regex.hasMatch(value)) {
-        return 'A senha deve conter no mínimo 8 caracteres com letra maiúscula, minúscula e símbolos (\$@!&%).';
+        return 'A senha deve conter no mínimo 8 caracteres com letras maiúsculas, minúsculas, números, e símbolos (\$@!&%).';
       }
+    }
+    return null;
+  }
+
+  String _validatePasswordLogin(String value) {
+    if (value.trim().isEmpty) {
+      return 'Por favor, informe sua senha.';
     }
     return null;
   }
@@ -120,6 +127,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
 
   void _resetForm() {
     _formKey.currentState.reset();
+    _informedPassword.text = '';
   }
 
   void _trySubmit() {
@@ -147,7 +155,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       textCapitalization: TextCapitalization.words,
       validator: (name) => _validateName(name),
       onSaved: (name) {
-        _userName = name.trim();
+        _userName = name.trim().toString().toLowerCase().capitalizeFirstofEach;
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
@@ -169,7 +177,8 @@ class _FormUserAccessState extends State<FormUserAccess> {
       enableSuggestions: false,
       validator: (surname) => _validateSurname(surname),
       onSaved: (surname) {
-        _userSurname = surname.trim();
+        _userSurname =
+            surname.trim().toString().toLowerCase().capitalizeFirstofEach;
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
@@ -209,7 +218,9 @@ class _FormUserAccessState extends State<FormUserAccess> {
           : (_) {
               FocusScope.of(context).requestFocus(_repeatedPasswordFocus);
             },
-      validator: (password) => _validatePassword(password),
+      validator: (password) => widget.isLogin()
+          ? _validatePasswordLogin(password)
+          : _validatePassword(password),
       onSaved: (password) {
         _userPassword = password.trim();
       },
@@ -270,6 +281,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
         ),
       ),
       obscureText: _showUserRepeteadPassword ? false : true,
+      enableInteractiveSelection: false,
     );
 
     final radioTypeUser = Container(
@@ -293,7 +305,10 @@ class _FormUserAccessState extends State<FormUserAccess> {
                     },
                   ),
                 ),
-                Text('Aluno'),
+                Text(
+                  'Aluno',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ],
             ),
           ),
@@ -313,7 +328,10 @@ class _FormUserAccessState extends State<FormUserAccess> {
                     },
                   ),
                 ),
-                Text('Professor'),
+                Text(
+                  'Professor',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ],
             ),
           ),
@@ -343,14 +361,15 @@ class _FormUserAccessState extends State<FormUserAccess> {
                         style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        'Cadastre-se!',
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontSize: 16,
-                          decoration: TextDecoration.underline,
+                      DefaultTextStyle(
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                              color: Theme.of(context).accentColor,
+                              decoration: TextDecoration.underline,
+                            ),
+                        child: Text(
+                          'Cadastre-se!',
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ],
                   )
@@ -367,42 +386,44 @@ class _FormUserAccessState extends State<FormUserAccess> {
       ),
     );
 
-    final _content = SingleChildScrollView(
-      child: AnimatedContainer(
-        duration: Duration(
-          microseconds: 300,
+    final _content = AnimatedContainer(
+      duration: Duration(
+        microseconds: 300,
+      ),
+      curve: Curves.easeIn,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: widget.isLogin()
+              ? deviceSize.height * 0.4
+              : deviceSize.height * 0.8,
+          maxHeight: widget.isLogin()
+              ? deviceSize.height * 0.66
+              : deviceSize.height * 1.25,
         ),
-        curve: Curves.easeIn,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: widget.isLogin()
-                ? deviceSize.height * 0.69
-                : deviceSize.height * 0.8,
-            maxHeight: widget.isLogin()
-                ? deviceSize.height * 0.69
-                : deviceSize.height * 1.25,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (!widget.isLogin()) _texFieldName,
-                if (!widget.isLogin()) _textFieldSurname,
-                _textFieldEmail,
-                _textFieldPassword,
-                if (!widget.isLogin()) _textFieldRepeatedPassword,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!widget.isLogin()) _texFieldName,
+              if (!widget.isLogin()) _textFieldSurname,
+              _textFieldEmail,
+              _textFieldPassword,
+              if (!widget.isLogin()) _textFieldRepeatedPassword,
+              SizedBox(
+                height: 12,
+              ),
+              if (!widget.isLogin()) radioTypeUser,
+              SizedBox(
+                height: 12,
+              ),
+              if (widget.isLoading()) CircularProgressIndicator(),
+              if (widget.isLoading())
                 SizedBox(
                   height: 12,
                 ),
-                if (!widget.isLogin()) radioTypeUser,
-                SizedBox(
-                  height: 12,
-                ),
-                if (widget.isLoading()) CircularProgressIndicator(),
-                _buttons,
-              ],
-            ),
+              _buttons,
+            ],
           ),
         ),
       ),
@@ -410,4 +431,11 @@ class _FormUserAccessState extends State<FormUserAccess> {
 
     return _content;
   }
+}
+
+extension CapExtension on String {
+  String get capitalize => '${this[0].toUpperCase()}${this.substring(1)}';
+  String get allInCaps => this.toUpperCase();
+  String get capitalizeFirstofEach =>
+      this.split(" ").map((str) => str.capitalize).join(" ");
 }

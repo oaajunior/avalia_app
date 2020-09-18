@@ -104,9 +104,9 @@ class _DoneEvaluationQuestionAnswersViewState
 
     Widget _buildTwoButtons(String name, Function buttonFunction) {
       return Padding(
-        padding: const EdgeInsets.only(top: 6.0),
+        padding: const EdgeInsets.only(top: 8.0),
         child: Container(
-          height: 60,
+          height: 55,
           width: _deviceSize.width * 0.4,
           child: RaisedButton(
             color: Theme.of(context).backgroundColor,
@@ -115,7 +115,7 @@ class _DoneEvaluationQuestionAnswersViewState
               name,
               style: TextStyle(
                 color: greenDeepColor,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -145,7 +145,7 @@ class _DoneEvaluationQuestionAnswersViewState
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: _deviceSize.height * 0.75,
-          maxHeight: _deviceSize.height * 0.87,
+          maxHeight: _deviceSize.height * 0.86,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

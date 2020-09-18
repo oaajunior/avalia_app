@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:avalia_app/res/custom_button_icon.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/colors.dart';
+import '../../res/custom_button_icon.dart';
 
 class LayoutPage {
   static void _backPage(BuildContext context) {
@@ -30,7 +30,7 @@ class LayoutPage {
 
     final _header = Container(
       width: deviceSize.width,
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.only(top: 8.0),
       child: Stack(
         alignment: hasHeaderButtons ? Alignment.topLeft : Alignment.topCenter,
         children: [
@@ -45,17 +45,17 @@ class LayoutPage {
             ),
           if (headerTitle != null)
             Container(
-              padding: const EdgeInsets.only(top: 14.0),
+              padding: const EdgeInsets.only(top: 10.0),
               alignment: Alignment.center,
               height: deviceSize.height * 0.06,
               child: Text(
                 headerTitle,
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
           if (hasHeaderLogo)
             Container(
-              height: deviceSize.height * 0.25,
+              height: deviceSize.height * 0.28,
               padding: const EdgeInsets.only(top: 32.0, bottom: 32.0),
               child: Center(
                   child: Image.asset(
@@ -109,26 +109,27 @@ class LayoutPage {
     return Scaffold(
       backgroundColor: color,
       body: SafeArea(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: deviceSize.height * 0.45,
-            maxHeight: deviceSize.height * 1.25,
-          ),
+        child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (hasHeader) _header,
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (mainText != null) _mainText,
-                    if (mainText != null) _buildSizedBox(8),
-                    if (message != null) _message,
-                    if (message != null) _buildSizedBox(8),
-                    if (content != null) Flexible(child: content),
-                  ],
-                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (mainText != null) _mainText,
+                  if (mainText != null) _buildSizedBox(8),
+                  if (message != null) _message,
+                  if (message != null) _buildSizedBox(8),
+                  if (content != null)
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: deviceSize.height * 0.45,
+                        maxHeight: deviceSize.height * 1.25,
+                      ),
+                      child: content,
+                    ),
+                ],
               ),
             ],
           ),

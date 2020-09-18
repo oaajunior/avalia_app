@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
 import 'colors.dart';
+import './custom_text_factor.dart';
 
 ThemeData basicTheme() {
   final ThemeData base = ThemeData.light();
@@ -58,7 +58,7 @@ InputDecorationTheme _basicInputDecorationTheme(
   return baseInputDecoration.copyWith(
     hintStyle: TextStyle(
       color: whiteColor,
-      fontSize: 20,
+      fontSize: 18,
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(32),
@@ -139,7 +139,7 @@ ButtonThemeData _basicButtonTheme(ButtonThemeData baseButton) {
 IconThemeData _basicIconTheme(IconThemeData baseIcon) {
   return baseIcon.copyWith(
     color: whiteColor,
-    size: 28.0,
+    size: 24.0,
   );
 }
 
@@ -148,37 +148,35 @@ TextTheme _basicTextTheme(TextTheme baseText) {
       .copyWith(
         bodyText1: TextStyle(
           color: whiteColor,
-          fontSize: 16,
+          fontSize: CustomTextFactor.bodyText1ScaledSize,
         ),
         bodyText2: TextStyle(
-          fontSize: 20,
           color: whiteColor,
+          fontSize: CustomTextFactor.bodyText2ScaledSize,
         ),
         headline2: TextStyle(
           color: whiteColor,
-          fontSize: 36,
+          fontSize: CustomTextFactor.headline2ScaledSize,
         ),
         headline3: TextStyle(
           color: whiteColor,
-          fontSize: 30,
+          fontSize: CustomTextFactor.headline3ScaledSize,
         ),
         headline4: TextStyle(
           color: whiteColor,
-          fontSize: 26,
+          fontSize: CustomTextFactor.headline4ScaledSize,
         ),
         headline5: TextStyle(
           color: whiteColor,
-          fontSize: 22,
+          fontSize: CustomTextFactor.headline5ScaledSize,
         ),
         headline6: TextStyle(
           color: whiteColor,
-          fontSize: 20,
-          height: 1.1,
+          fontSize: CustomTextFactor.headline6ScaledSize,
+          //height: 1.1,
         ),
         subtitle1: TextStyle(
-          color: whiteColor,
-          fontSize: 18,
-        ),
+            color: whiteColor, fontSize: CustomTextFactor.subtitle1ScaledSize),
       )
       .apply(
         fontFamily: 'Quenda',

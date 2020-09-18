@@ -14,9 +14,10 @@ class LayoutTextFields {
     TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
     Function validator,
-    TextStyle textStyle = const TextStyle(fontSize: 20),
+    TextStyle textStyle = const TextStyle(fontSize: 18),
     bool obscureText = false,
     InputDecoration decoration,
+    bool enableInteractiveSelection = true,
   }) {
     Widget textFormField = Padding(
       padding: const EdgeInsets.symmetric(
@@ -26,6 +27,7 @@ class LayoutTextFields {
       child: TextFormField(
         key: key,
         focusNode: focusNode,
+        enableInteractiveSelection: enableInteractiveSelection,
         onFieldSubmitted: onFieldSubmitted,
         textInputAction: textInputAction,
         keyboardType: keyboardType,

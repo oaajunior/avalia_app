@@ -52,38 +52,38 @@ class UserServiceImpl implements UserService {
       switch (error.code) {
         case 'user-not-found':
           throw UserException(
-              'O e-mail informado não foi encontrado. Por favor, verifique!');
+              'O e-mail informado não foi encontrado.\nPor favor, verifique!');
         case 'email-already-exists':
           throw UserException(
-              'O e-mail informado já existe. Por favor, verifique!');
+              'O e-mail informado já existe.\nPor favor, verifique!');
         case 'wrong-password':
           throw UserException(
-              'A senha informada não está correta. Por favor, verifique!');
+              'A senha informada não está correta.\nPor favor, verifique!');
         case 'invalid-password':
           throw UserException(
-              'A senha informada não está correta. Por favor, verifique!');
+              'A senha informada não está correta.\nPor favor, verifique!');
         case 'weak-passowrd':
           throw UserException(
-              'A senha informada não é adequada. Por favor, informe uma senha contendo letras (minúscula e maiúscula), números e símbolos (#%*!\$)');
+              'A senha informada não é adequada.\nPor favor, informe uma senha contendo letras (minúscula e maiúscula), números e símbolos (#%*!\$)');
         case 'invalid-email':
           throw UserException(
-              'O endereço de e-mail informado não está no formato correto. Por favor, verifique!');
+              'O endereço de e-mail informado não está no formato correto.\nPor favor, verifique!');
 
         case 'email-already-in-use':
           throw UserException(
-              'Já existe um usuário em uso com o e-mail informado. Por favor, verifique!');
+              'Já existe um usuário cadastrado para o e-mail informado.\nPor favor, informe um novo e-mail!');
 
         case 'user-disabled':
           throw UserException(
-              'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
+              'O e-mail informado foi desabilitado!\nPor favor, entre em contato com o administrador.');
 
         case 'too-many-requests':
           throw UserException(
-              'No momento há muitas requisições. Por favor, tente novamente mais tarde!');
+              'No momento há muitas requisições.\nPor favor, tente novamente mais tarde!');
 
         case 'network-request-failed':
           throw InternetException(
-              'Houve um erro ao tentar se conectar com o servidor. Verifique sua conexão com a internet.');
+              'Houve um erro ao tentar se conectar com o servidor.\nVerifique sua conexão com a internet.');
 
         default:
           throw UserException('Houve um erro no cadastro do usuário!');
@@ -92,35 +92,35 @@ class UserServiceImpl implements UserService {
       switch (error.code) {
         case 'ERROR_USER_NOT_FOUND':
           throw UserException(
-              'O e-mail informado não foi encontrado. Por favor, verifique!');
+              'O e-mail informado não foi encontrado.\nPor favor, verifique!');
 
         case 'ERROR_WRONG_PASSWORD':
           throw UserException(
-              'A senha informada não está correta. Por favor, verifique!');
+              'A senha informada não está correta.\nPor favor, verifique!');
 
         case 'ERROR_WEAK_PASSWORD':
           throw UserException(
-              'A senha informada não é adequada. Por favor, informe uma senha contendo letras (minúscula e maiúscula), números e símbolos (#%*!\$)');
+              'A senha informada não é adequada.\nPor favor, informe uma senha contendo letras (minúscula e maiúscula), números e símbolos (#%*!\$)');
 
         case 'ERROR_INVALID_EMAIL':
           throw UserException(
-              'O endereço de e-mail informado não está no formato correto. Por favor, verifique!');
+              'O endereço de e-mail informado não está no formato correto.\nPor favor, verifique!');
 
         case 'ERROR_EMAIL_ALREADY_IN_USE':
           throw UserException(
-              'Já existe um usuário em uso com o e-mail informado. Por favor, verifique!');
+              'Já existe um usuário cadastrado para o e-mail informado.\nPor favor, informe um novo e-mail!');
 
         case 'ERROR_USER_DISABLED':
           throw UserException(
-              'O e-mail informado foi desabilitado! Por favor, entre em contato com o administrador.');
+              'O e-mail informado foi desabilitado!\nPor favor, entre em contato com o administrador.');
 
         case 'ERROR_TOO_MANY_REQUESTS':
           throw UserException(
-              'No momento há muitas requisições. Por favor, tente novamente mais tarde!');
+              'No momento há muitas requisições.\nPor favor, tente novamente mais tarde!');
 
         case 'ERROR_NETWORK_REQUEST_FAILED':
           throw InternetException(
-              'Houve um erro ao tentar se conectar com o servidor. Verifique sua conexão com a internet.');
+              'Houve um erro ao tentar se conectar com o servidor.\nVerifique sua conexão com a internet.');
 
         default:
           throw UserException('Houve um erro no cadastro do usuário!');

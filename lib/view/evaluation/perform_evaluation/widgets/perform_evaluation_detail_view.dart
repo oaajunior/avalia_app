@@ -50,7 +50,7 @@ class _PerformEvaluationDetailViewState
           Text(
             'Por favor,\n informe um código',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline6,
           ),
           LayoutTextFields.customTextFields(
             decoration: InputDecoration(
@@ -103,8 +103,8 @@ class _PerformEvaluationDetailViewState
 
     final _content = ConstrainedBox(
       constraints: BoxConstraints(
-        minHeight: deviceSize.height * 0.83,
-        maxHeight: deviceSize.height * 0.86,
+        minHeight: deviceSize.height * 0.80,
+        maxHeight: deviceSize.height * 0.85,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,

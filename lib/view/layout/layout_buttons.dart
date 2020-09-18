@@ -23,13 +23,13 @@ class LayoutButtons {
         margin: const EdgeInsets.only(
           bottom: 8,
         ),
-        height: 60,
+        height: 55,
         width: deviceSize.width,
         child: Stack(
           children: [
             Container(
               width: deviceSize.width * 0.9,
-              height: 60,
+              height: 55,
               child: RaisedButton(
                 color: Theme.of(context).backgroundColor,
                 onPressed: onPressedButton,
@@ -37,7 +37,7 @@ class LayoutButtons {
                   textButton != null ? textButton : '',
                   style: TextStyle(
                     color: color != null ? color : Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

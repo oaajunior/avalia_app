@@ -64,7 +64,7 @@ class _PerformEvaluationPrepareViewState
         child: DefaultTextStyle(
           style: Theme.of(context)
               .textTheme
-              .headline4
+              .headline5
               .copyWith(color: yellowDeepColor, fontWeight: FontWeight.bold),
           child: Text(
             'A sua avaliação\njá vai começar!',
@@ -73,23 +73,25 @@ class _PerformEvaluationPrepareViewState
       ),
     );
 
-    Text message = Text(
-      'Prepare-se!',
-      style: TextStyle(
-        fontSize: 26,
-        color: yellowDeepColor,
-        fontWeight: FontWeight.bold,
+    Widget message = DefaultTextStyle(
+      style: Theme.of(context)
+          .textTheme
+          .headline5
+          .copyWith(color: yellowDeepColor, fontWeight: FontWeight.bold),
+      child: Text(
+        'Prepare-se!',
       ),
     );
 
     Widget showMessage = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 80.0),
       child: CircularPercentIndicator(
-        radius: 188,
+        radius: 150,
         lineWidth: 4.0,
-        percent: percent,
-        // animation: true,
-        // animationDuration: 250,
+        //percent: percent,
+        percent: 1.0,
+        animation: true,
+        animationDuration: 11000,
         backgroundColor: whiteColor,
         progressColor: greenBrightColor,
         center: DefaultTextStyle(
@@ -127,25 +129,28 @@ class _PerformEvaluationPrepareViewState
     //   ),
     // );
 
-    return Center(
-      child: Container(
-        height: deviceSize.height * 0.5,
-        width: deviceSize.width * 0.8,
-        child: Card(
-          shape: DialogTheme.of(context).shape,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              title,
-              SizedBox(
-                height: 10,
-              ),
-              showMessage,
-              SizedBox(
-                height: 10,
-              ),
-              message,
-            ],
+    return Container(
+      height: deviceSize.height * 0.9,
+      child: Center(
+        child: Container(
+          height: deviceSize.height * 0.5,
+          width: deviceSize.width * 0.8,
+          child: Card(
+            shape: DialogTheme.of(context).shape,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                title,
+                SizedBox(
+                  height: 10,
+                ),
+                showMessage,
+                SizedBox(
+                  height: 10,
+                ),
+                message,
+              ],
+            ),
           ),
         ),
       ),

@@ -62,11 +62,11 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
             DefaultTextStyle(
               style: Theme.of(context).textTheme.headline6.copyWith(
                     color: greenDeepColor,
-                    fontWeight: FontWeight.bold,
+                    //fontWeight: FontWeight.bold,
                   ),
               child: AutoSizeText(
                 _studentEvaluation[index].evaluationDiscipline,
-                maxLines: 2,
+                maxLines: 1,
                 wrapWords: false,
               ),
             ),
@@ -87,9 +87,9 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
 
     Widget _buildGrade(int index) {
       return Container(
-        padding: const EdgeInsets.only(left: 12.0, top: 8.0, right: 4.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 4.0),
         child: CircularPercentIndicator(
-          radius: 70,
+          radius: 60,
           lineWidth: 2.0,
           percent: 1.0,
           animation: false,
@@ -134,10 +134,11 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
       );
     }
 
-    final _listView = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    final _content = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      height: _deviceSize.height * 0.87,
       child: ListView.builder(
-        padding: const EdgeInsets.only(bottom: 16.0),
+        padding: const EdgeInsets.only(bottom: 32.0),
         itemCount: _studentEvaluation.length,
         itemExtent: _deviceSize.height * 0.15,
         itemBuilder: (ctx, index) => _buildListItem(index),
@@ -150,7 +151,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
       hasHeader: true,
       context: context,
       color: greenDeepColor,
-      content: _listView,
+      content: _content,
     );
   }
 }

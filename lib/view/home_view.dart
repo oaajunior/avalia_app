@@ -61,6 +61,8 @@ class _HomeViewState extends State<HomeView> {
     },
   ];
 
+  void _functionNothing(BuildContext context) {}
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +74,9 @@ class _HomeViewState extends State<HomeView> {
         });
       }
     });
+    _listOptionsBottomPage[0]['function'] = _functionNothing;
+    _listOptionsBottomPage[1]['function'] = _functionNothing;
+    _listOptionsBottomPage[2]['function'] = _functionNothing;
     _listOptionsBottomPage[3]['function'] = _exitApplication;
   }
 
@@ -163,20 +168,20 @@ class _HomeViewState extends State<HomeView> {
                     image,
                   ),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.white12,
-                    blurRadius: 20.0,
-                    offset: Offset(10, 10),
-                  ),
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.white12,
+                //     blurRadius: 20.0,
+                //     offset: Offset(10, 10),
+                //   ),
+                // ],
               ),
             ),
             Positioned(
               top: 10,
-              left: 48,
+              left: 40,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline2.copyWith(
+                style: Theme.of(context).textTheme.headline4.copyWith(
                       color: color,
                     ),
                 child: Text(
@@ -242,34 +247,41 @@ class _HomeViewState extends State<HomeView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: _listOptionsBottomPage.map((item) {
           Function actionFunction = item['function'] as Function;
-          return InkWell(
-            onTap: () => actionFunction(context),
-            child: Container(
-              margin: const EdgeInsets.only(
-                right: 8,
-              ),
-              height: deviceSize.height * 0.12,
-              width: deviceSize.width * 0.2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: blueBrightColor,
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      item['name'],
-                      style: Theme.of(context).textTheme.bodyText1,
-                      textAlign: TextAlign.left,
+          return Theme(
+            data: ThemeData.light().copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
+            child: InkWell(
+              onTap: () => actionFunction(context),
+              child: Container(
+                margin: const EdgeInsets.only(
+                  right: 8,
+                ),
+                height: deviceSize.height * 0.12,
+                width: deviceSize.width * 0.2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: blueBrightColor,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                      child: Text(
+                        item['name'],
+                        style: Theme.of(context).textTheme.subtitle1,
+                        textAlign: TextAlign.left,
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: Icon(
-                      item['icon'],
-                    ),
-                  )
-                ],
+                    Center(
+                      child: Icon(
+                        item['icon'],
+                        color: whiteColor,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );

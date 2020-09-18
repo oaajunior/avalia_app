@@ -217,7 +217,7 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
     final _formMessage = Text(
       'Por favor,\n informe a data',
       textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.headline5,
+      style: Theme.of(context).textTheme.headline6,
     );
 
     final _form = Form(

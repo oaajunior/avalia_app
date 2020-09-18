@@ -127,6 +127,7 @@ class _UserAccessViewState extends State<UserAccessView> {
         Navigator.of(context).pushReplacementNamed(HomeView.routeName);
         break;
       case LoadingStatus.error:
+        setIsLoading(false);
         if (viewModel.userException != null) {
           if (_isLogin) {
             await showMessageToUser(
@@ -144,10 +145,9 @@ class _UserAccessViewState extends State<UserAccessView> {
                 titleCreateUser, messageCreateUserWithError);
           }
         }
-        setIsLoading(false);
         break;
-
       default:
+        setIsLoading(false);
         if (_isLogin) {
           await showMessageToUser(
               titleAuthenticateUser, messageLogiWithUndefinedError);
@@ -155,7 +155,6 @@ class _UserAccessViewState extends State<UserAccessView> {
           await showMessageToUser(
               titleCreateUser, messageCreateUserWithUndefinedError);
         }
-        setIsLoading(false);
     }
   }
 

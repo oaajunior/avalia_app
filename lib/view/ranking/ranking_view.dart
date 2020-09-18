@@ -70,24 +70,26 @@ class _RankingViewState extends State<RankingView> {
 
     final _header = Container(
       width: _deviceSize.width * 0.85,
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
       child: Row(
         children: [
           Icon(
             CustomIcon.icon_ranking,
             color: purpleDeepColor,
-            size: 70,
+            size: 55,
           ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     DefaultTextStyle(
-                      style: Theme.of(context).textTheme.headline4.copyWith(
+                      style: Theme.of(context).textTheme.headline6.copyWith(
                             color: purpleDeepColor,
+                            fontWeight: FontWeight.w700,
                           ),
                       child: AutoSizeText(
                         widget._studentEvaluation.evaluationDiscipline,
@@ -98,7 +100,7 @@ class _RankingViewState extends State<RankingView> {
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
                       child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: purpleDeepColor,
                             ),
                         child: Text(
@@ -118,24 +120,24 @@ class _RankingViewState extends State<RankingView> {
     );
 
     final _columnTitles = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
                   color: purpleDeepColor,
                 ),
             child: Text('Posição'),
           ),
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
                   color: purpleDeepColor,
                 ),
             child: Text('Nome'),
           ),
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
                   color: purpleDeepColor,
                 ),
             child: Text('Nota'),
@@ -192,8 +194,8 @@ class _RankingViewState extends State<RankingView> {
         studentEvaluationListWidget.add(
           Padding(
             padding: const EdgeInsets.only(
-              top: 8.0,
-              right: 16.0,
+              top: 7.0,
+              right: 8.0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,7 +223,7 @@ class _RankingViewState extends State<RankingView> {
             ),
           ),
         );
-        if (qtdStudents >= 6 && !studentBetweenThree) {
+        if (qtdStudents >= 6) {
           Future.delayed(Duration.zero, () => _setScrollBar());
         }
       }
@@ -262,7 +264,7 @@ class _RankingViewState extends State<RankingView> {
       }
 
       return Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -275,10 +277,10 @@ class _RankingViewState extends State<RankingView> {
 
     Widget _buildRankingContent() {
       return Container(
-        height: _deviceSize.height * 0.53,
+        height: _deviceSize.height * 0.50,
         child: DraggableScrollbar.rrect(
           alwaysVisibleScrollThumb: hasManyItemsToShow,
-          heightScrollThumb: 40.0,
+          heightScrollThumb: 38.0,
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           backgroundColor: purpleSoftColor,
           controller: _controller,
@@ -329,7 +331,7 @@ class _RankingViewState extends State<RankingView> {
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).accentColor),
       width: _deviceSize.width * 0.9,
-      height: _deviceSize.height * 0.75,
+      height: _deviceSize.height * 0.73,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -342,7 +344,7 @@ class _RankingViewState extends State<RankingView> {
 
     final content = ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: _deviceSize.height * 0.88,
+        maxHeight: _deviceSize.height * 0.86,
         maxWidth: _deviceSize.width * 0.9,
       ),
       child: Column(
