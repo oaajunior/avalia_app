@@ -258,7 +258,7 @@ class _HomeViewState extends State<HomeView> {
                 margin: const EdgeInsets.only(
                   right: 8,
                 ),
-                height: deviceSize.height * 0.12,
+                height: deviceSize.height * 0.13,
                 width: deviceSize.width * 0.2,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),

@@ -21,7 +21,7 @@ class DoneEvaluationListView extends StatefulWidget {
 class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
   String _title;
   List<EvaluationStudentModel> _studentEvaluation;
-
+  AutoSizeGroup _itemListSize = AutoSizeGroup();
   @override
   void initState() {
     _title = widget.arguments[0];
@@ -53,8 +53,9 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
     );
 
     Widget _buildInformation(int index) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+      return Container(
+        width: _deviceSize.width * 0.53,
+        padding: const EdgeInsets.only(left: 4.0, top: 4.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -62,22 +63,25 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
             DefaultTextStyle(
               style: Theme.of(context).textTheme.headline6.copyWith(
                     color: greenDeepColor,
-                    //fontWeight: FontWeight.bold,
                   ),
               child: AutoSizeText(
                 _studentEvaluation[index].evaluationDiscipline,
                 maxLines: 1,
                 wrapWords: false,
+                group: _itemListSize,
               ),
             ),
             DefaultTextStyle(
               style: Theme.of(context).textTheme.headline6.copyWith(
                     color: greenDeepColor,
                   ),
-              child: Text(
+              child: AutoSizeText(
                 DateFormat('dd/MM/yyyy').format(
                   _studentEvaluation[index].initialDateTime.toDate(),
                 ),
+                maxLines: 1,
+                wrapWords: false,
+                group: _itemListSize,
               ),
             ),
           ],
@@ -87,9 +91,11 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
 
     Widget _buildGrade(int index) {
       return Container(
-        padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+        padding: const EdgeInsets.only(
+          left: 2.0,
+        ),
         child: CircularPercentIndicator(
-          radius: 60,
+          radius: 55,
           lineWidth: 2.0,
           percent: 1.0,
           animation: false,
@@ -135,7 +141,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
     }
 
     final _content = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
       height: _deviceSize.height * 0.87,
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 32.0),

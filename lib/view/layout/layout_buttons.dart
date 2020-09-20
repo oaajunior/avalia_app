@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class LayoutButtons {
@@ -10,6 +11,7 @@ class LayoutButtons {
     void Function([BuildContext ctx]) onPressedButtonTwo,
     Color color,
     BuildContext context,
+    bool shortButton = false,
   }) {
     final deviceSize = MediaQuery.of(context).size;
 
@@ -19,22 +21,25 @@ class LayoutButtons {
       Function onPressedButton,
     ) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: shortButton
+            ? const EdgeInsets.symmetric(horizontal: 0.0)
+            : const EdgeInsets.symmetric(horizontal: 32.0),
         margin: const EdgeInsets.only(
           bottom: 8,
         ),
-        height: 55,
-        width: deviceSize.width,
+        width: shortButton ? deviceSize.width * 0.4 : deviceSize.width,
         child: Stack(
           children: [
             Container(
-              width: deviceSize.width * 0.9,
-              height: 55,
+              width:
+                  shortButton ? deviceSize.width * 0.5 : deviceSize.width * 0.9,
+              height: deviceSize.height * 0.09,
               child: RaisedButton(
                 color: Theme.of(context).backgroundColor,
                 onPressed: onPressedButton,
-                child: Text(
+                child: AutoSizeText(
                   textButton != null ? textButton : '',
+                  maxLines: 1,
                   style: TextStyle(
                     color: color != null ? color : Colors.white,
                     fontSize: 18,
@@ -88,7 +93,7 @@ class LayoutButtons {
           child: (text is String)
               ? Text(
                   text,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.subtitle1,
                 )
               : text),
     );

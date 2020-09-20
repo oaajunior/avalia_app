@@ -358,11 +358,11 @@ class _FormUserAccessState extends State<FormUserAccess> {
                     children: [
                       Text(
                         'É novo por aqui? ',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.subtitle1,
                         textAlign: TextAlign.center,
                       ),
                       DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: Theme.of(context).accentColor,
                               decoration: TextDecoration.underline,
                             ),
@@ -420,7 +420,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
               if (widget.isLoading()) CircularProgressIndicator(),
               if (widget.isLoading())
                 SizedBox(
-                  height: 12,
+                  height: 8,
                 ),
               _buttons,
             ],

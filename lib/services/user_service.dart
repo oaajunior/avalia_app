@@ -158,8 +158,7 @@ class UserServiceImpl implements UserService {
       final userData = UserModel.fromMap(userId, userReference.data());
 
       return userData;
-    } on PlatformException catch (error) {
-      print(error.message);
+    } on PlatformException catch (_) {
       throw UserException(
           'Houve um erro ao tentar recuperar informações do usuário');
     }

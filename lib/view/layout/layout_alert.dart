@@ -28,9 +28,10 @@ class LayoutAlert {
               shape: DialogTheme.of(context).shape,
               backgroundColor: Theme.of(context).accentColor,
               title: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline5.copyWith(
-                    color: colorTitle != null ? colorTitle : color,
-                    fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline6.copyWith(
+                      color: colorTitle != null ? colorTitle : color,
+                      fontWeight: FontWeight.bold,
+                    ),
                 child: Text(
                   title,
                   textAlign: TextAlign.center,

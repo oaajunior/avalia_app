@@ -102,40 +102,35 @@ class _DoneEvaluationQuestionAnswersViewState
       );
     }
 
-    Widget _buildTwoButtons(String name, Function buttonFunction) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Container(
-          height: 55,
-          width: _deviceSize.width * 0.4,
-          child: RaisedButton(
-            color: Theme.of(context).backgroundColor,
-            onPressed: buttonFunction,
-            child: Text(
-              name,
-              style: TextStyle(
-                color: greenDeepColor,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    final _buttonNextAndBackPage = Container(
-      width: _deviceSize.width * 0.9,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    final _buttonNextAndBackPage = Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _buildTwoButtons(
-            'Anterior',
-            _beforeQuestion,
-          ),
-          _buildTwoButtons(
-            'Próxima',
-            _nextQuestion,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: LayoutButtons.customRaisedButtons(
+                  textRaisedButtonOne: 'Anterior',
+                  color: greenDeepColor,
+                  context: context,
+                  shortButton: true,
+                  onPressedButtonOne: _beforeQuestion,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: LayoutButtons.customRaisedButtons(
+                  textRaisedButtonOne: 'Próxima',
+                  color: greenDeepColor,
+                  context: context,
+                  shortButton: true,
+                  onPressedButtonOne: _nextQuestion,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -145,7 +140,7 @@ class _DoneEvaluationQuestionAnswersViewState
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: _deviceSize.height * 0.75,
-          maxHeight: _deviceSize.height * 0.86,
+          maxHeight: _deviceSize.height * 0.85,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

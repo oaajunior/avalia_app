@@ -1,4 +1,3 @@
-import 'package:avalia_app/view/evaluation/done_evaluation/done_evaluation_list_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../res/colors.dart';
@@ -6,6 +5,7 @@ import '../../layout/layout_page.dart';
 import './widgets/done_evaluation_search_detail.dart';
 import '../../layout/layout_alert.dart';
 import '../../../model/evaluation_student/evaluation_student_model.dart';
+import '../../../view/evaluation/done_evaluation/done_evaluation_list_view.dart';
 import '../../../view_model/done_evaluation_view_model.dart';
 import '../../../utils/loading_status.dart';
 

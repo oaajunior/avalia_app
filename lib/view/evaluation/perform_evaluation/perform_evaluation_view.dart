@@ -1,6 +1,4 @@
-import 'package:avalia_app/view/evaluation/perform_evaluation/perform_evaluation_prepare_view.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../view/layout/layout_alert.dart';
 import '../../layout/layout_page.dart';
@@ -9,6 +7,7 @@ import 'widgets/perform_evaluation_detail_view.dart';
 import '../../../utils/loading_status.dart';
 import '../../../res/colors.dart';
 import '../../../model/evaluation/evaluation_model.dart';
+import '../../../view/evaluation/perform_evaluation/widgets/perform_evaluation_start.dart';
 
 class PerformEvaluationView extends StatefulWidget {
   static const routeName = '/perform_evaluation';
@@ -22,6 +21,7 @@ class PerformEvaluationView extends StatefulWidget {
 
 class _PerformEvaluationViewState extends State<PerformEvaluationView> {
   final _viewModel = PerformEvaluationViewModel();
+
   EvaluationModel _evaluation;
   bool _isLoading = false;
 
@@ -33,61 +33,6 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
 
   bool getIsLoading() {
     return _isLoading;
-  }
-
-  void _goToPage() async {
-    if (await _isDateEvaluationRight()) {
-      Navigator.of(context).pop();
-      Navigator.of(context).pushNamed(
-        PerformEvaluationPrepareView.routeName,
-        arguments: _evaluation,
-      );
-    }
-  }
-
-  Future<bool> _isDateEvaluationRight() async {
-    if (_evaluation.finalDate.toDate().isBefore(DateTime.now())) {
-      await showMessageToUser('Período da Avaliação',
-          'O período da avaliação já foi encerrado. Verifique com o seu professor!');
-      return false;
-    } else if (_evaluation.initialDate.toDate().isAfter(DateTime.now())) {
-      await showMessageToUser('Período da Avaliação',
-          'O período da avaliação ainda não foi iniciado. Verifique com o seu professor!');
-      return false;
-    }
-    return true;
-  }
-
-  Widget _buildText(String textHeader, String textField) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Row(
-        children: [
-          DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
-                ),
-            child: Text(
-              textHeader,
-              textAlign: TextAlign.left,
-            ),
-          ),
-          SizedBox(
-            height: 28,
-          ),
-          DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                  color: Colors.black54,
-                ),
-            child: Text(
-              textField,
-              textAlign: TextAlign.left,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Future<void> showMessageToUser(
@@ -126,98 +71,11 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     );
   }
 
-  Future<void> _buildEvaluation(EvaluationModel _evaluation) {
-    final message = FittedBox(
-      alignment: Alignment.topLeft,
-      fit: BoxFit.fitWidth,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildText(
-            'Disciplina: ',
-            _evaluation.discipline,
-          ),
-          _buildText(
-            'Ano Escolar: ',
-            '${_evaluation.schoolYear.toString()}º',
-          ),
-          _buildText(
-            'Turma: ',
-            _evaluation.team,
-          ),
-          _buildText(
-            'Quantidade de Questões: ',
-            _evaluation.totalQuestions.toString(),
-          ),
-          _buildText(
-            'Tempo Mínimo: ',
-            _evaluation.totalTime,
-          ),
-          _buildText(
-            'Data Inicio: ',
-            DateFormat('dd/MM/yy').format(_evaluation.initialDate.toDate()),
-          ),
-          _buildText(
-            'Hora Inicio: ',
-            DateFormat('Hm').format(_evaluation.initialDate.toDate()),
-          ),
-          _buildText(
-            'Data Final ',
-            DateFormat('dd/MM/yy').format(_evaluation.finalDate.toDate()),
-          ),
-          _buildText(
-            'Hora Final: ',
-            DateFormat('Hm').format(_evaluation.finalDate.toDate()),
-          ),
-        ],
-      ),
+  void _goToPage() async {
+    Navigator.of(context).pushNamed(
+      PerformEvaluationStart.routeName,
+      arguments: _evaluation,
     );
-
-    final _buttons = Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        RaisedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.subtitle1.copyWith(
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.bold,
-                ),
-            child: Text('Cancelar'),
-          ),
-          color: yellowBrightColor,
-          elevation: 0,
-        ),
-        SizedBox(
-          width: 32,
-        ),
-        RaisedButton(
-          onPressed: _goToPage,
-          color: yellowDeepColor,
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.subtitle1.copyWith(
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.bold,
-                ),
-            child: Text('Iniciar'),
-          ),
-        )
-      ],
-    );
-
-    final alert = LayoutAlert.customAlert(
-      title: widget.title.replaceAll('\n', ' '),
-      color: blackSoftColor,
-      colorTitle: yellowDeepColor,
-      context: context,
-      message: message,
-      actionButtons: _buttons,
-      barrierDismissible: false,
-    );
-    return alert;
   }
 
   void _searchForEvaluationCode(String codigo) async {
@@ -227,7 +85,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
     switch (_viewModel.loadingStatus) {
       case LoadingStatus.completed:
         setLoading(false);
-        await _buildEvaluation(_evaluation);
+        _goToPage();
         break;
 
       case LoadingStatus.empty:

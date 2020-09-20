@@ -1,3 +1,4 @@
+import 'package:avalia_app/view/evaluation/perform_evaluation/widgets/perform_evaluation_start.dart';
 import 'package:avalia_app/view/ranking/ranking_view.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case PerformEvaluationPrepareView.routeName:
       builder = (context) => PerformEvaluationPrepareView(arguments);
+      break;
+    case PerformEvaluationStart.routeName:
+      builder = (context) => PerformEvaluationStart(arguments);
       break;
     case DoneEvaluationsSearchView.routeName:
       builder = (context) => DoneEvaluationsSearchView(arguments);

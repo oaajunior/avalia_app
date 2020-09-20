@@ -47,7 +47,7 @@ class LayoutPage {
             Container(
               padding: const EdgeInsets.only(top: 10.0),
               alignment: Alignment.center,
-              height: deviceSize.height * 0.06,
+              height: deviceSize.height * 0.07,
               child: Text(
                 headerTitle,
                 style: Theme.of(context).textTheme.headline5,

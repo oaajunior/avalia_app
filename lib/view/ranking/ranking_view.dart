@@ -26,6 +26,7 @@ class _RankingViewState extends State<RankingView> {
   final _viewModelEvaluation = DoneEvaluationViewModel();
   ScrollController _controller;
   bool hasManyItemsToShow = false;
+  AutoSizeGroup _itemListSize = AutoSizeGroup();
 
   void _setScrollBar() {
     if (!hasManyItemsToShow)
@@ -83,34 +84,43 @@ class _RankingViewState extends State<RankingView> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    DefaultTextStyle(
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                            color: purpleDeepColor,
-                            fontWeight: FontWeight.w700,
-                          ),
-                      child: AutoSizeText(
-                        widget._studentEvaluation.evaluationDiscipline,
-                        wrapWords: false,
-                        maxLines: 2,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(
-                              color: purpleDeepColor,
-                            ),
-                        child: Text(
-                          DateFormat('dd/MM/yyyy').format(
-                            widget._studentEvaluation.initialDateTime.toDate(),
+                Container(
+                  width: _deviceSize.width * 0.6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Center(
+                        child: DefaultTextStyle(
+                          style: Theme.of(context).textTheme.headline6.copyWith(
+                                color: purpleDeepColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                          child: AutoSizeText(
+                            widget._studentEvaluation.evaluationDiscipline,
+                            wrapWords: false,
+                            maxLines: 2,
                           ),
                         ),
                       ),
-                    )
-                  ],
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: DefaultTextStyle(
+                            style:
+                                Theme.of(context).textTheme.subtitle1.copyWith(
+                                      color: purpleDeepColor,
+                                    ),
+                            child: Text(
+                              DateFormat('dd/MM/yyyy').format(
+                                widget._studentEvaluation.initialDateTime
+                                    .toDate(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -128,19 +138,28 @@ class _RankingViewState extends State<RankingView> {
             style: Theme.of(context).textTheme.headline6.copyWith(
                   color: purpleDeepColor,
                 ),
-            child: Text('Posição'),
+            child: AutoSizeText(
+              'Posição',
+              group: _itemListSize,
+            ),
           ),
           DefaultTextStyle(
             style: Theme.of(context).textTheme.headline6.copyWith(
                   color: purpleDeepColor,
                 ),
-            child: Text('Nome'),
+            child: AutoSizeText(
+              'Nome',
+              group: _itemListSize,
+            ),
           ),
           DefaultTextStyle(
             style: Theme.of(context).textTheme.headline6.copyWith(
                   color: purpleDeepColor,
                 ),
-            child: Text('Nota'),
+            child: AutoSizeText(
+              'Nota',
+              group: _itemListSize,
+            ),
           ),
         ],
       ),
@@ -164,6 +183,7 @@ class _RankingViewState extends State<RankingView> {
                 ),
             child: AutoSizeText(
               '${position.toString()}º',
+              group: _itemListSize,
             ),
           ),
         ),
@@ -192,7 +212,7 @@ class _RankingViewState extends State<RankingView> {
           currentStudent = false;
         }
         studentEvaluationListWidget.add(
-          Padding(
+          Container(
             padding: const EdgeInsets.only(
               top: 7.0,
               right: 8.0,
@@ -201,13 +221,19 @@ class _RankingViewState extends State<RankingView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildPosition(listEvaluation[i].position, currentStudent),
-                DefaultTextStyle(
-                  style: Theme.of(context).textTheme.headline6.copyWith(
-                        color:
-                            currentStudent ? purpleDeepColor : purpleSoftColor,
-                      ),
-                  child: AutoSizeText(
-                    listEvaluation[i].userName,
+                Container(
+                  width: _deviceSize.width * 0.5,
+                  child: DefaultTextStyle(
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                          color: currentStudent
+                              ? purpleDeepColor
+                              : purpleSoftColor,
+                        ),
+                    child: AutoSizeText(
+                      listEvaluation[i].userName,
+                      maxLines: 1,
+                      group: _itemListSize,
+                    ),
                   ),
                 ),
                 DefaultTextStyle(
@@ -215,9 +241,8 @@ class _RankingViewState extends State<RankingView> {
                         color:
                             currentStudent ? purpleDeepColor : purpleSoftColor,
                       ),
-                  child: Text(
-                    listEvaluation[i].grade.toString(),
-                  ),
+                  child: AutoSizeText(listEvaluation[i].grade.toString(),
+                      group: _itemListSize),
                 ),
               ],
             ),
@@ -250,7 +275,7 @@ class _RankingViewState extends State<RankingView> {
             child: AutoSizeText(
               actualStudent.percentStudentGrade <= 75.0
                   ? actualStudent.grade <= 3.0
-                      ? '${actualStudent.userName}, parece que sua nota não foi tão boa :( \n Mas ela está entre ${actualStudent.percentStudentGrade}% das melhores notas. Continue estudando!'
+                      ? '${actualStudent.userName}, parece que sua nota não foi tão boa :( \nContinue estudando!'
                       : '${actualStudent.userName}, sua nota está entre ${actualStudent.percentStudentGrade}% das melhores notas ;)'
                   : actualStudent.grade <= 3.0
                       ? '${actualStudent.userName}, parece que sua nota não foi tão boa :( \n Continue estudando!'
@@ -293,9 +318,12 @@ class _RankingViewState extends State<RankingView> {
                     userId: widget._studentEvaluation.userId),
                 builder: (ctx, dataSnapshot) {
                   if (ConnectionState.waiting == dataSnapshot.connectionState) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: whiteColor,
+                    return Container(
+                      height: _deviceSize.height * 0.4,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: purpleDeepColor,
+                        ),
                       ),
                     );
                   } else if (!dataSnapshot.hasData) {
@@ -331,7 +359,7 @@ class _RankingViewState extends State<RankingView> {
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).accentColor),
       width: _deviceSize.width * 0.9,
-      height: _deviceSize.height * 0.73,
+      height: _deviceSize.height * 0.72,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -344,7 +372,7 @@ class _RankingViewState extends State<RankingView> {
 
     final content = ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: _deviceSize.height * 0.86,
+        maxHeight: _deviceSize.height * 0.85,
         maxWidth: _deviceSize.width * 0.9,
       ),
       child: Column(

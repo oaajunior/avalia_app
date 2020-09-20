@@ -59,7 +59,7 @@ class _PerformEvaluationPrepareViewState
     final deviceSize = MediaQuery.of(context).size;
 
     Widget title = Padding(
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Center(
         child: DefaultTextStyle(
           style: Theme.of(context)
@@ -73,20 +73,23 @@ class _PerformEvaluationPrepareViewState
       ),
     );
 
-    Widget message = DefaultTextStyle(
-      style: Theme.of(context)
-          .textTheme
-          .headline5
-          .copyWith(color: yellowDeepColor, fontWeight: FontWeight.bold),
-      child: Text(
-        'Prepare-se!',
+    Widget message = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: DefaultTextStyle(
+        style: Theme.of(context)
+            .textTheme
+            .headline5
+            .copyWith(color: yellowDeepColor, fontWeight: FontWeight.bold),
+        child: Text(
+          'Prepare-se!',
+        ),
       ),
     );
 
     Widget showMessage = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 80.0),
+      padding: const EdgeInsets.symmetric(horizontal: 50.0),
       child: CircularPercentIndicator(
-        radius: 150,
+        radius: 166,
         lineWidth: 4.0,
         //percent: percent,
         percent: 1.0,
@@ -133,23 +136,25 @@ class _PerformEvaluationPrepareViewState
       height: deviceSize.height * 0.9,
       child: Center(
         child: Container(
-          height: deviceSize.height * 0.5,
-          width: deviceSize.width * 0.8,
-          child: Card(
-            shape: DialogTheme.of(context).shape,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                title,
-                SizedBox(
-                  height: 10,
-                ),
-                showMessage,
-                SizedBox(
-                  height: 10,
-                ),
-                message,
-              ],
+          height: deviceSize.height * 0.7,
+          width: deviceSize.width * 0.82,
+          child: Center(
+            child: Card(
+              shape: DialogTheme.of(context).shape,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  title,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  showMessage,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  message,
+                ],
+              ),
             ),
           ),
         ),

@@ -60,7 +60,14 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
 
   bool _isValidDate(String date) {
     try {
-      DateFormat('dd/MM/yyyy').parse(date);
+      final resultDate = DateFormat('dd/MM/yyyy').parseStrict(date);
+      if (resultDate.day > 31 || resultDate.day < 1) {
+        return false;
+      } else if (resultDate.month > 12 || resultDate.month < 1) {
+        return false;
+      } else if (resultDate.year < 1900) {
+        return false;
+      }
       return true;
     } on FormatException catch (_) {
       return false;
@@ -68,13 +75,19 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
   }
 
   bool _isFirstDateIsBeforeFinalDate() {
-    _initialDate = DateFormat('dd/MM/yyyy').parse(_initialDateController.text);
+    if (_initialDateController.text.toString().trim() == '' ||
+        _finalDateController.text.toString().trim() == '') {
+      return null;
+    }
+    _initialDate =
+        DateFormat('dd/MM/yyyy').parseStrict(_initialDateController.text);
     _initialDate = _initialDate.year.toString().length == 2
         ? DateTime(
             _initialDate.year + 2000, _initialDate.month, _initialDate.day)
         : _initialDate;
 
-    _finalDate = DateFormat('dd/MM/yyyy').parse(_finalDateController.text);
+    _finalDate =
+        DateFormat('dd/MM/yyyy').parseStrict(_finalDateController.text);
     _finalDate = _finalDate.year.toString().length == 2
         ? DateTime(_finalDate.year + 2000, _finalDate.month, _finalDate.day)
         : _finalDate;
@@ -89,17 +102,26 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
     if (date.trim().isEmpty) {
       return 'Por favor, informe uma data.';
     } else if (!_isValidDate(date.trim())) {
-      return 'Por favor, informe a data no formato dd/mm/yyyy.';
-    } else if (!_isFirstDateIsBeforeFinalDate()) {
-      return 'A data inicial deve ser menor do que a final. Por favor, verifique!';
+      return 'Por favor, informe a data no formato dd/mm/aaaa.';
     }
     return null;
   }
 
   void _trySubmit() {
-    final _isValid = _formKey.currentState.validate();
+    var _isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
 
+    if (_isValid) {
+      final areValidDates = _isFirstDateIsBeforeFinalDate();
+      if (areValidDates == null) {
+        _isValid = false;
+      } else if (!areValidDates) {
+        _isValid = false;
+        _showMessageToUser('Intervalo de datas',
+            'A data inicial deve ser menor do que a final. Por favor, verifique!');
+        return;
+      }
+    }
     if (_isValid) {
       widget.searchForStudentEvaluation(_initialDate, _finalDate);
     }
@@ -113,16 +135,16 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
         currentDate: DateTime.now(),
         initialDate: (controller.text == null || controller.text.trim() == '')
             ? DateTime.now()
-            : DateFormat('dd/MM/yyyy').parse(controller.text),
+            : DateFormat('dd/MM/yyyy').parseStrict(controller.text),
         firstDate: (controller.text == null || controller.text.trim() == '')
             ? DateTime.now().subtract(Duration(days: 366))
             : DateFormat('dd/MM/yyyy')
-                .parse(controller.text)
+                .parseStrict(controller.text)
                 .subtract(Duration(days: 366)),
         lastDate: (controller.text == null || controller.text.trim() == '')
             ? DateTime.now().add(Duration(days: 366))
             : DateFormat('dd/MM/yyyy')
-                .parse(controller.text)
+                .parseStrict(controller.text)
                 .add(Duration(days: 366)),
         helpText: 'Escolha a data',
         builder: (context, child) => Theme(
@@ -146,7 +168,7 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
       });
     } on FormatException catch (_) {
       _showMessageToUser('Formato da data',
-          'A data informada não está no formato correto.\n A data deve estar no formato dd/mm/yyyy.\nPor favor, verifique!');
+          'A data informada não está no formato correto.\n A data deve estar no formato dd/mm/aaaa.\nPor favor, verifique!');
     }
   }
 
@@ -167,6 +189,7 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
               // },
               controller: controller,
               onFieldSubmitted: (_) => _trySubmit(),
+
               validator: (date) => _validateDate(date),
               decoration: InputDecoration(
                 hintText: hintText,
@@ -258,7 +281,7 @@ class _DoneEvaluationDetailState extends State<DoneEvaluationDetail> {
     final _content = ConstrainedBox(
       constraints: BoxConstraints(
         minHeight: deviceSize.height * 0.83,
-        maxHeight: deviceSize.height * 0.86,
+        maxHeight: deviceSize.height * 0.85,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,

@@ -170,7 +170,7 @@ class _PerformEvaluationQuestionsViewState
     Widget userGrade = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 60.0),
       child: CircularPercentIndicator(
-        radius: 170,
+        radius: 160,
         lineWidth: 4.0,
         percent: 1.0,
         animation: false,
@@ -182,7 +182,7 @@ class _PerformEvaluationQuestionsViewState
                 fontWeight: FontWeight.bold,
               ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               _evaluationStudent.grade.toString(),
             ),
@@ -209,6 +209,7 @@ class _PerformEvaluationQuestionsViewState
         progressColor: greenBrightColor,
       ),
     );
+
     Widget button = RaisedButton(
       onPressed: () {
         Navigator.of(context)..pop()..pop()..pop()..pop();
@@ -244,21 +245,21 @@ class _PerformEvaluationQuestionsViewState
     );
     switch (_viewModelEvaluation.loadingStatus) {
       case LoadingStatus.completed:
+        setLoading(false);
         await showUserGrade(
           'Sua nota foi: ',
           userGrade,
           button,
         );
-        setLoading(false);
         break;
       case LoadingStatus.error:
+        setLoading(false);
         await showUserGrade(
           'Erro ao processar a nota',
           Text(
               'Houve um erro ao processar a sua nota.\nPor favor, entre em contato com o seu professor!'),
           button,
         );
-        setLoading(false);
         break;
 
       default:
@@ -377,7 +378,7 @@ class _PerformEvaluationQuestionsViewState
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: deviceSize.height * 0.75,
-          maxHeight: deviceSize.height * 0.86,
+          maxHeight: deviceSize.height * 0.85,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

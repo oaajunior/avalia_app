@@ -59,7 +59,7 @@ class _EvaluationQuestionnaireViewState
     final deviceSize = MediaQuery.of(context).size;
 
     final _question = Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+      padding: const EdgeInsets.only(top: 6.0, left: 8.0, right: 8.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -148,29 +148,57 @@ class _EvaluationQuestionnaireViewState
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
-                    DefaultTextStyle(
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                            color: widget.color,
-                          ),
-                      child: AutoSizeText(
-                        letter,
-                        wrapWords: false,
-                        textAlign: TextAlign.left,
-                        group: _groupOfTextsRadios,
-                      ),
-                    ),
-                    Container(
-                      width: deviceSize.width * 0.65,
+                    GestureDetector(
+                      onTap: widget.isPerformEvaluation
+                          ? () {
+                              final resultLetter =
+                                  widget.getAnswerLetter(answerLetter);
+                              widget.turnAllAnswerLetterToFalse();
+                              widget.setAnswerLetter(
+                                answerLetter,
+                                resultLetter == true ? false : true,
+                              );
+                            }
+                          : () => {},
                       child: DefaultTextStyle(
                         style: Theme.of(context).textTheme.headline6.copyWith(
                               color: widget.color,
                             ),
                         child: AutoSizeText(
-                          optionAnswer,
+                          letter,
                           wrapWords: false,
                           textAlign: TextAlign.left,
                           group: _groupOfTextsRadios,
-                          maxLines: 3,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: widget.isPerformEvaluation
+                          ? () {
+                              final resultLetter =
+                                  widget.getAnswerLetter(answerLetter);
+                              widget.turnAllAnswerLetterToFalse();
+                              widget.setAnswerLetter(
+                                answerLetter,
+                                resultLetter == true ? false : true,
+                              );
+                            }
+                          : () => {},
+                      child: Container(
+                        width: deviceSize.width * 0.63,
+                        child: DefaultTextStyle(
+                          style: Theme.of(context).textTheme.headline6.copyWith(
+                                color: widget.color,
+                              ),
+                          child: AutoSizeText(
+                            optionAnswer,
+                            minFontSize: 17,
+                            stepGranularity: 1,
+                            wrapWords: false,
+                            textAlign: TextAlign.left,
+                            group: _groupOfTextsRadios,
+                            maxLines: 3,
+                          ),
                         ),
                       ),
                     ),
@@ -187,7 +215,6 @@ class _EvaluationQuestionnaireViewState
       margin: EdgeInsets.only(
         left: 8.0,
         right: 8.0,
-        top: 8.0,
       ),
       //height: deviceSize.height * 0.45,
       child: Column(
@@ -249,10 +276,10 @@ class _EvaluationQuestionnaireViewState
           child: Text('Ranking'),
         ),
         onPressed: () => _goToPage(),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
         icon: Icon(
           CustomIcon.icon_ranking,
-          size: 40,
+          size: 38,
           color: purpleDeepColor,
         ),
         color: whiteColor,
@@ -282,8 +309,8 @@ class _EvaluationQuestionnaireViewState
           color: Theme.of(context).accentColor),
       width: deviceSize.width * 0.9,
       height: widget.isPerformEvaluation
-          ? deviceSize.height * 0.65
-          : deviceSize.height * 0.75,
+          ? deviceSize.height * 0.63
+          : deviceSize.height * 0.73,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
