@@ -39,11 +39,11 @@ class DoneEvaluationImpl implements DoneEvaluationService {
       Query _query = _storeInstance
           .collection('student_evaluation')
           .where(
-            'initial_date',
+            'created_at',
             isGreaterThanOrEqualTo: Timestamp.fromDate(initialDate),
           )
           .where(
-            'initial_date',
+            'created_at',
             isLessThanOrEqualTo:
                 Timestamp.fromDate(finalDate.add(Duration(days: 1))),
           )
@@ -52,7 +52,7 @@ class DoneEvaluationImpl implements DoneEvaluationService {
             isEqualTo: userId,
           )
           .orderBy(
-            'initial_date',
+            'created_at',
             descending: true,
           );
 

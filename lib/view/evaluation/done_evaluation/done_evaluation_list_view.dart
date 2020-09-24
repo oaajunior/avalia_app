@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../model/evaluation_student/evaluation_student_model.dart';
+import '../../../view/layout/layout_alert.dart';
 import '../../../res/colors.dart';
 import '../../../view/layout/layout_page.dart';
 import './done_evaluation_question_answers_view.dart';
@@ -22,6 +23,9 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
   String _title;
   List<EvaluationStudentModel> _studentEvaluation;
   AutoSizeGroup _itemListSize = AutoSizeGroup();
+  bool isFinalDateBeforeActualDate;
+  DateTime actualDate;
+  DateTime finalDate;
   @override
   void initState() {
     _title = widget.arguments[0];
@@ -30,9 +34,56 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
   }
 
   void _goToPage(int index) async {
+    finalDate = _studentEvaluation[index].finalDateTime.toDate();
+    actualDate = DateTime.now();
+    isFinalDateBeforeActualDate = finalDate.isBefore(actualDate);
+    if (!isFinalDateBeforeActualDate) {
+      await showMessageToUser(
+          'Avaliação aberta',
+          'A avaliação ainda não terminou.\nPor favor, aguarde finalizar o tempo programado para a avaliação!',
+          context);
+      return;
+    }
     Navigator.of(context).pushNamed(
       DoneEvaluationQuestionAnswersView.routeName,
       arguments: _studentEvaluation[index],
+    );
+  }
+
+  Future<void> showMessageToUser(
+    String title,
+    String message,
+    BuildContext context,
+  ) {
+    final customMessage = Text(
+      message,
+      textAlign: TextAlign.center,
+    );
+
+    final button = RaisedButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      color: greenDeepColor,
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold,
+            ),
+        child: Text(
+          'Ok',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+
+    return LayoutAlert.customAlert(
+      title: title,
+      message: customMessage,
+      colorTitle: greenDeepColor,
+      color: blackSoftColor,
+      context: context,
+      actionButtons: button,
     );
   }
 
@@ -53,6 +104,9 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
     );
 
     Widget _buildInformation(int index) {
+      finalDate = _studentEvaluation[index].finalDateTime.toDate();
+      actualDate = DateTime.now();
+      isFinalDateBeforeActualDate = finalDate.isBefore(actualDate);
       return Container(
         width: _deviceSize.width * 0.53,
         padding: const EdgeInsets.only(left: 4.0, top: 4.0),
@@ -71,18 +125,47 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
                 group: _itemListSize,
               ),
             ),
-            DefaultTextStyle(
-              style: Theme.of(context).textTheme.headline6.copyWith(
-                    color: greenDeepColor,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                DefaultTextStyle(
+                  style: Theme.of(context).textTheme.headline6.copyWith(
+                      color: isFinalDateBeforeActualDate
+                          ? greenDeepColor
+                          : redColor),
+                  child: AutoSizeText(
+                    DateFormat('dd/MM/yyyy').format(
+                      _studentEvaluation[index].finalDateTime.toDate(),
+                    ),
+                    maxLines: 1,
+                    wrapWords: false,
+                    group: _itemListSize,
                   ),
-              child: AutoSizeText(
-                DateFormat('dd/MM/yyyy').format(
-                  _studentEvaluation[index].initialDateTime.toDate(),
                 ),
-                maxLines: 1,
-                wrapWords: false,
-                group: _itemListSize,
-              ),
+                DefaultTextStyle(
+                  style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: isFinalDateBeforeActualDate
+                            ? greenDeepColor
+                            : redColor,
+                      ),
+                  child: Text('-'),
+                ),
+                DefaultTextStyle(
+                  style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: isFinalDateBeforeActualDate
+                            ? greenDeepColor
+                            : redColor,
+                      ),
+                  child: AutoSizeText(
+                    DateFormat('HH:MM').format(
+                      _studentEvaluation[index].finalDateTime.toDate(),
+                    ),
+                    maxLines: 1,
+                    wrapWords: false,
+                    group: _itemListSize,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -153,7 +236,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
 
     return LayoutPage.render(
       headerTitle: _title,
-      hasHeaderButtons: true,
+      hasFirstButton: true,
       hasHeader: true,
       context: context,
       color: greenDeepColor,

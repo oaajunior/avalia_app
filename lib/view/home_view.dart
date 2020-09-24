@@ -258,29 +258,30 @@ class _HomeViewState extends State<HomeView> {
                 margin: const EdgeInsets.only(
                   right: 8,
                 ),
-                height: deviceSize.height * 0.13,
+                //height: deviceSize.height * 0.13,
                 width: deviceSize.width * 0.2,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: blueBrightColor,
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-                      child: Text(
+                child: AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
                         item['name'],
                         style: Theme.of(context).textTheme.subtitle1,
                         textAlign: TextAlign.left,
                       ),
-                    ),
-                    Center(
-                      child: Icon(
-                        item['icon'],
-                        color: whiteColor,
-                      ),
-                    )
-                  ],
+                      Center(
+                        child: Icon(
+                          item['icon'],
+                          color: whiteColor,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -304,7 +305,7 @@ class _HomeViewState extends State<HomeView> {
 
     return LayoutPage.render(
       hasHeader: false,
-      hasHeaderButtons: false,
+      hasFirstButton: false,
       hasHeaderLogo: false,
       context: context,
       color: Theme.of(context).primaryColor,

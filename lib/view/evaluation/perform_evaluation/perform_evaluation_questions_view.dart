@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -89,7 +88,7 @@ class _PerformEvaluationQuestionsViewState
       _cancelTimer();
       _performStudentEvaluation();
       _evaluationStudent.listQuestionAnswers = _listQuestionAnswer;
-      _evaluationStudent.finalDateTime = Timestamp.now();
+
       _lastQuestion = true;
       _saveStudentEvaluation(_evaluationStudent);
     }
@@ -102,7 +101,8 @@ class _PerformEvaluationQuestionsViewState
       final tempName = user.surName.split(' ');
       final userName = user.name + ' ' + tempName.first;
       _evaluationStudent = EvaluationStudentModel();
-      _evaluationStudent.initialDateTime = Timestamp.now();
+      _evaluationStudent.initialDateTime = evaluationData.initialDate;
+      _evaluationStudent.finalDateTime = evaluationData.finalDate;
       _evaluationStudent.evaluationId = evaluationData.id;
       _evaluationStudent.evaluationTitle = evaluationData.title;
       _evaluationStudent.evaluationDiscipline = evaluationData.discipline;
@@ -182,7 +182,7 @@ class _PerformEvaluationQuestionsViewState
                 fontWeight: FontWeight.bold,
               ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               _evaluationStudent.grade.toString(),
             ),
@@ -316,6 +316,7 @@ class _PerformEvaluationQuestionsViewState
 
     final _title = Container(
       alignment: Alignment.center,
+      padding: const EdgeInsets.only(top: 8.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -327,9 +328,9 @@ class _PerformEvaluationQuestionsViewState
           ),
           Container(
             width: deviceSize.width * 0.4,
-            padding: const EdgeInsets.only(left: 52.0),
+            padding: const EdgeInsets.only(left: 40.0),
             child: CircularPercentIndicator(
-              radius: 50,
+              radius: 48,
               percent: _timeToResponse,
               center: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -377,8 +378,8 @@ class _PerformEvaluationQuestionsViewState
     final _content = SingleChildScrollView(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          minHeight: deviceSize.height * 0.75,
-          maxHeight: deviceSize.height * 0.85,
+          minHeight: deviceSize.height * 0.72,
+          maxHeight: deviceSize.height * 0.955,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -392,9 +393,9 @@ class _PerformEvaluationQuestionsViewState
     );
 
     return LayoutPage.render(
-      hasHeader: true,
-      hasHeaderButtons: true,
-      headerTitle: 'Questões',
+      hasHeader: false,
+      hasFirstButton: false,
+      //headerTitle: 'Questões',
       context: context,
       color: yellowDeepColor,
       content: _content,

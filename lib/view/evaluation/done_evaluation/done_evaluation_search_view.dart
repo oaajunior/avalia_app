@@ -120,7 +120,7 @@ class _DoneEvaluationsSearchViewState extends State<DoneEvaluationsSearchView> {
   Widget build(BuildContext context) {
     return LayoutPage.render(
       hasHeader: true,
-      hasHeaderButtons: true,
+      hasFirstButton: true,
       context: context,
       headerTitle: widget.title.replaceAll('\n', ' '),
       color: greenDeepColor,

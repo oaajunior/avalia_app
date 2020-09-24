@@ -27,7 +27,7 @@ class _PerformEvaluationDetailViewState
         return 'Por favor, informe o código.';
       } else {
         if (value.length < 4) {
-          return 'O código possui mais de 4 caracteres. Por favor, verifique!';
+          return 'O código deve possuir mais de 4 caracteres. Por favor, verifique!';
         }
       }
       return null;

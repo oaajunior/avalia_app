@@ -242,7 +242,7 @@ class PerformEvaluationStart extends StatelessWidget {
     );
     return LayoutPage.render(
       hasHeader: true,
-      hasHeaderButtons: true,
+      hasFirstButton: true,
       headerTitle: 'Informações Gerais',
       context: context,
       color: yellowDeepColor,

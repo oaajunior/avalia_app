@@ -113,7 +113,7 @@ class _PerformEvaluationViewState extends State<PerformEvaluationView> {
   Widget build(BuildContext context) {
     return LayoutPage.render(
       hasHeader: true,
-      hasHeaderButtons: true,
+      hasFirstButton: true,
       headerTitle: widget.title.replaceAll('\n', ' '),
       context: context,
       color: yellowDeepColor,

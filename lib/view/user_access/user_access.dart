@@ -162,7 +162,7 @@ class _UserAccessViewState extends State<UserAccessView> {
   Widget build(BuildContext context) {
     return LayoutPage.render(
       hasHeader: true,
-      hasHeaderButtons: false,
+      hasFirstButton: false,
       context: context,
       hasHeaderLogo: true,
       color: blueDeepColor,

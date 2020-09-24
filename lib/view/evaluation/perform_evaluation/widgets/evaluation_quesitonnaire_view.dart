@@ -1,9 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import '../../../../res/custom_icon.dart';
-import '../../../../view/ranking/ranking_view.dart';
 import '../../../../res/colors.dart';
 import '../../../../utils/student_answer.dart';
 import '../../../../model/evaluation_student/evaluation_student_model.dart';
@@ -44,14 +44,14 @@ class EvaluationQuestionnaireView extends StatefulWidget {
 }
 
 class _EvaluationQuestionnaireViewState
-    extends State<EvaluationQuestionnaireView> {
+    extends State<EvaluationQuestionnaireView> with TickerProviderStateMixin {
   final _groupOfTextsRadios = AutoSizeGroup();
+  FocusNode caputureKey = FocusNode();
 
-  void _goToPage() {
-    Navigator.of(context).pushNamed(
-      RankingView.routeName,
-      arguments: widget.studentEvaluation,
-    );
+  @override
+  void dispose() {
+    caputureKey.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,7 +59,10 @@ class _EvaluationQuestionnaireViewState
     final deviceSize = MediaQuery.of(context).size;
 
     final _question = Padding(
-      padding: const EdgeInsets.only(top: 6.0, left: 8.0, right: 8.0),
+      padding: const EdgeInsets.only(
+        top: 8.0,
+        left: 16.0,
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -90,7 +93,7 @@ class _EvaluationQuestionnaireViewState
                 textAlign: TextAlign.left,
                 wrapWords: false,
                 group: _groupOfTextsRadios,
-                maxLines: 4,
+                maxLines: 5,
               ),
             ),
           ),
@@ -98,10 +101,10 @@ class _EvaluationQuestionnaireViewState
       ),
     );
 
-    Widget _buildOptions(
-        AnswerLetter answerLetter, String letter, String optionAnswer) {
+    Widget _buildOptions(AnswerLetter answerLetter, String letter,
+        String optionAnswer, isSetToFalse) {
       return ConstrainedBox(
-        constraints: BoxConstraints(minHeight: deviceSize.height * 0.02),
+        constraints: BoxConstraints(minHeight: deviceSize.height * 0.08),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -184,20 +187,23 @@ class _EvaluationQuestionnaireViewState
                               );
                             }
                           : () => {},
-                      child: Container(
-                        width: deviceSize.width * 0.63,
-                        child: DefaultTextStyle(
-                          style: Theme.of(context).textTheme.headline6.copyWith(
-                                color: widget.color,
-                              ),
-                          child: AutoSizeText(
-                            optionAnswer,
-                            minFontSize: 17,
-                            stepGranularity: 1,
-                            wrapWords: false,
-                            textAlign: TextAlign.left,
-                            group: _groupOfTextsRadios,
-                            maxLines: 3,
+                      child: FittedBox(
+                        child: Container(
+                          width: deviceSize.width * 0.67,
+                          child: DefaultTextStyle(
+                            style:
+                                Theme.of(context).textTheme.headline6.copyWith(
+                                      color: widget.color,
+                                    ),
+                            child: AutoSizeText(
+                              optionAnswer,
+                              minFontSize: 16,
+                              stepGranularity: 1,
+                              wrapWords: false,
+                              textAlign: TextAlign.left,
+                              group: _groupOfTextsRadios,
+                              maxLines: 3,
+                            ),
                           ),
                         ),
                       ),
@@ -211,94 +217,74 @@ class _EvaluationQuestionnaireViewState
       );
     }
 
-    final _answersOptions = Container(
-      margin: EdgeInsets.only(
-        left: 8.0,
-        right: 8.0,
-      ),
-      //height: deviceSize.height * 0.45,
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildOptions(
-            AnswerLetter.A,
-            'A - ',
-            widget.isPerformEvaluation
-                ? widget.question.answerOptions[AnswerLetter.A]
-                : widget
-                    .studentEvaluation
-                    .listQuestionAnswers[widget.indexQuestion]
-                    .answerOptions[AnswerLetter.A],
-          ),
-          _buildOptions(
-            AnswerLetter.B,
-            'B - ',
-            widget.isPerformEvaluation
-                ? widget.question.answerOptions[AnswerLetter.B]
-                : widget
-                    .studentEvaluation
-                    .listQuestionAnswers[widget.indexQuestion]
-                    .answerOptions[AnswerLetter.B],
-          ),
-          _buildOptions(
-            AnswerLetter.C,
-            'C - ',
-            widget.isPerformEvaluation
-                ? widget.question.answerOptions[AnswerLetter.C]
-                : widget
-                    .studentEvaluation
-                    .listQuestionAnswers[widget.indexQuestion]
-                    .answerOptions[AnswerLetter.C],
-          ),
-          _buildOptions(
-            AnswerLetter.D,
-            'D - ',
-            widget.isPerformEvaluation
-                ? widget.question.answerOptions[AnswerLetter.D]
-                : widget
-                    .studentEvaluation
-                    .listQuestionAnswers[widget.indexQuestion]
-                    .answerOptions[AnswerLetter.D],
-          ),
-        ],
-      ),
-    );
+    // void setToFalseRadioButtons() {
+    //   for (var i = 0; i < 4; i++) {
+    //     _buildOptions(
+    //       AnswerLetter.A,
+    //       '',
+    //       '',
+    //       true,
+    //     );
+    //   }
+    // }
 
-    final _ranking = Container(
-      margin: const EdgeInsets.only(top: 8.0),
-      child: RaisedButton.icon(
-        label: DefaultTextStyle(
-          style: Theme.of(context).textTheme.subtitle2.copyWith(
-                color: purpleDeepColor,
-                fontWeight: FontWeight.w600,
-              ),
-          child: Text('Ranking'),
+    final _questionOptions = FittedBox(
+      child: Container(
+        margin: EdgeInsets.only(
+          left: 8.0,
+          right: 8.0,
         ),
-        onPressed: () => _goToPage(),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-        icon: Icon(
-          CustomIcon.icon_ranking,
-          size: 38,
-          color: purpleDeepColor,
+        height: deviceSize.height * 0.77,
+        width: deviceSize.width * 0.9,
+        child: ListView(
+          children: [
+            _question,
+            _buildOptions(
+              AnswerLetter.A,
+              'A - ',
+              widget.isPerformEvaluation
+                  ? widget.question.answerOptions[AnswerLetter.A]
+                  : widget
+                      .studentEvaluation
+                      .listQuestionAnswers[widget.indexQuestion]
+                      .answerOptions[AnswerLetter.A],
+              false,
+            ),
+            _buildOptions(
+              AnswerLetter.B,
+              'B - ',
+              widget.isPerformEvaluation
+                  ? widget.question.answerOptions[AnswerLetter.B]
+                  : widget
+                      .studentEvaluation
+                      .listQuestionAnswers[widget.indexQuestion]
+                      .answerOptions[AnswerLetter.B],
+              false,
+            ),
+            _buildOptions(
+              AnswerLetter.C,
+              'C - ',
+              widget.isPerformEvaluation
+                  ? widget.question.answerOptions[AnswerLetter.C]
+                  : widget
+                      .studentEvaluation
+                      .listQuestionAnswers[widget.indexQuestion]
+                      .answerOptions[AnswerLetter.C],
+              false,
+            ),
+            _buildOptions(
+              AnswerLetter.D,
+              'D - ',
+              widget.isPerformEvaluation
+                  ? widget.question.answerOptions[AnswerLetter.D]
+                  : widget
+                      .studentEvaluation
+                      .listQuestionAnswers[widget.indexQuestion]
+                      .answerOptions[AnswerLetter.D],
+              false,
+            ),
+          ],
         ),
-        color: whiteColor,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(color: purpleDeepColor, width: 1.3),
-        ),
-      ),
-    );
-
-    final _header = Container(
-      width: deviceSize.width * 0.8,
-      height: deviceSize.height * 0.1,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _ranking,
-        ],
       ),
     );
 
@@ -309,14 +295,20 @@ class _EvaluationQuestionnaireViewState
           color: Theme.of(context).accentColor),
       width: deviceSize.width * 0.9,
       height: widget.isPerformEvaluation
-          ? deviceSize.height * 0.63
-          : deviceSize.height * 0.73,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+          ? deviceSize.height * 0.72
+          : deviceSize.height * 0.72,
+      child: ListView(
         children: [
-          if (!widget.isPerformEvaluation) _header,
-          _question,
-          _answersOptions,
+          RawKeyboardListener(
+            focusNode: caputureKey,
+            autofocus: true,
+            onKey: (RawKeyEvent event) {
+              if (event.logicalKey == LogicalKeyboardKey.keyP) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: _questionOptions,
+          ),
         ],
       ),
     );

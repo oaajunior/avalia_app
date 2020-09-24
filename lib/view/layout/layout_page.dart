@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:avalia_app/res/custom_icon.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/colors.dart';
@@ -16,40 +17,50 @@ class LayoutPage {
 
   static Widget render({
     bool hasHeader = false,
-    bool hasHeaderButtons = false,
     bool hasHeaderLogo = false,
+    bool hasFirstButton = false,
+    bool hasSecondButton = false,
+    bool firstButtonIconClose = false,
+    Function onPressedButtonOne,
+    Function onPressedButtonSecond,
     String headerTitle,
     String mainText,
     String message,
     Color color,
     BuildContext context,
-    int numberPagesToHome,
     Widget content,
   }) {
     final deviceSize = MediaQuery.of(context).size;
 
     final _header = Container(
       width: deviceSize.width,
-      margin: const EdgeInsets.only(top: 8.0),
-      child: Stack(
-        alignment: hasHeaderButtons ? Alignment.topLeft : Alignment.topCenter,
+      height: !hasHeaderLogo ? deviceSize.height * 0.086 : null,
+      margin: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+      child: Row(
+        mainAxisAlignment: !hasHeaderLogo
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.center,
         children: [
-          if (hasHeaderButtons)
+          if (hasFirstButton)
             IconButton(
-              iconSize: Theme.of(context).iconTheme.size,
+              iconSize: firstButtonIconClose ? 30 : 22,
               icon: Icon(
-                CustomButtonIcon.button_back_without_desc,
+                firstButtonIconClose
+                    ? Icons.close_rounded
+                    : CustomButtonIcon.button_back_without_desc,
                 color: whiteColor,
               ),
-              onPressed: () => _backPage(context),
+              onPressed: () => onPressedButtonOne != null
+                  ? onPressedButtonOne
+                  : _backPage(context),
             ),
           if (headerTitle != null)
             Container(
-              padding: const EdgeInsets.only(top: 10.0),
               alignment: Alignment.center,
-              height: deviceSize.height * 0.07,
-              child: Text(
+              width: deviceSize.width * 0.65,
+              child: AutoSizeText(
                 headerTitle,
+                maxLines: 1,
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
@@ -60,24 +71,24 @@ class LayoutPage {
               child: Center(
                   child: Image.asset(
                 'lib/res/images/avalia_logo.png',
-              )
-                  // Text(
-                  //   headerTitle != null ? headerTitle : '',
-                  //   style: Theme.of(context).textTheme.headline3,
-                  // ),
-                  ),
+              )),
             ),
+          if (hasSecondButton)
+            IconButton(
+              iconSize: 38,
+              icon: Icon(
+                CustomIcon.icon_ranking,
+                color: whiteColor,
+              ),
+              onPressed: () => onPressedButtonSecond(),
+            ),
+          if (!hasSecondButton && !hasHeaderLogo)
+            Container(
+              margin: const EdgeInsets.only(right: 8.0),
+              width: deviceSize.width * 0.1,
+            )
         ],
       ),
-      // if (hasHeaderButtons)
-      //   Padding(
-      //     padding: const EdgeInsets.only(right: 48.0),
-      //     child: IconButton(
-      //       iconSize: Theme.of(context).iconTheme.size,
-      //       icon: Icon(CustomIconButton.button_home),
-      //       onPressed: () => _backToBegin(context),
-      //     ),
-      //   ),
     );
 
     final _mainText = Flexible(

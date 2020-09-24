@@ -85,17 +85,24 @@ class LayoutButtons {
     dynamic text,
     Function onPressed,
     BuildContext context,
+    Color color,
   }) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
       child: FlatButton(
-          onPressed: onPressed,
-          child: (text is String)
-              ? Text(
+        onPressed: onPressed,
+        child: (text is String)
+            ? DefaultTextStyle(
+                style: Theme.of(context).textTheme.subtitle1.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.bold,
+                    ),
+                child: Text(
                   text,
-                  style: Theme.of(context).textTheme.subtitle1,
-                )
-              : text),
+                ),
+              )
+            : text,
+      ),
     );
   }
 }

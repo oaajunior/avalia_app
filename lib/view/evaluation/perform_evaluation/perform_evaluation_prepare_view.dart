@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:avalia_app/view/layout/layout_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -31,6 +32,18 @@ class _PerformEvaluationPrepareViewState
     super.initState();
   }
 
+  void _goToPage() {
+    if (counterTime != null) {
+      counterTime.cancel();
+      counterTime = null;
+    }
+    Navigator.pop(context);
+    Navigator.of(context).pushNamed(
+      PerformEvaluationQuestionsView.routeName,
+      arguments: widget.evaluation,
+    );
+  }
+
   void timer() {
     counterTime = Timer.periodic(Duration(seconds: 1), (timer) {
       if (counterSeconds >= 0) {
@@ -42,15 +55,7 @@ class _PerformEvaluationPrepareViewState
         timeToCounter--;
         counterSeconds -= 0.1;
       } else {
-        if (counterTime != null) {
-          counterTime.cancel();
-          counterTime = null;
-        }
-        Navigator.pop(context);
-        Navigator.of(context).pushNamed(
-          PerformEvaluationQuestionsView.routeName,
-          arguments: widget.evaluation,
-        );
+        _goToPage();
       }
     });
   }
@@ -74,7 +79,7 @@ class _PerformEvaluationPrepareViewState
     );
 
     Widget message = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DefaultTextStyle(
         style: Theme.of(context)
             .textTheme
@@ -86,6 +91,14 @@ class _PerformEvaluationPrepareViewState
       ),
     );
 
+    Widget buttonEscape = Container(
+      child: LayoutButtons.customFlatButtons(
+        text: 'Pular',
+        context: context,
+        color: yellowBrightColor,
+        onPressed: _goToPage,
+      ),
+    );
     Widget showMessage = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50.0),
       child: CircularPercentIndicator(
@@ -136,7 +149,7 @@ class _PerformEvaluationPrepareViewState
       height: deviceSize.height * 0.9,
       child: Center(
         child: Container(
-          height: deviceSize.height * 0.7,
+          height: deviceSize.height * 0.74,
           width: deviceSize.width * 0.82,
           child: Center(
             child: Card(
@@ -145,14 +158,9 @@ class _PerformEvaluationPrepareViewState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   title,
-                  SizedBox(
-                    height: 10,
-                  ),
                   showMessage,
-                  SizedBox(
-                    height: 10,
-                  ),
                   message,
+                  buttonEscape,
                 ],
               ),
             ),

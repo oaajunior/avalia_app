@@ -139,7 +139,7 @@ ButtonThemeData _basicButtonTheme(ButtonThemeData baseButton) {
 IconThemeData _basicIconTheme(IconThemeData baseIcon) {
   return baseIcon.copyWith(
     color: whiteColor,
-    size: 24.0,
+    size: 20.0,
   );
 }
 

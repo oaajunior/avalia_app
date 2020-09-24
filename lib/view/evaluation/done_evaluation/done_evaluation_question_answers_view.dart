@@ -1,3 +1,4 @@
+import 'package:avalia_app/view/ranking/ranking_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/answer_letter.dart';
@@ -68,6 +69,13 @@ class _DoneEvaluationQuestionAnswersViewState
 
   StudentAnswer getAnswerLetter(AnswerLetter letter) {
     return _answerLetters[letter];
+  }
+
+  void _goToPage() {
+    Navigator.of(context).pushNamed(
+      RankingView.routeName,
+      arguments: widget.studentEvaluation,
+    );
   }
 
   @override
@@ -168,7 +176,10 @@ class _DoneEvaluationQuestionAnswersViewState
 
     return LayoutPage.render(
       hasHeader: true,
-      hasHeaderButtons: true,
+      hasFirstButton: true,
+      firstButtonIconClose: true,
+      hasSecondButton: true,
+      onPressedButtonSecond: _goToPage,
       headerTitle: widget.studentEvaluation.evaluationDiscipline,
       color: greenDeepColor,
       context: context,
