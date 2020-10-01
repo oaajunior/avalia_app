@@ -89,7 +89,7 @@ class PerformEvaluationStart extends StatelessWidget {
             Container(
               width: _deviceSize.width * widthValue,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme.of(context).textTheme.headline4.copyWith(
                       color: Colors.black54,
                       fontWeight: FontWeight.bold,
                     ),
@@ -104,7 +104,7 @@ class PerformEvaluationStart extends StatelessWidget {
             Container(
               width: _deviceSize.width * widthValue,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme.of(context).textTheme.headline4.copyWith(
                       color: Colors.black54,
                     ),
                 child: AutoSizeText(
@@ -112,7 +112,7 @@ class PerformEvaluationStart extends StatelessWidget {
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   strutStyle: StrutStyle.fromTextStyle(
-                    Theme.of(context).textTheme.headline6,
+                    Theme.of(context).textTheme.headline4,
                   ),
                 ),
               ),
@@ -130,7 +130,7 @@ class PerformEvaluationStart extends StatelessWidget {
         color: Theme.of(context).accentColor,
       ),
       width: _deviceSize.width * 0.9,
-      height: _deviceSize.height * 0.72,
+      height: _deviceSize.height * 0.74,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FittedBox(
@@ -230,7 +230,7 @@ class PerformEvaluationStart extends StatelessWidget {
     final _content = ConstrainedBox(
       constraints: BoxConstraints(
         minHeight: _deviceSize.height * 0.80,
-        maxHeight: _deviceSize.height * 0.85,
+        maxHeight: _deviceSize.height * 0.86,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,

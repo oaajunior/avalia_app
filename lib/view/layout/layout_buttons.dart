@@ -25,7 +25,7 @@ class LayoutButtons {
             ? const EdgeInsets.symmetric(horizontal: 0.0)
             : const EdgeInsets.symmetric(horizontal: 32.0),
         margin: const EdgeInsets.only(
-          bottom: 8,
+          bottom: 16,
         ),
         width: shortButton ? deviceSize.width * 0.4 : deviceSize.width,
         child: Stack(
@@ -33,7 +33,7 @@ class LayoutButtons {
             Container(
               width:
                   shortButton ? deviceSize.width * 0.5 : deviceSize.width * 0.9,
-              height: deviceSize.height * 0.09,
+              height: deviceSize.height * 0.08,
               child: RaisedButton(
                 color: Theme.of(context).backgroundColor,
                 onPressed: onPressedButton,
@@ -88,7 +88,7 @@ class LayoutButtons {
     Color color,
   }) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+      margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
       child: FlatButton(
         onPressed: onPressed,
         child: (text is String)

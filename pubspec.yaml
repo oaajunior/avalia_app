@@ -52,6 +52,8 @@ dependencies:
   circular_check_box: ^1.0.4
   #To show a custom scrollbar
   draggable_scrollbar: ^0.0.4
+  #To save user e-mail in the phone
+  shared_preferences: ^0.5.12
 
 
   # The following adds the Cupertino Icons font to your application.

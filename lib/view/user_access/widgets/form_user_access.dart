@@ -10,8 +10,15 @@ class FormUserAccess extends StatefulWidget {
   final Function isLogin;
   final Function setLogin;
   final Function processUserRequest;
+
+  final userEmailLastLogin;
   FormUserAccess(
-      this.isLoading, this.isLogin, this.setLogin, this.processUserRequest);
+    this.isLoading,
+    this.isLogin,
+    this.setLogin,
+    this.processUserRequest,
+    this.userEmailLastLogin,
+  );
 
   @override
   _FormUserAccessState createState() => _FormUserAccessState();
@@ -24,6 +31,11 @@ class _FormUserAccessState extends State<FormUserAccess> {
   String _userSurname = '';
   String _userEmail = '';
   String _userPassword = '';
+  Widget _texFieldName;
+  Widget _textFieldSurname;
+  Widget _textFieldEmail;
+  Widget _textFieldPassword;
+  Widget _textFieldRepeatedPassword;
   TypeOfUser _userType = TypeOfUser.Student;
   FocusNode _usernameFocus;
   FocusNode _surnameFocus;
@@ -32,7 +44,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
   FocusNode _passwordFocus;
   FocusNode _repeatedPasswordFocus;
   FocusNode _userTypeFocus;
-  TextEditingController _informedPassword = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   bool _showUserPassword = false;
   bool _showUserRepeteadPassword = false;
 
@@ -57,6 +69,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
     _typeOfUserFocus.dispose();
     _passwordFocus.dispose();
     _repeatedPasswordFocus.dispose();
+    _passwordController.dispose();
   }
 
   String _validateName(String value) {
@@ -127,7 +140,8 @@ class _FormUserAccessState extends State<FormUserAccess> {
 
   void _resetForm() {
     _formKey.currentState.reset();
-    _informedPassword.text = '';
+    _passwordController.text = '';
+    _userEmail = '';
   }
 
   void _trySubmit() {
@@ -138,14 +152,19 @@ class _FormUserAccessState extends State<FormUserAccess> {
       _formKey.currentState.save();
 
       widget.processUserRequest(
-          _userName, _userSurname, _userEmail, _userPassword, _userType);
+        _userName,
+        _userSurname,
+        _userEmail,
+        _userPassword,
+        _userType,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final _texFieldName = LayoutTextFields.customTextFields(
+    _texFieldName = LayoutTextFields.customTextFields(
       key: ValueKey('name'),
       focusNode: _usernameFocus,
       textInputAction: TextInputAction.next,
@@ -159,6 +178,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(deviceSize.height * 0.025),
         hintText: 'Nome',
         hintStyle: TextStyle(
           color: whitSoftColor,
@@ -166,7 +186,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       ),
     );
 
-    final _textFieldSurname = LayoutTextFields.customTextFields(
+    _textFieldSurname = LayoutTextFields.customTextFields(
       key: ValueKey('surname'),
       focusNode: _surnameFocus,
       textInputAction: TextInputAction.next,
@@ -182,6 +202,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(deviceSize.height * 0.025),
         hintText: 'Sobrenome',
         hintStyle: TextStyle(
           color: whitSoftColor,
@@ -189,28 +210,36 @@ class _FormUserAccessState extends State<FormUserAccess> {
       ),
     );
 
-    final _textFieldEmail = LayoutTextFields.customTextFields(
+    _textFieldEmail = LayoutTextFields.customTextFields(
       key: ValueKey('email'),
       focusNode: _emailFocus,
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_passwordFocus);
       },
-      validator: (email) => _validateEmail(email.trim()),
+      validator: (email) {
+        _userEmail = email.trim();
+        return _validateEmail(email.trim());
+      },
       onSaved: (email) {
         _userEmail = email.trim();
       },
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(deviceSize.height * 0.025),
         hintText: 'E-mail',
         hintStyle: TextStyle(
           color: whitSoftColor,
         ),
       ),
+      initialValue: (widget.isLogin() && !widget.isLoading())
+          ? widget.userEmailLastLogin
+          : null,
     );
-    final _textFieldPassword = LayoutTextFields.customTextFields(
+
+    _textFieldPassword = LayoutTextFields.customTextFields(
       key: ValueKey('password'),
-      controller: _informedPassword,
+      controller: _passwordController,
       focusNode: _passwordFocus,
       textInputAction: widget.isLogin() ? null : TextInputAction.next,
       onFieldSubmitted: widget.isLogin()
@@ -225,6 +254,8 @@ class _FormUserAccessState extends State<FormUserAccess> {
         _userPassword = password.trim();
       },
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(deviceSize.height * 0.025),
+        errorMaxLines: 5,
         hintText: 'Senha',
         hintStyle: TextStyle(
           color: whitSoftColor,
@@ -249,15 +280,16 @@ class _FormUserAccessState extends State<FormUserAccess> {
       obscureText: _showUserPassword ? false : true,
     );
 
-    final _textFieldRepeatedPassword = LayoutTextFields.customTextFields(
+    _textFieldRepeatedPassword = LayoutTextFields.customTextFields(
       key: ValueKey('repeatedPassword'),
       focusNode: _repeatedPasswordFocus,
       validator: (repeatedPassword) =>
-          _validateRepeatedPassword(_informedPassword.text, repeatedPassword),
+          _validateRepeatedPassword(_passwordController.text, repeatedPassword),
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_userTypeFocus);
       },
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(deviceSize.height * 0.025),
         hintText: 'Confirmação Senha',
         hintStyle: TextStyle(
           color: whitSoftColor,
@@ -339,7 +371,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
       ),
     );
 
-    final _buttons = Expanded(
+    final _buttons = Flexible(
       flex: widget.isLogin() ? 1 : 0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -388,7 +420,7 @@ class _FormUserAccessState extends State<FormUserAccess> {
 
     final _content = AnimatedContainer(
       duration: Duration(
-        microseconds: 300,
+        microseconds: 3000,
       ),
       curve: Curves.easeIn,
       child: ConstrainedBox(
@@ -397,8 +429,8 @@ class _FormUserAccessState extends State<FormUserAccess> {
               ? deviceSize.height * 0.4
               : deviceSize.height * 0.8,
           maxHeight: widget.isLogin()
-              ? deviceSize.height * 0.66
-              : deviceSize.height * 1.25,
+              ? deviceSize.height * 0.65
+              : deviceSize.height * 1.6,
         ),
         child: Form(
           key: _formKey,
@@ -417,7 +449,8 @@ class _FormUserAccessState extends State<FormUserAccess> {
               SizedBox(
                 height: 12,
               ),
-              if (widget.isLoading()) CircularProgressIndicator(),
+              if (widget.isLoading() && widget.isLogin())
+                CircularProgressIndicator(),
               if (widget.isLoading())
                 SizedBox(
                   height: 8,

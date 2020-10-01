@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'colors.dart';
-import './custom_text_factor.dart';
 
 ThemeData basicTheme() {
   final ThemeData base = ThemeData.light();
@@ -12,7 +9,6 @@ ThemeData basicTheme() {
     backgroundColor: whiteColor,
     scaffoldBackgroundColor: whiteColor,
     buttonColor: whiteColor,
-    cursorColor: whiteColor,
     unselectedWidgetColor: whiteColor,
     toggleableActiveColor: whiteColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -26,21 +22,6 @@ ThemeData basicTheme() {
     inputDecorationTheme: _basicInputDecorationTheme(base.inputDecorationTheme),
   );
 }
-
-// ToggleButtonsThemeData _basicToggleTheme(
-//     ToggleButtonsThemeData baseToggleTheme) {
-//   return baseToggleTheme.copyWith(
-//     color: whiteColor,
-//     borderColor: whiteColor,
-//     disabledBorderColor: whiteColor,
-//     disabledColor: whiteColor,
-//     fillColor: whiteColor,
-//     selectedColor: whiteColor,
-//     focusColor: whiteColor,
-//     selectedBorderColor: whiteColor,
-//     highlightColor: whiteColor,
-//   );
-// }
 
 ButtonBarThemeData _basicButtonBarTheme(ButtonBarThemeData basicButtonBar) {
   return basicButtonBar.copyWith(
@@ -96,7 +77,6 @@ InputDecorationTheme _basicInputDecorationTheme(
       color: whiteColor,
       fontSize: 18,
     ),
-    //contentPadding: const EdgeInsets.fromLTRB(0.0, 16.0, 8.0, 16.0),
   );
 }
 
@@ -148,35 +128,40 @@ TextTheme _basicTextTheme(TextTheme baseText) {
       .copyWith(
         bodyText1: TextStyle(
           color: whiteColor,
-          fontSize: CustomTextFactor.bodyText1ScaledSize,
+          fontSize: 16.0,
         ),
         bodyText2: TextStyle(
           color: whiteColor,
-          fontSize: CustomTextFactor.bodyText2ScaledSize,
+          fontSize: 14.0,
+        ),
+        headline1: TextStyle(
+          color: whiteColor,
+          fontSize: 32,
         ),
         headline2: TextStyle(
           color: whiteColor,
-          fontSize: CustomTextFactor.headline2ScaledSize,
+          fontSize: 26,
         ),
         headline3: TextStyle(
           color: whiteColor,
-          fontSize: CustomTextFactor.headline3ScaledSize,
+          fontSize: 24,
         ),
         headline4: TextStyle(
           color: whiteColor,
-          fontSize: CustomTextFactor.headline4ScaledSize,
+          fontSize: 20,
         ),
         headline5: TextStyle(
           color: whiteColor,
-          fontSize: CustomTextFactor.headline5ScaledSize,
+          fontSize: 18,
         ),
         headline6: TextStyle(
-          color: whiteColor,
-          fontSize: CustomTextFactor.headline6ScaledSize,
+          color: whiteColor, fontSize: 15,
           //height: 1.1,
         ),
         subtitle1: TextStyle(
-            color: whiteColor, fontSize: CustomTextFactor.subtitle1ScaledSize),
+          color: whiteColor,
+          fontSize: 15,
+        ),
       )
       .apply(
         fontFamily: 'Quenda',

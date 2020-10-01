@@ -1,3 +1,4 @@
+import 'package:avalia_app/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../view/home_view.dart';
@@ -20,6 +21,7 @@ class _UserAccessViewState extends State<UserAccessView> {
   final viewModel = UserAccessViewModel();
   bool _isLogin = true;
   bool _isLoading = false;
+  ScrollController _scrollController = ScrollController();
 
   void setLogin(bool value) {
     setState(() {
@@ -84,7 +86,16 @@ class _UserAccessViewState extends State<UserAccessView> {
     String userPassword,
     TypeOfUser typeOfUser,
   ) async {
+    if (!_isLogin) {
+      await _scrollController.animateTo(
+        0.0,
+        curve: Curves.easeOut,
+        duration: const Duration(seconds: 1),
+      );
+    }
     setIsLoading(true);
+    viewModel.loadingStatus = LoadingStatus.loading;
+
     UserModel user;
     final titleCreateUser = 'Cadastro de Usuário';
     final messageCreateUserWithSuccess = 'Usuário cadastrado com sucesso!';
@@ -115,6 +126,13 @@ class _UserAccessViewState extends State<UserAccessView> {
       await viewModel.createOrAuthenticateUser(user, login: false);
     }
     switch (viewModel.loadingStatus) {
+      case LoadingStatus.loading:
+        if (!_isLogin) {
+          SplashScreen(
+            isTransparent: true,
+          );
+        }
+        break;
       case LoadingStatus.completed:
         setIsLoading(false);
         if (!_isLogin) {
@@ -160,18 +178,30 @@ class _UserAccessViewState extends State<UserAccessView> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutPage.render(
-      hasHeader: true,
-      hasFirstButton: false,
-      context: context,
-      hasHeaderLogo: true,
-      color: blueDeepColor,
-      content: FormUserAccess(
-        getIsLoading,
-        getIsLogin,
-        setLogin,
-        _processUserRequest,
-      ),
-    );
+    return FutureBuilder(
+        future: viewModel.getEmailLastUser(),
+        builder: (context, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen(
+              isTransparent: true,
+            );
+          } else {
+            return LayoutPage.render(
+              hasHeader: true,
+              hasFirstButton: false,
+              context: context,
+              hasHeaderLogo: true,
+              color: blueDeepColor,
+              scrollController: _scrollController,
+              content: FormUserAccess(
+                getIsLoading,
+                getIsLogin,
+                setLogin,
+                _processUserRequest,
+                dataSnapshot.data,
+              ),
+            );
+          }
+        });
   }
 }

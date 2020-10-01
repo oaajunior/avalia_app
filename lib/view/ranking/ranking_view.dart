@@ -25,29 +25,29 @@ class RankingView extends StatefulWidget {
 class _RankingViewState extends State<RankingView> {
   final _viewModelEvaluation = DoneEvaluationViewModel();
   ScrollController _controller;
-  bool hasManyItemsToShow = false;
+  final hasManyItemsToShow = ValueNotifier<bool>(false);
   AutoSizeGroup _itemListSize = AutoSizeGroup();
   Widget _studentPosition;
   bool _studentBetweenThree = false;
   bool _currentStudent = false;
 
   void _setScrollBar() {
-    if (!hasManyItemsToShow)
-      setState(() {
-        hasManyItemsToShow = true;
-      });
+    if (!hasManyItemsToShow.value) {
+      hasManyItemsToShow.value = true;
+    }
   }
 
   @override
   void initState() {
-    super.initState();
     _controller = ScrollController();
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    hasManyItemsToShow.dispose();
+    super.dispose();
   }
 
   @override
@@ -94,7 +94,7 @@ class _RankingViewState extends State<RankingView> {
                     children: [
                       Center(
                         child: DefaultTextStyle(
-                          style: Theme.of(context).textTheme.headline6.copyWith(
+                          style: Theme.of(context).textTheme.headline5.copyWith(
                                 color: purpleDeepColor,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -110,13 +110,12 @@ class _RankingViewState extends State<RankingView> {
                           padding: const EdgeInsets.only(top: 4.0),
                           child: DefaultTextStyle(
                             style:
-                                Theme.of(context).textTheme.subtitle1.copyWith(
+                                Theme.of(context).textTheme.headline6.copyWith(
                                       color: purpleDeepColor,
                                     ),
                             child: Text(
                               DateFormat('dd/MM/yyyy').format(
-                                widget._studentEvaluation.initialDateTime
-                                    .toDate(),
+                                widget._studentEvaluation.createdAt.toDate(),
                               ),
                             ),
                           ),
@@ -176,7 +175,7 @@ class _RankingViewState extends State<RankingView> {
       width: _deviceSize.width * 0.85,
       height: _deviceSize.width * 0.08,
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline6.copyWith(
+        style: Theme.of(context).textTheme.headline5.copyWith(
               color: purpleDeepColor,
             ),
         child: AutoSizeText(
@@ -195,7 +194,7 @@ class _RankingViewState extends State<RankingView> {
       width: _deviceSize.width * 0.85,
       height: _deviceSize.width * 0.1,
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline6.copyWith(
+        style: Theme.of(context).textTheme.headline5.copyWith(
               color: purpleDeepColor,
             ),
         child: AutoSizeText(
@@ -219,7 +218,7 @@ class _RankingViewState extends State<RankingView> {
         ),
         child: Center(
           child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6.copyWith(
+            style: Theme.of(context).textTheme.headline5.copyWith(
                   color: purpleBrightColor,
                 ),
             child: AutoSizeText(
@@ -258,7 +257,7 @@ class _RankingViewState extends State<RankingView> {
               Container(
                 width: _deviceSize.width * 0.5,
                 child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.headline6.copyWith(
+                  style: Theme.of(context).textTheme.headline5.copyWith(
                         color: purpleBrightColor,
                       ),
                   child: AutoSizeText(
@@ -269,7 +268,7 @@ class _RankingViewState extends State<RankingView> {
                 ),
               ),
               DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme.of(context).textTheme.headline5.copyWith(
                       color: purpleBrightColor,
                     ),
                 child: AutoSizeText(
@@ -308,7 +307,7 @@ class _RankingViewState extends State<RankingView> {
             vertical: 4.0,
           ),
           child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6.copyWith(
+            style: Theme.of(context).textTheme.headline5.copyWith(
                   color: purpleBrightColor,
                   fontWeight: FontWeight.w600,
                 ),
@@ -349,17 +348,20 @@ class _RankingViewState extends State<RankingView> {
             height: _studentBetweenThree
                 ? _deviceSize.height * 0.33
                 : _deviceSize.height * 0.29,
-            child: DraggableScrollbar.rrect(
-              alwaysVisibleScrollThumb: hasManyItemsToShow,
-              heightScrollThumb: 30.0,
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              backgroundColor: purpleDeepColor,
-              controller: _controller,
-              child: ListView(
+            child: ValueListenableBuilder(
+              valueListenable: hasManyItemsToShow,
+              builder: (context, value, child) => DraggableScrollbar.rrect(
+                alwaysVisibleScrollThumb: value,
+                heightScrollThumb: 30.0,
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                backgroundColor: purpleDeepColor,
                 controller: _controller,
-                children: [
-                  ...studentEvaluationListWidget,
-                ],
+                child: ListView(
+                  controller: _controller,
+                  children: [
+                    ...studentEvaluationListWidget,
+                  ],
+                ),
               ),
             ),
           ),

@@ -181,7 +181,7 @@ class _HomeViewState extends State<HomeView> {
               top: 10,
               left: 40,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline4.copyWith(
+                style: Theme.of(context).textTheme.headline1.copyWith(
                       color: color,
                     ),
                 child: Text(
@@ -197,7 +197,7 @@ class _HomeViewState extends State<HomeView> {
     final _userOptionsPage = Center(
       child: Container(
         padding: EdgeInsets.only(top: deviceSize.height * 0.1),
-        height: deviceSize.height * 0.7,
+        height: deviceSize.height * 0.56,
         width: deviceSize.width,
         child: PageView.builder(
           scrollDirection: Axis.horizontal,
@@ -291,7 +291,7 @@ class _HomeViewState extends State<HomeView> {
     );
 
     Widget _content = Container(
-      height: deviceSize.height * 0.93,
+      height: deviceSize.height * 0.92,
       child: Column(
         children: [
           _userOptionsPage,

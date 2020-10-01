@@ -48,9 +48,9 @@ class _PerformEvaluationDetailViewState
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            'Por favor,\n informe um código',
+            'Por favor,\n informe o código',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.headline5,
           ),
           LayoutTextFields.customTextFields(
             decoration: InputDecoration(

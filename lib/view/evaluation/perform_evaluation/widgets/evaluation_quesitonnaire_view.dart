@@ -1,7 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../res/colors.dart';
@@ -47,42 +51,84 @@ class _EvaluationQuestionnaireViewState
     extends State<EvaluationQuestionnaireView> with TickerProviderStateMixin {
   final _groupOfTextsRadios = AutoSizeGroup();
   FocusNode caputureKey = FocusNode();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     caputureKey.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final _numberOfLines = ValueNotifier<int>(0);
+    var tp = TextPainter(
+      text: TextSpan(
+        text: widget.isPerformEvaluation
+            ? widget.question.description
+            : widget.studentEvaluation.listQuestionAnswers[widget.indexQuestion]
+                .description,
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      textAlign: TextAlign.left,
+      textDirection: ui.TextDirection.ltr,
+    );
+
+    tp.layout(maxWidth: deviceSize.width * 0.65);
+    List<ui.LineMetrics> lines = tp.computeLineMetrics();
+    _numberOfLines.value += lines.length;
+
+    final listOptionAnswers = [
+      AnswerLetter.A,
+      AnswerLetter.B,
+      AnswerLetter.C,
+      AnswerLetter.D
+    ];
+
+    listOptionAnswers.forEach((element) {
+      tp = TextPainter(
+        text: TextSpan(
+          text: widget.isPerformEvaluation
+              ? widget.question.answerOptions[element]
+              : widget
+                  .studentEvaluation
+                  .listQuestionAnswers[widget.indexQuestion]
+                  .answerOptions[element],
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        textAlign: TextAlign.left,
+        textDirection: ui.TextDirection.ltr,
+      );
+      tp.layout(maxWidth: deviceSize.width * 0.57);
+
+      lines = tp.computeLineMetrics();
+      _numberOfLines.value += lines.length;
+    });
 
     final _question = Padding(
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        left: 16.0,
-      ),
+      padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 8.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6.copyWith(
+            style: Theme.of(context).textTheme.headline4.copyWith(
                   color: widget.color,
                 ),
             child: AutoSizeText(
               '${widget.indexQuestion + 1}. ',
               wrapWords: false,
               group: _groupOfTextsRadios,
-              maxLines: 1,
+              //maxLines: 1,
             ),
           ),
           Container(
-            width: deviceSize.width * 0.75,
+            width: deviceSize.width * 0.73,
             child: DefaultTextStyle(
-              style: Theme.of(context).textTheme.headline6.copyWith(
+              style: Theme.of(context).textTheme.headline4.copyWith(
                     color: widget.color,
                   ),
               child: AutoSizeText(
@@ -93,7 +139,7 @@ class _EvaluationQuestionnaireViewState
                 textAlign: TextAlign.left,
                 wrapWords: false,
                 group: _groupOfTextsRadios,
-                maxLines: 5,
+                //maxLines: 5,
               ),
             ),
           ),
@@ -164,7 +210,7 @@ class _EvaluationQuestionnaireViewState
                             }
                           : () => {},
                       child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.headline6.copyWith(
+                        style: Theme.of(context).textTheme.headline4.copyWith(
                               color: widget.color,
                             ),
                         child: AutoSizeText(
@@ -189,10 +235,10 @@ class _EvaluationQuestionnaireViewState
                           : () => {},
                       child: FittedBox(
                         child: Container(
-                          width: deviceSize.width * 0.67,
+                          width: deviceSize.width * 0.63,
                           child: DefaultTextStyle(
                             style:
-                                Theme.of(context).textTheme.headline6.copyWith(
+                                Theme.of(context).textTheme.headline4.copyWith(
                                       color: widget.color,
                                     ),
                             child: AutoSizeText(
@@ -202,7 +248,8 @@ class _EvaluationQuestionnaireViewState
                               wrapWords: false,
                               textAlign: TextAlign.left,
                               group: _groupOfTextsRadios,
-                              maxLines: 3,
+
+                              //maxLines: 3,
                             ),
                           ),
                         ),
@@ -217,74 +264,104 @@ class _EvaluationQuestionnaireViewState
       );
     }
 
-    // void setToFalseRadioButtons() {
-    //   for (var i = 0; i < 4; i++) {
-    //     _buildOptions(
-    //       AnswerLetter.A,
-    //       '',
-    //       '',
-    //       true,
-    //     );
-    //   }
-    // }
+    if (_scrollController.hasClients) {
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
+        await _scrollController.animateTo(0.0,
+            duration: Duration(seconds: 1), curve: Curves.easeIn);
+      });
+    }
 
     final _questionOptions = FittedBox(
       child: Container(
         margin: EdgeInsets.only(
           left: 8.0,
-          right: 8.0,
+          right: 0.0,
         ),
-        height: deviceSize.height * 0.77,
+        height: deviceSize.height * 0.73,
         width: deviceSize.width * 0.9,
-        child: ListView(
-          children: [
-            _question,
-            _buildOptions(
-              AnswerLetter.A,
-              'A - ',
-              widget.isPerformEvaluation
-                  ? widget.question.answerOptions[AnswerLetter.A]
-                  : widget
-                      .studentEvaluation
-                      .listQuestionAnswers[widget.indexQuestion]
-                      .answerOptions[AnswerLetter.A],
-              false,
-            ),
-            _buildOptions(
-              AnswerLetter.B,
-              'B - ',
-              widget.isPerformEvaluation
-                  ? widget.question.answerOptions[AnswerLetter.B]
-                  : widget
-                      .studentEvaluation
-                      .listQuestionAnswers[widget.indexQuestion]
-                      .answerOptions[AnswerLetter.B],
-              false,
-            ),
-            _buildOptions(
-              AnswerLetter.C,
-              'C - ',
-              widget.isPerformEvaluation
-                  ? widget.question.answerOptions[AnswerLetter.C]
-                  : widget
-                      .studentEvaluation
-                      .listQuestionAnswers[widget.indexQuestion]
-                      .answerOptions[AnswerLetter.C],
-              false,
-            ),
-            _buildOptions(
-              AnswerLetter.D,
-              'D - ',
-              widget.isPerformEvaluation
-                  ? widget.question.answerOptions[AnswerLetter.D]
-                  : widget
-                      .studentEvaluation
-                      .listQuestionAnswers[widget.indexQuestion]
-                      .answerOptions[AnswerLetter.D],
-              false,
-            ),
-          ],
-        ),
+        child: ValueListenableBuilder(
+            valueListenable: _numberOfLines,
+            builder: (context, value, child) {
+              bool showScrollbar = false;
+              if (_scrollController.hasClients) {
+                if (value > 14 &&
+                    _scrollController.position.viewportDimension < 390) {
+                  showScrollbar = true;
+                } else if (value > 17 &&
+                    _scrollController.position.viewportDimension < 468) {
+                  showScrollbar = true;
+                } else {
+                  showScrollbar = false;
+                }
+              }
+              return DraggableScrollbar.rrect(
+                key: ValueKey('$value'),
+                scrollThumbKey: ValueKey('$value'),
+                alwaysVisibleScrollThumb: showScrollbar ? true : false,
+                padding: const EdgeInsets.only(
+                  top: 12.0,
+                  right: 1.5,
+                ),
+                controller: _scrollController,
+                heightScrollThumb: 24.0,
+                backgroundColor: widget.isPerformEvaluation
+                    ? yellowDeepColor
+                    : greenDeepColor,
+                child: ListView(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(
+                    bottom: 8.0,
+                  ),
+                  children: [
+                    _question,
+                    _buildOptions(
+                      AnswerLetter.A,
+                      'A - ',
+                      widget.isPerformEvaluation
+                          ? widget.question.answerOptions[AnswerLetter.A]
+                          : widget
+                              .studentEvaluation
+                              .listQuestionAnswers[widget.indexQuestion]
+                              .answerOptions[AnswerLetter.A],
+                      false,
+                    ),
+                    _buildOptions(
+                      AnswerLetter.B,
+                      'B - ',
+                      widget.isPerformEvaluation
+                          ? widget.question.answerOptions[AnswerLetter.B]
+                          : widget
+                              .studentEvaluation
+                              .listQuestionAnswers[widget.indexQuestion]
+                              .answerOptions[AnswerLetter.B],
+                      false,
+                    ),
+                    _buildOptions(
+                      AnswerLetter.C,
+                      'C - ',
+                      widget.isPerformEvaluation
+                          ? widget.question.answerOptions[AnswerLetter.C]
+                          : widget
+                              .studentEvaluation
+                              .listQuestionAnswers[widget.indexQuestion]
+                              .answerOptions[AnswerLetter.C],
+                      false,
+                    ),
+                    _buildOptions(
+                      AnswerLetter.D,
+                      'D - ',
+                      widget.isPerformEvaluation
+                          ? widget.question.answerOptions[AnswerLetter.D]
+                          : widget
+                              .studentEvaluation
+                              .listQuestionAnswers[widget.indexQuestion]
+                              .answerOptions[AnswerLetter.D],
+                      false,
+                    ),
+                  ],
+                ),
+              );
+            }),
       ),
     );
 

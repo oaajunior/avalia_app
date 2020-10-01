@@ -69,7 +69,7 @@ class _PerformEvaluationPrepareViewState
         child: DefaultTextStyle(
           style: Theme.of(context)
               .textTheme
-              .headline5
+              .headline4
               .copyWith(color: yellowDeepColor, fontWeight: FontWeight.bold),
           child: Text(
             'A sua avaliação\njá vai começar!',
@@ -81,10 +81,10 @@ class _PerformEvaluationPrepareViewState
     Widget message = Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DefaultTextStyle(
-        style: Theme.of(context)
-            .textTheme
-            .headline5
-            .copyWith(color: yellowDeepColor, fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.headline4.copyWith(
+              color: yellowDeepColor,
+              fontWeight: FontWeight.bold,
+            ),
         child: Text(
           'Prepare-se!',
         ),
@@ -102,7 +102,7 @@ class _PerformEvaluationPrepareViewState
     Widget showMessage = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50.0),
       child: CircularPercentIndicator(
-        radius: 166,
+        radius: 150,
         lineWidth: 4.0,
         //percent: percent,
         percent: 1.0,
@@ -111,7 +111,7 @@ class _PerformEvaluationPrepareViewState
         backgroundColor: whiteColor,
         progressColor: greenBrightColor,
         center: DefaultTextStyle(
-          style: Theme.of(context).textTheme.headline3.copyWith(
+          style: Theme.of(context).textTheme.headline2.copyWith(
                 color: greenBrightColor,
                 fontWeight: FontWeight.bold,
               ),

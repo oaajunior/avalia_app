@@ -14,7 +14,9 @@ class Avalia extends StatelessWidget {
         future: viewModel.getCurrentUser(),
         builder: (ctx, userSnapshot) {
           if (userSnapshot.connectionState == ConnectionState.waiting) {
-            return SplashScreen();
+            return SplashScreen(
+              isTransparent: false,
+            );
           }
           if (userSnapshot.hasData) {
             return HomeView();

@@ -22,7 +22,6 @@ class DoneEvaluationListView extends StatefulWidget {
 class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
   String _title;
   List<EvaluationStudentModel> _studentEvaluation;
-  AutoSizeGroup _itemListSize = AutoSizeGroup();
   bool isFinalDateBeforeActualDate;
   DateTime actualDate;
   DateTime finalDate;
@@ -115,18 +114,18 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             DefaultTextStyle(
-              style: Theme.of(context).textTheme.headline6.copyWith(
+              style: Theme.of(context).textTheme.headline5.copyWith(
                     color: greenDeepColor,
                   ),
               child: AutoSizeText(
                 _studentEvaluation[index].evaluationDiscipline,
                 maxLines: 1,
                 wrapWords: false,
-                group: _itemListSize,
+                //group: _itemListSize,
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 DefaultTextStyle(
                   style: Theme.of(context).textTheme.headline6.copyWith(
@@ -139,7 +138,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
                     ),
                     maxLines: 1,
                     wrapWords: false,
-                    group: _itemListSize,
+                    //group: _itemListSize,
                   ),
                 ),
                 DefaultTextStyle(
@@ -162,7 +161,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
                     ),
                     maxLines: 1,
                     wrapWords: false,
-                    group: _itemListSize,
+                    //group: _itemListSize,
                   ),
                 ),
               ],
@@ -175,7 +174,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
     Widget _buildGrade(int index) {
       return Container(
         padding: const EdgeInsets.only(
-          left: 2.0,
+          left: 1.0,
         ),
         child: CircularPercentIndicator(
           radius: 55,
@@ -185,7 +184,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
           backgroundColor: greenBrightColor,
           progressColor: greenBrightColor,
           center: DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6.copyWith(
+            style: Theme.of(context).textTheme.headline5.copyWith(
                   color: greenBrightColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -225,7 +224,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
 
     final _content = Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
-      height: _deviceSize.height * 0.87,
+      height: _deviceSize.height * 0.85,
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 32.0),
         itemCount: _studentEvaluation.length,

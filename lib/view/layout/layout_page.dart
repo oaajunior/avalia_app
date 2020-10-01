@@ -29,13 +29,14 @@ class LayoutPage {
     Color color,
     BuildContext context,
     Widget content,
+    ScrollController scrollController,
   }) {
     final deviceSize = MediaQuery.of(context).size;
 
     final _header = Container(
-      width: deviceSize.width,
-      height: !hasHeaderLogo ? deviceSize.height * 0.086 : null,
       margin: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+      width: deviceSize.width,
+      height: !hasHeaderLogo ? deviceSize.height * 0.08 : null,
       child: Row(
         mainAxisAlignment: !hasHeaderLogo
             ? MainAxisAlignment.spaceBetween
@@ -61,7 +62,7 @@ class LayoutPage {
               child: AutoSizeText(
                 headerTitle,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headline3,
               ),
             ),
           if (hasHeaderLogo)
@@ -74,13 +75,16 @@ class LayoutPage {
               )),
             ),
           if (hasSecondButton)
-            IconButton(
-              iconSize: 38,
-              icon: Icon(
-                CustomIcon.icon_ranking,
-                color: whiteColor,
+            Container(
+              margin: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                iconSize: 35,
+                icon: Icon(
+                  CustomIcon.icon_ranking,
+                  color: whiteColor,
+                ),
+                onPressed: () => onPressedButtonSecond(),
               ),
-              onPressed: () => onPressedButtonSecond(),
             ),
           if (!hasSecondButton && !hasHeaderLogo)
             Container(
@@ -106,7 +110,7 @@ class LayoutPage {
     final _message = Flexible(
       child: Text(
         message != null ? message : '',
-        style: Theme.of(context).textTheme.headline5,
+        style: Theme.of(context).textTheme.headline4,
         textAlign: TextAlign.center,
       ),
     );
@@ -120,7 +124,9 @@ class LayoutPage {
     return Scaffold(
       backgroundColor: color,
       body: SafeArea(
+        maintainBottomViewPadding: true,
         child: SingleChildScrollView(
+          controller: scrollController,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -136,7 +142,7 @@ class LayoutPage {
                     ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: deviceSize.height * 0.45,
-                        maxHeight: deviceSize.height * 1.25,
+                        maxHeight: deviceSize.height * 1.6,
                       ),
                       child: content,
                     ),

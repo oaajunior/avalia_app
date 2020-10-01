@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/user/user_model.dart';
 import '../utils/verify_internet_connection.dart';
@@ -14,18 +15,20 @@ abstract class UserService {
   User getCurrentFirebaseUser();
   Future<UserModel> getUserData();
   Future<String> getCurrentUser();
+  Future<String> getEmailLastUser();
 }
 
 class UserServiceImpl implements UserService {
   final _authInstance = FirebaseAuth.instance;
   final _storeInstance = FirebaseFirestore.instance;
+  SharedPreferences prefs;
   static String _userId;
 
   @override
   Future<void> createOrAuthenticateUser(UserModel user,
       {bool login = true}) async {
     UserCredential _authResult;
-
+    prefs = await SharedPreferences.getInstance();
     try {
       final isInternetOn = await VerifyInternetConnection.getStatus();
       if (!isInternetOn) {
@@ -48,6 +51,8 @@ class UserServiceImpl implements UserService {
             .doc(_authResult.user.uid)
             .set(user.toMap());
       }
+
+      prefs.setString('userEmail', user.email);
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case 'user-not-found':
@@ -175,5 +180,14 @@ class UserServiceImpl implements UserService {
       }
       return _userId;
     }
+  }
+
+  @override
+  Future<String> getEmailLastUser() async {
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+    }
+    final extractedUserEmail = prefs.getString('userEmail');
+    return extractedUserEmail;
   }
 }

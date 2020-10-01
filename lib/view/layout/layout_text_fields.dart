@@ -1,3 +1,4 @@
+import 'package:avalia_app/res/colors.dart';
 import 'package:flutter/material.dart';
 
 class LayoutTextFields {
@@ -18,6 +19,7 @@ class LayoutTextFields {
     bool obscureText = false,
     InputDecoration decoration,
     bool enableInteractiveSelection = true,
+    String initialValue,
   }) {
     Widget textFormField = Padding(
       padding: const EdgeInsets.symmetric(
@@ -40,6 +42,8 @@ class LayoutTextFields {
         validator: validator,
         obscureText: obscureText,
         decoration: decoration,
+        initialValue: initialValue,
+        cursorColor: whiteColor,
       ),
     );
     return textFormField;

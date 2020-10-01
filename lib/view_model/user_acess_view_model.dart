@@ -41,4 +41,8 @@ class UserAccessViewModel {
       throw error;
     }
   }
+
+  Future<String> getEmailLastUser() async {
+    return service.getEmailLastUser();
+  }
 }

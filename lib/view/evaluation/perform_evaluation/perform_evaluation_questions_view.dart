@@ -38,7 +38,7 @@ class _PerformEvaluationQuestionsViewState
   List<QuestionAnswersModel> _listQuestionAnswer = List<QuestionAnswersModel>();
   QuestionAnswersModel _questionAnswers;
   Timer _timerToCancel;
-  double _timeToResponse = 0.0;
+  final _timeToResponse = ValueNotifier<double>(0.0);
   int _indexQuestion = 0;
   bool _lastQuestion = false;
   bool _isLoading = false;
@@ -151,11 +151,10 @@ class _PerformEvaluationQuestionsViewState
         widget.evaluation.question[_indexQuestion].responseTime;
     _timerToCancel = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_counterSeconds >= 0) {
-        setState(() {
-          _timeToResponse = (_counterSeconds /
-                  widget.evaluation.question[_indexQuestion].responseTime)
-              .toPrecision(2);
-        });
+        _timeToResponse.value = (_counterSeconds /
+                widget.evaluation.question[_indexQuestion].responseTime)
+            .toPrecision(2);
+
         _timeToAnswer = _counterSeconds;
         _counterSeconds--;
       } else {
@@ -170,14 +169,14 @@ class _PerformEvaluationQuestionsViewState
     Widget userGrade = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 60.0),
       child: CircularPercentIndicator(
-        radius: 160,
+        radius: 150,
         lineWidth: 4.0,
         percent: 1.0,
         animation: false,
         backgroundColor: greenBrightColor,
         progressColor: greenBrightColor,
         center: DefaultTextStyle(
-          style: Theme.of(context).textTheme.headline4.copyWith(
+          style: Theme.of(context).textTheme.headline3.copyWith(
                 color: greenBrightColor,
                 fontWeight: FontWeight.bold,
               ),
@@ -293,6 +292,7 @@ class _PerformEvaluationQuestionsViewState
       _timerToCancel.cancel();
       _timerToCancel = null;
     }
+    _timeToResponse.dispose();
     super.dispose();
   }
 
@@ -323,25 +323,28 @@ class _PerformEvaluationQuestionsViewState
         children: [
           Text(
             '${numberFormat.format(_indexQuestion + 1)}/${numberFormat.format(numberOfQuestions)}',
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline4,
             textAlign: TextAlign.center,
           ),
           Container(
             width: deviceSize.width * 0.4,
             padding: const EdgeInsets.only(left: 40.0),
-            child: CircularPercentIndicator(
-              radius: 48,
-              percent: _timeToResponse,
-              center: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(),
-                  child: Text((_timeToAnswer).toString()),
+            child: ValueListenableBuilder(
+              valueListenable: _timeToResponse,
+              builder: (context, value, child) => CircularPercentIndicator(
+                radius: 42,
+                percent: value,
+                center: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DefaultTextStyle(
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                    child: Text((_timeToAnswer).toString()),
+                  ),
                 ),
+                backgroundColor: whiteColor,
+                progressColor: greenDeepColor,
+                animation: false,
               ),
-              backgroundColor: whiteColor,
-              progressColor: greenDeepColor,
-              animation: false,
             ),
           ),
         ],
@@ -352,14 +355,17 @@ class _PerformEvaluationQuestionsViewState
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          LayoutButtons.customRaisedButtons(
-            textRaisedButtonOne: 'Próxima',
-            color: (_timeToResponse <= 0.4 &&
-                    (_timeToResponse * 100).toInt().isOdd)
-                ? redColor
-                : yellowDeepColor,
-            context: context,
-            onPressedButtonOne: _nextQuestion,
+          ValueListenableBuilder(
+            valueListenable: _timeToResponse,
+            builder: (context, value, child) =>
+                LayoutButtons.customRaisedButtons(
+              textRaisedButtonOne: 'Próxima',
+              color: (value <= 0.4 && (value * 100).toInt().isOdd)
+                  ? redColor
+                  : yellowDeepColor,
+              context: context,
+              onPressedButtonOne: _nextQuestion,
+            ),
           ),
         ],
       ),
@@ -379,7 +385,7 @@ class _PerformEvaluationQuestionsViewState
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: deviceSize.height * 0.72,
-          maxHeight: deviceSize.height * 0.955,
+          maxHeight: deviceSize.height * 0.95,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -394,8 +400,6 @@ class _PerformEvaluationQuestionsViewState
 
     return LayoutPage.render(
       hasHeader: false,
-      hasFirstButton: false,
-      //headerTitle: 'Questões',
       context: context,
       color: yellowDeepColor,
       content: _content,
