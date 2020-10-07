@@ -121,34 +121,39 @@ class LayoutPage {
       );
     }
 
-    return Scaffold(
-      backgroundColor: color,
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: SingleChildScrollView(
-          controller: scrollController,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (hasHeader) _header,
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (mainText != null) _mainText,
-                  if (mainText != null) _buildSizedBox(8),
-                  if (message != null) _message,
-                  if (message != null) _buildSizedBox(8),
-                  if (content != null)
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: deviceSize.height * 0.45,
-                        maxHeight: deviceSize.height * 1.6,
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: color,
+        body: SafeArea(
+          maintainBottomViewPadding: true,
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (hasHeader) _header,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (mainText != null) _mainText,
+                    if (mainText != null) _buildSizedBox(8),
+                    if (message != null) _message,
+                    if (message != null) _buildSizedBox(8),
+                    if (content != null)
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: deviceSize.height * 0.45,
+                          maxHeight: deviceSize.height * 1.6,
+                        ),
+                        child: content,
                       ),
-                      child: content,
-                    ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

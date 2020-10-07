@@ -54,6 +54,8 @@ dependencies:
   draggable_scrollbar: ^0.0.4
   #To save user e-mail in the phone
   shared_preferences: ^0.5.12
+  #To disable buttom home
+  hardware_buttons: 0.2.4
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -130,7 +130,7 @@ class PerformEvaluationStart extends StatelessWidget {
         color: Theme.of(context).accentColor,
       ),
       width: _deviceSize.width * 0.9,
-      height: _deviceSize.height * 0.74,
+      height: _deviceSize.height * 0.73,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FittedBox(

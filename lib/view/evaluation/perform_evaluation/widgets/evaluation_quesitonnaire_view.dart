@@ -25,15 +25,20 @@ class EvaluationQuestionnaireView extends StatefulWidget {
   Color color;
   bool checkValue = false;
   Function turnAllAnswerLetterToFalse;
+  Function getIsClickedInOptions;
+  Function setIsClickedInOptions;
 
   EvaluationQuestionnaireView.performEvaluation(
-      this.indexQuestion,
-      this.question,
-      this.getAnswerLetter,
-      this.setAnswerLetter,
-      this.isPerformEvaluation,
-      this.color,
-      this.turnAllAnswerLetterToFalse);
+    this.indexQuestion,
+    this.question,
+    this.getAnswerLetter,
+    this.setAnswerLetter,
+    this.isPerformEvaluation,
+    this.color,
+    this.turnAllAnswerLetterToFalse,
+    this.getIsClickedInOptions,
+    this.setIsClickedInOptions,
+  );
 
   EvaluationQuestionnaireView.doneEvaluation(
     this.studentEvaluation,
@@ -51,13 +56,20 @@ class _EvaluationQuestionnaireViewState
     extends State<EvaluationQuestionnaireView> with TickerProviderStateMixin {
   final _groupOfTextsRadios = AutoSizeGroup();
   FocusNode caputureKey = FocusNode();
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
 
   @override
   void dispose() {
     caputureKey.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+
+    super.initState();
   }
 
   @override
@@ -181,6 +193,7 @@ class _EvaluationQuestionnaireViewState
                     ? (bool value) {
                         widget.turnAllAnswerLetterToFalse();
                         widget.setAnswerLetter(answerLetter, value);
+                        widget.setIsClickedInOptions(true);
                       }
                     : widget.getAnswerLetter(answerLetter) ==
                             StudentAnswer.STUDENT_BLANK
@@ -207,6 +220,7 @@ class _EvaluationQuestionnaireViewState
                                 answerLetter,
                                 resultLetter == true ? false : true,
                               );
+                              widget.setIsClickedInOptions(true);
                             }
                           : () => {},
                       child: DefaultTextStyle(
@@ -231,6 +245,7 @@ class _EvaluationQuestionnaireViewState
                                 answerLetter,
                                 resultLetter == true ? false : true,
                               );
+                              widget.setIsClickedInOptions(true);
                             }
                           : () => {},
                       child: FittedBox(
@@ -264,7 +279,7 @@ class _EvaluationQuestionnaireViewState
       );
     }
 
-    if (_scrollController.hasClients) {
+    if (_scrollController.hasClients && !widget.getIsClickedInOptions()) {
       SchedulerBinding.instance.addPostFrameCallback((_) async {
         await _scrollController.animateTo(0.0,
             duration: Duration(seconds: 1), curve: Curves.easeIn);
@@ -283,27 +298,27 @@ class _EvaluationQuestionnaireViewState
             valueListenable: _numberOfLines,
             builder: (context, value, child) {
               bool showScrollbar = false;
-              if (_scrollController.hasClients) {
-                if (value > 14 &&
-                    _scrollController.position.viewportDimension < 390) {
-                  showScrollbar = true;
-                } else if (value > 17 &&
-                    _scrollController.position.viewportDimension < 468) {
-                  showScrollbar = true;
-                } else {
-                  showScrollbar = false;
-                }
+
+              if (value > 14 && deviceSize.height * 0.73 < 390) {
+                showScrollbar = true;
+              } else if (value > 15 && deviceSize.height * 0.73 < 433) {
+                showScrollbar = true;
+              } else if (value > 17 && deviceSize.height * 0.73 < 468) {
+                showScrollbar = true;
+              } else {
+                showScrollbar = false;
               }
+
               return DraggableScrollbar.rrect(
                 key: ValueKey('$value'),
                 scrollThumbKey: ValueKey('$value'),
                 alwaysVisibleScrollThumb: showScrollbar ? true : false,
+                heightScrollThumb: 30.0,
                 padding: const EdgeInsets.only(
                   top: 12.0,
                   right: 1.5,
                 ),
                 controller: _scrollController,
-                heightScrollThumb: 24.0,
                 backgroundColor: widget.isPerformEvaluation
                     ? yellowDeepColor
                     : greenDeepColor,

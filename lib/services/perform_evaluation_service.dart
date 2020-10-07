@@ -115,6 +115,7 @@ class EvaluationServiceImpl implements PerformEvaluationService {
         }
       }
     });
+    questions.shuffle();
     return questions;
   }
 

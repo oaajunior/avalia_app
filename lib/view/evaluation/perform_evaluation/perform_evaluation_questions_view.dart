@@ -43,6 +43,15 @@ class _PerformEvaluationQuestionsViewState
   bool _lastQuestion = false;
   bool _isLoading = false;
   int _timeToAnswer = 0;
+  bool _isClickedInOptions = false;
+
+  bool getIsClickedInOptions() {
+    return _isClickedInOptions;
+  }
+
+  void setIsClickedInOptions(bool value) {
+    _isClickedInOptions = value;
+  }
 
   void setLoading(bool value) {
     setState(() {
@@ -80,6 +89,7 @@ class _PerformEvaluationQuestionsViewState
       _performStudentEvaluation();
       setState(() {
         _turnAllAnswerLetterToFalse();
+        setIsClickedInOptions(false);
         _indexQuestion++;
       });
       _timeToQuestion();
@@ -379,6 +389,8 @@ class _PerformEvaluationQuestionsViewState
       true,
       yellowDeepColor,
       _turnAllAnswerLetterToFalse,
+      getIsClickedInOptions,
+      setIsClickedInOptions,
     );
 
     final _content = SingleChildScrollView(
