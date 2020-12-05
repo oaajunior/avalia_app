@@ -9,12 +9,18 @@ class LayoutAlert {
     Color color,
     Widget actionButtons,
     bool barrierDismissible = true,
+    bool countTimer = false,
   }) {
     return showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder: (ctx) => LayoutBuilder(
-        builder: (context, constraints) => ConstrainedBox(
+      builder: (ctx) => LayoutBuilder(builder: (context, constraints) {
+        if (countTimer) {
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop(true);
+          });
+        }
+        return ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: constraints.maxWidth,
           ),
@@ -51,8 +57,8 @@ class LayoutAlert {
               ],
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

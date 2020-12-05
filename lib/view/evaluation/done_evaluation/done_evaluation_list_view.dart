@@ -156,7 +156,7 @@ class _DoneEvaluationListViewState extends State<DoneEvaluationListView> {
                             : redColor,
                       ),
                   child: AutoSizeText(
-                    DateFormat('HH:MM').format(
+                    DateFormat.Hm().format(
                       _studentEvaluation[index].finalDateTime.toDate(),
                     ),
                     maxLines: 1,

@@ -166,6 +166,7 @@ class _EvaluationQuestionnaireViewState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
           children: [
             Transform.scale(
               scale: 0.9,
@@ -209,6 +210,7 @@ class _EvaluationQuestionnaireViewState
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     GestureDetector(
                       onTap: widget.isPerformEvaluation
@@ -279,11 +281,13 @@ class _EvaluationQuestionnaireViewState
       );
     }
 
-    if (_scrollController.hasClients && !widget.getIsClickedInOptions()) {
-      SchedulerBinding.instance.addPostFrameCallback((_) async {
-        await _scrollController.animateTo(0.0,
-            duration: Duration(seconds: 1), curve: Curves.easeIn);
-      });
+    if (_scrollController.hasClients && widget.isPerformEvaluation) {
+      if (!widget.getIsClickedInOptions()) {
+        SchedulerBinding.instance.addPostFrameCallback((_) async {
+          await _scrollController.animateTo(0.0,
+              duration: Duration(seconds: 1), curve: Curves.easeIn);
+        });
+      }
     }
 
     final _questionOptions = FittedBox(

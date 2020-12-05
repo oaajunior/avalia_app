@@ -221,7 +221,7 @@ class _PerformEvaluationQuestionsViewState
 
     Widget button = RaisedButton(
       onPressed: () {
-        Navigator.of(context)..pop()..pop()..pop()..pop();
+        Navigator.of(context)..pop()..pop()..pop();
       },
       color: whiteColor,
       elevation: 0.0,
@@ -245,13 +245,10 @@ class _PerformEvaluationQuestionsViewState
       ),
     );
 
-    showUserGrade(
+    await showAwaitMessageForGrade(
         'Aguarde! Estamos calculando a sua nota...', circularProgress, null);
     setLoading(true);
-    await Future.delayed(
-      Duration(seconds: 5),
-      () => _viewModelEvaluation.saveStudentEvaluation(evaluationStudent),
-    );
+    await _viewModelEvaluation.saveStudentEvaluation(evaluationStudent);
     switch (_viewModelEvaluation.loadingStatus) {
       case LoadingStatus.completed:
         setLoading(false);
@@ -274,6 +271,19 @@ class _PerformEvaluationQuestionsViewState
       default:
         setLoading(false);
     }
+  }
+
+  Future<void> showAwaitMessageForGrade(
+      String title, Widget content, Widget button) async {
+    return LayoutAlert.customAlert(
+      title: title,
+      color: yellowDeepColor,
+      context: context,
+      message: content,
+      actionButtons: button,
+      countTimer: true,
+      barrierDismissible: false,
+    );
   }
 
   Future<void> showUserGrade(

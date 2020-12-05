@@ -25,15 +25,21 @@ class _HomeViewState extends State<HomeView> {
     {
       'id': 0,
       'title': 'Realizar\navaliação',
+      //'title': 'Criar avaliações',
       'image': 'lib/res/images/avalia_realizar_avaliacao.png',
+      //'image': 'lib/res/images/avalia_criar_avaliacoes.png',
       'color': yellowDeepColor,
+      //'color': pinkColor,
       'page': PerformEvaluationView.routeName,
     },
     {
       'id': 1,
       'title': 'Avaliações\nrealizadas',
+      //'title': 'Avaliações criadas',
       'image': 'lib/res/images/avalia_avaliacoes_realizadas.png',
+      //'image': 'lib/res/images/avalia_avaliacoes_criadas.png',
       'color': greenDeepColor,
+      //'color': purpleBrightColor,
       'page': DoneEvaluationsSearchView.routeName,
     },
   ];
@@ -168,13 +174,6 @@ class _HomeViewState extends State<HomeView> {
                     image,
                   ),
                 ),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.white12,
-                //     blurRadius: 20.0,
-                //     offset: Offset(10, 10),
-                //   ),
-                // ],
               ),
             ),
             Positioned(
